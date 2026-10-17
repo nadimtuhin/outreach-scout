@@ -4,26 +4,58 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
   const db = new ScoutDatabase(dbPath);
 
   const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outreach Scout — Executive B2B Pipeline</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
+    /* Silicon Valley 2026 Light Design System (Stripe / Linear / Resend aesthetic) */
+    :root, [data-theme="light"] {
+      --bg: #f8f9fb;
+      --card-bg: #ffffff;
+      --card-border: rgba(15, 23, 42, 0.08);
+      --card-border-hover: rgba(37, 99, 235, 0.28);
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 6px 16px -4px rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(0, 0, 0, 0.02);
+      --surface: #f1f4f9;
+      --surface-border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+      --emerald-border: #a7f3d0;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --code-bg: #f8fafc;
+      --code-text: #1e293b;
+      --radius: 12px;
+      --badge-radius: 6px;
+    }
+
+    [data-theme="dark"] {
       --bg: #090a0f;
       --card-bg: rgba(18, 20, 29, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
       --card-border-hover: rgba(255, 255, 255, 0.18);
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      --card-shadow-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.8);
       --surface: #141722;
       --surface-border: rgba(255, 255, 255, 0.06);
       --text: #f4f4f7;
       --text-muted: #8b92a5;
       --text-subtle: #565d73;
       --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-light: rgba(59, 130, 246, 0.15);
       --emerald: #10b981;
       --emerald-bg: rgba(16, 185, 129, 0.1);
       --emerald-border: rgba(16, 185, 129, 0.25);
@@ -31,22 +63,28 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       --amber-bg: rgba(245, 158, 11, 0.1);
       --amber-border: rgba(245, 158, 11, 0.25);
       --code-bg: #06070a;
-      --radius: 10px;
+      --code-text: #cbd5e1;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+        radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
       background-attachment: fixed;
       color: var(--text);
       padding: 32px 24px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
-    .container { max-width: 1340px; margin: 0 auto; }
+
+    .container { max-width: 1360px; margin: 0 auto; }
+
+    /* Modern 2026 Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -57,11 +95,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       flex-wrap: wrap;
       gap: 16px;
     }
+
     .brand-wrap { display: flex; align-items: center; gap: 14px; }
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       display: flex;
       align-items: center;
@@ -69,29 +108,30 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       color: #fff;
       font-weight: 700;
       font-size: 16px;
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
     }
-    h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
-    .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 400; margin-top: 2px; }
-    .header-pills { display: flex; align-items: center; gap: 12px; }
+    h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.025em; color: var(--text); }
+    .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 500; margin-top: 1px; }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; }
     .live-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--emerald);
       background: var(--emerald-bg);
       border: 1px solid var(--emerald-border);
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
     }
     .pulse-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--emerald);
-      box-shadow: 0 0 8px var(--emerald);
+      box-shadow: 0 0 6px var(--emerald);
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -101,12 +141,30 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .meta-pill {
       font-size: 12px;
+      font-weight: 500;
       color: var(--text-muted);
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      padding: 4px 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 5px 12px;
       border-radius: 20px;
     }
+    .theme-toggle-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+    .theme-toggle-btn:hover { color: var(--text); border-color: var(--primary); }
+
+    /* 2026 Segmented Control (Linear style) */
     .filter-bar {
       display: flex;
       align-items: center;
@@ -117,65 +175,72 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .segmented-control {
       display: inline-flex;
-      background: #0d0f17;
+      background: var(--surface);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 3px;
-      gap: 2px;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 3px;
     }
     .segment-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 6px;
+      padding: 7px 15px;
+      border-radius: 7px;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .segment-btn:hover { color: #fff; }
+    .segment-btn:hover { color: var(--text); }
     .segment-btn.active {
-      background: var(--surface);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      background: var(--card-bg);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
     }
     .segment-count {
       font-size: 11px;
-      background: rgba(255, 255, 255, 0.08);
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.06);
       padding: 1px 6px;
       border-radius: 10px;
       color: var(--text-muted);
     }
     .segment-btn.active .segment-count {
-      background: rgba(59, 130, 246, 0.2);
-      color: #93c5fd;
+      background: var(--primary-light);
+      color: var(--primary);
     }
+
+    /* Cards Grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(410px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 22px;
     }
+
+    /* 2026 High-Craft Card */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 22px;
+      box-shadow: var(--card-shadow);
+      padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
     .card:hover {
       border-color: var(--card-border-hover);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      box-shadow: var(--card-shadow-hover);
       transform: translateY(-2px);
     }
+
     .card-head {
       display: flex;
       justify-content: space-between;
@@ -184,72 +249,81 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .company-title-wrap { display: flex; flex-direction: column; gap: 4px; }
     .company-name {
-      font-size: 17px;
-      font-weight: 600;
-      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      letter-spacing: -0.02em;
     }
     .company-name:hover { color: var(--primary); }
-    .company-meta { font-size: 12px; color: var(--text-muted); }
+    .company-meta { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+
     .score-badge {
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 4px 9px;
+      border-radius: var(--badge-radius);
       background: var(--emerald-bg);
       color: var(--emerald);
       border: 1px solid var(--emerald-border);
+      white-space: nowrap;
     }
     .stage-badge {
       font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: var(--badge-radius);
+      background: var(--surface);
       color: var(--text-muted);
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--surface-border);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
+    /* Links bar */
     .link-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
-      background: #0d0f17;
-      padding: 8px 12px;
+      font-size: 12.5px;
+      background: var(--surface);
+      padding: 9px 12px;
       border-radius: 8px;
       border: 1px solid var(--surface-border);
     }
     .link-item {
-      color: #93c5fd;
+      color: var(--primary);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      font-weight: 600;
+      transition: color 0.15s;
     }
-    .link-item:hover { color: #bfdbfe; text-decoration: underline; }
+    .link-item:hover { color: var(--primary-hover); text-decoration: underline; }
     .link-sep { color: var(--text-subtle); }
+
+    /* Match Diagnosis Section */
     .diagnosis-box {
-      background: rgba(13, 15, 23, 0.5);
+      background: var(--surface);
       border: 1px solid var(--surface-border);
-      border-radius: 8px;
-      padding: 12px 14px;
+      border-radius: 9px;
+      padding: 13px 15px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      font-size: 12px;
+      font-size: 12.5px;
     }
     .section-label {
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
       color: var(--text-subtle);
       margin-bottom: 2px;
     }
@@ -257,67 +331,98 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      line-height: 1.4;
+      line-height: 1.45;
+      color: var(--text);
     }
     .match-icon-yes { color: var(--emerald); font-weight: 700; }
     .match-icon-bridge { color: var(--amber); font-weight: 700; }
-    .match-text-bridge { color: #fde68a; }
-    .draft-container { display: flex; flex-direction: column; gap: 6px; }
+    .match-text-bridge { color: var(--text); }
+
+    /* Pitch container */
+    .draft-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
     .draft-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 11px;
+      font-weight: 600;
       color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .draft-box {
       background: var(--code-bg);
       border: 1px solid var(--surface-border);
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 13px 15px;
       font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 11.5px;
-      color: #cbd5e1;
-      line-height: 1.55;
+      font-size: 12px;
+      color: var(--code-text);
+      line-height: 1.6;
       white-space: pre-wrap;
       word-break: break-word;
       max-height: 160px;
       overflow-y: auto;
     }
+
+    /* Actions bar */
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: auto;
-      padding-top: 8px;
+      padding-top: 6px;
     }
     .status-select {
-      background: #0d0f17;
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 12px;
+      color: var(--text);
+      padding: 7px 11px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
       outline: none;
+      transition: all 0.15s;
     }
-    .status-select:hover, .status-select:focus { border-color: var(--card-border-hover); color: #fff; }
+    .status-select:hover, .status-select:focus { border-color: var(--primary); }
+
     .btn-copy {
-      background: #fff;
-      color: #090a0f;
+      background: #0f172a;
+      color: #ffffff;
       border: none;
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.15s ease;
+      font-family: inherit;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
     }
-    .btn-copy:hover { background: #e2e8f0; transform: translateY(-1px); }
-    .btn-copy.copied { background: var(--emerald); color: #fff; }
+    .btn-copy:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+    .btn-copy.copied {
+      background: var(--emerald);
+      color: #ffffff;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.12); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.22); }
   </style>
 </head>
 <body>
@@ -330,12 +435,13 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           <p class="subtitle">High-Signal B2B Integration Targets & Pitch Intelligence</p>
         </div>
       </div>
-      <div class="header-pills">
+      <div class="header-actions">
         <div class="live-pill">
           <span class="pulse-dot"></span>
           <span>Local Engine Active</span>
         </div>
         <div class="meta-pill">Zero-Auth Local</div>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" id="theme-btn">🌙</button>
       </div>
     </header>
 
@@ -368,6 +474,20 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
   <script>
     let allTargets = [];
     let currentFilter = 'all';
+
+    function initTheme() {
+      const saved = localStorage.getItem('scout_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-btn').textContent = saved === 'light' ? '🌙' : '☀️';
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('scout_theme', next);
+      document.getElementById('theme-btn').textContent = next === 'light' ? '🌙' : '☀️';
+    }
 
     async function loadTargets() {
       const res = await fetch('/api/targets');
@@ -409,7 +529,7 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         ).join('');
 
         const employeeLinks = employees.map(e => 
-          '<a class="link-item" href="' + e.linkedInUrl + '" target="_blank">' + e.name + ' <span style="color:var(--text-subtle);">(' + e.role + ')</span></a>'
+          '<a class="link-item" href="' + e.linkedInUrl + '" target="_blank">' + e.name + ' <span style="color:var(--text-subtle); font-weight:400;">(' + e.role + ')</span></a>'
         ).join('<span class="link-sep">•</span>');
 
         return \`
@@ -432,12 +552,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
               <a class="link-item" href="\${t.website}" target="_blank">Website</a>
               \${t.careers_url ? '<span class="link-sep">•</span><a class="link-item" href="' + t.careers_url + '" target="_blank">Careers</a>' : ''}
               <span class="link-sep">•</span>
-              <span style="color:var(--text-muted);">Lead: <strong style="color:#fff;">\${t.leader_name}</strong></span>
+              <span style="color:var(--text-muted);">Lead: <strong style="color:var(--text);">' + t.leader_name + '</strong></span>
               \${employeeLinks ? '<span class="link-sep">•</span>' + employeeLinks : ''}
             </div>
 
-            <div style="font-size:12px; color:var(--text-muted);">
-              <span style="color:var(--text-subtle); font-weight:600;">PLATFORMS:</span> \${platforms}
+            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">
+              <span style="color:var(--text-subtle); font-weight:700;">PLATFORMS:</span> \${platforms}
             </div>
 
             <div class="diagnosis-box">
@@ -494,6 +614,7 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       if (t) t.status = newStatus;
     }
 
+    initTheme();
     loadTargets();
   </script>
 </body>
