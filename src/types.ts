@@ -50,6 +50,17 @@ export interface HiringPattern {
   partTimeTrialProposal: string;
 }
 
+export interface OutreachSequence {
+  touch1: string;
+  touch2: string;
+  touch3: string;
+  wordCounts: {
+    touch1: number;
+    touch2: number;
+    touch3: number;
+  };
+}
+
 export interface ContactLead {
   id: string;
   name: string;
@@ -60,6 +71,7 @@ export interface ContactLead {
   notes?: string;
   tailoredPitch: string;
   wordCount: number;
+  sequence?: OutreachSequence;
 }
 
 export interface TargetDossier {

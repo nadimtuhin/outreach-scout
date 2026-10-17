@@ -5,9 +5,11 @@
   "private": true,
   "scripts": {
     "lint": "oxlint -c .oxlintrc.json",
+    "test": "bun test",
     "typecheck": "tsc --noEmit",
     "scout": "bun run src/index.ts",
     "cli": "bun run src/cli.ts",
+    "export": "bun run src/exporter.ts",
     "sync": "bun run src/sync-remote.ts"
   },
   "devDependencies": {

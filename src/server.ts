@@ -1,4 +1,5 @@
 import { ScoutDatabase } from './db.ts';
+import { TARGET_DOSSIERS } from './targets-data.ts';
 
 export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
   const db = new ScoutDatabase(dbPath);
@@ -142,6 +143,8 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       display: flex;
       flex: 1;
       height: calc(100vh - 56px);
+      min-height: 0;
+      min-width: 0;
       overflow: hidden;
     }
 
@@ -153,6 +156,9 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .master-search-bar {
@@ -211,10 +217,14 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     .master-list {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
       padding: 8px;
       display: flex;
       flex-direction: column;
       gap: 4px;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     .target-item {
@@ -271,11 +281,16 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     .detail-pane {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+      height: 100%;
       padding: 30px 36px;
       display: flex;
       flex-direction: column;
       gap: 24px;
       background: var(--bg);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     /* Detail Header */
@@ -529,10 +544,64 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .status-select:focus { border-color: var(--primary); }
 
+    /* Responsive Breakpoints & Scrollbar tuning */
+    @media (max-width: 900px) {
+      body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
+      .workspace {
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+        overflow: visible;
+      }
+      .master-pane {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .master-list {
+        max-height: 320px;
+      }
+      .detail-pane {
+        height: auto;
+        overflow: visible;
+        padding: 20px 16px;
+      }
+    }
+
+    .btn-scrape {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-scrape:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .btn-scrape.loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
     /* Scrollbars */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.12); border-radius: 3px; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.03); }
+    ::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.35); }
   </style>
 </head>
 <body>
@@ -542,6 +611,10 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       <span>Outreach Scout</span>
     </div>
     <div class="nav-actions">
+      <button id="btn-scrape" class="btn-scrape" onclick="triggerScrape()" title="Re-scrape and update target dossiers">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Scrape / Refresh</span>
+      </button>
       <div class="live-status">
         <span class="pulse-dot"></span>
         <span>Local Engine Active</span>
@@ -863,6 +936,29 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       }
     });
 
+    async function triggerScrape() {
+      const btn = document.getElementById('btn-scrape');
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span>⚡ Scraping...</span>';
+      btn.classList.add('loading');
+      try {
+        const res = await fetch('/api/scrape', { method: 'POST' });
+        const data = await res.json();
+        if (data.ok) {
+          btn.innerHTML = '<span>✓ Scraped ' + data.count + ' Leads</span>';
+          await loadData();
+        } else {
+          btn.innerHTML = '<span>❌ Scrape Failed</span>';
+        }
+      } catch (e) {
+        btn.innerHTML = '<span>❌ Scrape Error</span>';
+      }
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.classList.remove('loading');
+      }, 2000);
+    }
+
     initTheme();
     loadData();
   </script>
@@ -883,6 +979,20 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         return new Response(JSON.stringify(rows), {
           headers: { 'Content-Type': 'application/json' },
         });
+      }
+
+      if (url.pathname === '/api/scrape' && req.method === 'POST') {
+        db.seedTargets(TARGET_DOSSIERS);
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            count: TARGET_DOSSIERS.length,
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
       }
 
       if (url.pathname === '/api/status' && req.method === 'POST') {
