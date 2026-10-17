@@ -106,11 +106,26 @@ export interface EngineeringTastes {
   engineeringCulture: string[];
 }
 
+export interface ScrapedJobPost {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  employmentType?: string;
+  remoteStatus: 'Remote' | 'Hybrid' | 'On-site';
+  url: string;
+  salaryBand?: string;
+  postedDate?: string;
+  keySkills: string[];
+  snippet: string;
+}
+
 export interface CompanyDeepProfile {
   business: CompanyBusinessProfile;
   blogs: BlogArticleSignal[];
   projects: ProjectRepoSignal[];
   tastes: EngineeringTastes;
+  jobs?: ScrapedJobPost[];
 }
 
 export type QueueJobStatus = 'waiting' | 'pending' | 'processing' | 'completed' | 'failed' | 'paused';
@@ -118,7 +133,7 @@ export type QueueJobStatus = 'waiting' | 'pending' | 'processing' | 'completed' 
 export interface ScrapingJob {
   id: string;
   targetId: string;
-  taskType: 'profile_deep_dive' | 'blog_scrape' | 'employee_scrape' | 'projects_scrape';
+  taskType: 'profile_deep_dive' | 'blog_scrape' | 'employee_scrape' | 'projects_scrape' | 'job_posts_scrape';
   status: QueueJobStatus;
   priority: number;
   attempts: number;
@@ -151,6 +166,7 @@ export interface TargetDossier {
   hiring: HiringPattern;
   coldOutreachDraft: string;
   deepProfile?: CompanyDeepProfile;
+  jobs?: ScrapedJobPost[];
 }
 
 export interface ScoutRunResult {

@@ -1,5 +1,6 @@
 import type { CompanyDeepProfile } from './types.ts';
 import { EXTENDED_COMPANY_PROFILES } from './extended-profiles.ts';
+import { SCRAPED_JOB_POSTS } from './job-posts.ts';
 
 export const BASE_COMPANY_PROFILES: Record<string, CompanyDeepProfile> = {
   craver: {
@@ -657,10 +658,20 @@ export const BASE_COMPANY_PROFILES: Record<string, CompanyDeepProfile> = {
   },
 };
 
-export const COMPANY_PROFILES: Record<string, CompanyDeepProfile> = {
+const RAW_COMBINED_PROFILES = {
   ...BASE_COMPANY_PROFILES,
   ...EXTENDED_COMPANY_PROFILES,
 };
+
+export const COMPANY_PROFILES: Record<string, CompanyDeepProfile> = Object.fromEntries(
+  Object.entries(RAW_COMBINED_PROFILES).map(([id, prof]) => [
+    id,
+    {
+      ...prof,
+      jobs: SCRAPED_JOB_POSTS[id] || [],
+    },
+  ])
+);
 
 export class CompanyProfiler {
   /**

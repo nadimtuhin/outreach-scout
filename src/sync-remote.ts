@@ -67,6 +67,7 @@ async function syncRemote(): Promise<void> {
         deepProfile,
         leadership,
         architecture,
+        jobs: deepProfile.jobs || [],
       };
     }),
   };

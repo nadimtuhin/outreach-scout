@@ -856,6 +856,88 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       font-weight: bold;
     }
 
+    /* Scraped Job Posts & Hiring Signals */
+    .jobs-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .job-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .job-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .job-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .job-title:hover { text-decoration: underline; }
+    .remote-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      text-transform: uppercase;
+    }
+    .job-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .salary-chip {
+      font-size: 11.5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--emerald);
+      background: var(--emerald-bg);
+      border: 1px solid var(--emerald-border);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .job-snippet {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .job-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .skill-chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
     /* Responsive Breakpoints & Scrollbar tuning */
     @media (max-width: 900px) {
       body {
@@ -1008,6 +1090,7 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
             deepProfile: JSON.parse(r.deep_profile || '{}'),
             leadership: JSON.parse(r.leadership || '[]'),
             architecture: JSON.parse(r.architecture || '{}'),
+            jobs: JSON.parse(r.deep_profile || '{}').jobs || [],
             coldOutreachDraft: r.draft_markdown,
             wordCount: r.word_count
           };
@@ -1173,6 +1256,47 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       const deep = t.deepProfile || {};
       const leaders = t.leadership || [];
       const arch = t.architecture || {};
+      const jobs = t.jobs || deep.jobs || [];
+
+      // 0. Scraped Job Posts HTML
+      const jobsHtml = \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">💼 Scraped Job Posts & Active Openings</div>
+            <div class="section-badge">\${jobs.length} Active Positions</div>
+          </div>
+          \${jobs.length > 0 ? \`
+            <div class="jobs-grid">
+              \${jobs.map(j => \`
+                <div class="job-card">
+                  <div class="job-header">
+                    <div>
+                      <div class="job-title-row">
+                        <a class="job-title" href="\${j.url}" target="_blank">\${j.title} ↗</a>
+                        \${j.remoteStatus ? \`<span class="remote-badge">\${j.remoteStatus}</span>\` : ''}
+                      </div>
+                      <div class="job-meta">
+                        <span>\${j.department}</span> • <span>\${j.location}</span>
+                        \${j.salaryBand ? \` • <span class="salary-chip">\${j.salaryBand}</span>\` : ''}
+                        \${j.postedDate ? \` • <span style="font-family:'JetBrains Mono',monospace;">\${j.postedDate}</span>\` : ''}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="job-snippet">\${j.snippet}</div>
+                  <div class="job-skills">
+                    \${(j.keySkills || []).map(s => \`<span class="skill-chip">\${s}</span>\`).join('')}
+                  </div>
+                </div>
+              \`).join('')}
+            </div>
+          \` : \`
+            <div style="font-size:12.5px; color:var(--text-muted); font-style:italic;">
+              No open roles cached. View live careers portal: 
+              <a class="company-link" href="\${t.careersUrl || t.website}" target="_blank">\${t.careersUrl || 'Careers'} ↗</a>
+            </div>
+          \`}
+        </div>
+      \`;
 
       // 1. Founders & Leadership HTML
       const leadersHtml = (leaders && leaders.length > 0) ? \`
@@ -1380,6 +1504,8 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           </div>
           \${contactContent}
         </div>
+
+        \${jobsHtml}
 
         \${leadersHtml}
 

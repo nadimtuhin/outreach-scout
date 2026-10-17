@@ -1109,5 +1109,6 @@ export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
     contacts,
     coldOutreachDraft: defaultDraft,
     deepProfile: COMPANY_PROFILES[t.metadata.id],
+    jobs: COMPANY_PROFILES[t.metadata.id]?.jobs || [],
   };
 });

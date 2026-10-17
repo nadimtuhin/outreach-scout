@@ -184,6 +184,29 @@ function handleShow(targetId: string): void {
     console.log(`  [~] ${g}`);
   }
 
+  const deep = JSON.parse(t.deep_profile || '{}');
+  const jobs = (deep.jobs || []) as Array<{
+    title: string;
+    department?: string;
+    location?: string;
+    remoteStatus?: string;
+    salaryBand?: string;
+    keySkills?: string[];
+    url: string;
+    snippet?: string;
+  }>;
+
+  if (jobs.length > 0) {
+    console.log('\n--- SCRAPED JOB POSTS & HIRING SIGNALS ---');
+    for (const j of jobs) {
+      console.log(`\n  [JOB] ${j.title} (${j.remoteStatus || 'Remote'} • ${j.location || 'Anywhere'})`);
+      if (j.salaryBand) console.log(`        Salary: ${j.salaryBand}`);
+      if (j.keySkills && j.keySkills.length > 0) console.log(`        Skills: ${j.keySkills.join(', ')}`);
+      console.log(`        Apply:  ${j.url}`);
+      if (j.snippet) console.log(`        Notes:  ${j.snippet}`);
+    }
+  }
+
   console.log('\n--- TARGETED CONTACTS & PERSONA PITCHES ---');
   if (contacts.length === 0) {
     console.log(`Primary Contact: ${t.leader_name}`);
