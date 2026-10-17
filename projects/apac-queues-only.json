@@ -1,0 +1,54 @@
+{
+  "id": "apac-queues-only",
+  "name": "APAC Distributed Queues & Async Workflows",
+  "description": "Niche campaign strictly targeting distributed background job engines and queues with confirmed APAC / South Asia engineering presence.",
+  "createdAt": "2026-10-17T00:00:00.000Z",
+  "profile": {
+    "name": "Omar Faruque Tuhin (Nadim Tuhin)",
+    "senderName": "Nadim",
+    "headline": "Senior Queue & Workflow Infrastructure Engineer | Redis, BullMQ, Temporal",
+    "email": "nadimtuhin+pad@gmail.com",
+    "calendlyUrl": "https://calendly.com/nadimtuhin/30min",
+    "location": "Bangladesh (UTC+6)",
+    "timezone": "UTC+6",
+    "experienceYears": 14,
+    "coreSkills": [
+      "BullMQ",
+      "Redis",
+      "TypeScript",
+      "Go",
+      "Distributed Task Queue",
+      "Idempotency",
+      "Temporal"
+    ],
+    "proofRepos": [
+      {
+        "name": "omnivore-pos-proxy",
+        "url": "https://github.com/nadimtuhin/omnivore-pos-proxy",
+        "description": "Idempotent event loop backpressure handling with Redis."
+      }
+    ],
+    "portfolioUrl": "https://pad.nadimtuhin.com/outreach/"
+  },
+  "rules": {
+    "targetVerticals": [
+      "developer_workflows_queues"
+    ],
+    "targetTitles": [
+      "CTO",
+      "VP Engineering",
+      "Head of Engineering"
+    ],
+    "minHalalScore": 95,
+    "minRemoteScore": 90,
+    "minApacScore": 88,
+    "requireApacHires": true,
+    "wordCountLimit": 150,
+    "voiceRules": {
+      "noEmDashes": true,
+      "noNumberedLists": true,
+      "bareProofUrlsOnTop": true,
+      "tone": "technical"
+    }
+  }
+}

@@ -6,6 +6,8 @@ import {
 } from './analytics.ts';
 import { ScoutDatabase, type StoredTargetRow } from './db.ts';
 import { evaluateHalalCompliance, evaluateRemoteApacHiring } from './scoring-engine.ts';
+import { getProject, listProjects, matchTargetForProject } from './projects.ts';
+import { TARGET_DOSSIERS } from './targets-data.ts';
 
 const dbPath = join(import.meta.dir, '..', 'scout.sqlite');
 const db = new ScoutDatabase(dbPath);
@@ -443,6 +445,99 @@ function handleScore(targetArg?: string): void {
   console.log('Run "bun run cli score <id>" for detailed compliance & team telemetry.\n');
 }
 
+function handleProject(subcmd?: string, arg?: string): void {
+  if (!subcmd || subcmd === 'list') {
+    const projects = listProjects();
+    console.log('\n=================== SCOUT CAMPAIGN PROJECTS ===================');
+    for (const p of projects) {
+      console.log(`\n• Project ID: ${p.id.padEnd(16)} [${p.name}]`);
+      console.log(`  Candidate:  ${p.profile.name} (${p.profile.headline})`);
+      console.log(`  Verticals:  ${p.rules.targetVerticals.join(', ')}`);
+      console.log(`  Rules:      Min Halal: ${p.rules.minHalalScore ?? 'none'}% | Min Remote: ${p.rules.minRemoteScore ?? 'none'}% | Min APAC: ${p.rules.minApacScore ?? 'none'}%`);
+      console.log(`  Repos:      ${p.profile.proofRepos.map((r) => r.name).join(', ')}`);
+    }
+    console.log('\n===============================================================\n');
+    console.log('Commands:');
+    console.log('  bun run cli project show <id>       Inspect full project profile and rules');
+    console.log('  bun run cli project filter <id>     Filter 70 targets against project rules\n');
+    return;
+  }
+
+  if (subcmd === 'show') {
+    if (!arg) {
+      console.error('Usage: bun run cli project show <project-id>');
+      process.exit(1);
+    }
+    const p = getProject(arg);
+    console.log(`\n=================== PROJECT: ${p.id.toUpperCase()} ===================`);
+    console.log(`Name:        ${p.name}`);
+    console.log(`Description: ${p.description}`);
+    console.log('\n--- CANDIDATE PROFILE ---');
+    console.log(`Name:        ${p.profile.name} (${p.profile.senderName})`);
+    console.log(`Headline:    ${p.profile.headline}`);
+    console.log(`Email:       ${p.profile.email}`);
+    console.log(`Calendly:    ${p.profile.calendlyUrl}`);
+    console.log(`Location:    ${p.profile.location} (${p.profile.timezone})`);
+    console.log(`Experience:  ${p.profile.experienceYears} years`);
+    console.log(`Skills:      ${p.profile.coreSkills.join(', ')}`);
+    console.log('Proof Repos:');
+    for (const r of p.profile.proofRepos) {
+      console.log(`  • ${r.name}: ${r.url} - ${r.description}`);
+    }
+    console.log('\n--- OUTBOUND RULES & FILTERS ---');
+    console.log(`Target Verticals: ${p.rules.targetVerticals.join(', ')}`);
+    console.log(`Target Titles:    ${p.rules.targetTitles.join(', ')}`);
+    console.log(`Min Halal Score:  ${p.rules.minHalalScore ?? 'none'}%`);
+    console.log(`Min Remote Score: ${p.rules.minRemoteScore ?? 'none'}%`);
+    console.log(`Min APAC Score:   ${p.rules.minApacScore ?? 'none'}%`);
+    console.log(`Require APAC Hires: ${p.rules.requireApacHires ? 'YES' : 'NO'}`);
+    console.log(`Word Count Limit: ${p.rules.wordCountLimit} words`);
+    console.log(`Voice Rules:      noEmDashes=${p.rules.voiceRules.noEmDashes}, noNumberedLists=${p.rules.voiceRules.noNumberedLists}, tone=${p.rules.voiceRules.tone}\n`);
+    return;
+  }
+
+  if (subcmd === 'filter') {
+    const projId = arg || 'default';
+    const p = getProject(projId);
+    const all = TARGET_DOSSIERS;
+
+    console.log(`\n=================== FILTER RESULTS FOR PROJECT: ${p.id.toUpperCase()} ===================`);
+    let passedCount = 0;
+    const passedTargets: Array<{ name: string; score: number; vertical: string }> = [];
+    const rejectedTargets: Array<{ name: string; rejections: string[] }> = [];
+
+    for (const t of all) {
+      const match = matchTargetForProject(p, t);
+      if (match.passedFilters) {
+        passedCount++;
+        passedTargets.push({ name: t.metadata.name, score: match.score, vertical: t.metadata.vertical });
+      } else {
+        rejectedTargets.push({ name: t.metadata.name, rejections: match.filterRejections });
+      }
+    }
+
+    console.log(`Matched & Qualified: ${passedCount} / ${all.length} companies`);
+    console.log(`Filtered Out:        ${rejectedTargets.length} companies\n`);
+
+    console.log('--- TOP MATCHED TARGETS ---');
+    passedTargets.sort((a, b) => b.score - a.score);
+    for (const pt of passedTargets.slice(0, 15)) {
+      console.log(`  • ${pt.name.padEnd(20)} | Match: ${pt.score}% | ${pt.vertical}`);
+    }
+
+    if (rejectedTargets.length > 0) {
+      console.log('\n--- SAMPLE FILTERED TARGETS & REASONS ---');
+      for (const rt of rejectedTargets.slice(0, 5)) {
+        console.log(`  ✕ ${rt.name.padEnd(16)}: ${rt.rejections.join('; ')}`);
+      }
+    }
+    console.log('===============================================================================\n');
+    return;
+  }
+
+  console.error(`Unknown project subcommand: ${subcmd}`);
+}
+
 function main(): void {
   const args = process.argv.slice(2);
   const command = args[0] || 'list';
@@ -458,6 +553,10 @@ function main(): void {
     }
     case 'score': {
       handleScore(args[1]);
+      break;
+    }
+    case 'project': {
+      handleProject(args[1], args[2]);
       break;
     }
     case 'search': {

@@ -102,6 +102,46 @@ export interface RemoteApacHiringAssessment {
   notes: string;
 }
 
+export interface CandidateUserProfile {
+  name: string;
+  senderName: string;
+  headline: string;
+  email: string;
+  calendlyUrl: string;
+  location: string;
+  timezone: string;
+  experienceYears: number;
+  coreSkills: string[];
+  proofRepos: Array<{ name: string; url: string; description: string }>;
+  portfolioUrl?: string;
+}
+
+export interface ProjectRuleSet {
+  targetVerticals: string[];
+  targetTitles: string[];
+  minHalalScore?: number;
+  prohibitedKeywords?: string[];
+  minRemoteScore?: number;
+  minApacScore?: number;
+  requireApacHires?: boolean;
+  wordCountLimit: number;
+  voiceRules: {
+    noEmDashes: boolean;
+    noNumberedLists: boolean;
+    bareProofUrlsOnTop: boolean;
+    tone: 'direct' | 'technical' | 'casual';
+  };
+}
+
+export interface ScoutProject {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  profile: CandidateUserProfile;
+  rules: ProjectRuleSet;
+}
+
 export interface BlogArticleSignal {
   title: string;
   url: string;

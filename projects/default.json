@@ -1,0 +1,90 @@
+{
+  "id": "default",
+  "name": "Nadim Tuhin - Senior Distributed Systems & Tech Lead",
+  "description": "High-leverage outreach targeting B2B SaaS engineering leaders across POS, FHIR Healthcare, Browser Automation, Queues, and Unified APIs.",
+  "createdAt": "2026-10-17T00:00:00.000Z",
+  "profile": {
+    "name": "Omar Faruque Tuhin (Nadim Tuhin)",
+    "senderName": "Nadim",
+    "headline": "14+ Years Senior SWE / Tech Lead | Distributed Systems & High-Throughput Automation",
+    "email": "nadimtuhin+pad@gmail.com",
+    "calendlyUrl": "https://calendly.com/nadimtuhin/30min",
+    "location": "Bangladesh (UTC+6)",
+    "timezone": "UTC+6",
+    "experienceYears": 14,
+    "coreSkills": [
+      "TypeScript",
+      "Node.js",
+      "Bun",
+      "Go",
+      "PostgreSQL",
+      "Redis",
+      "Cloudflare Workers",
+      "Durable Objects",
+      "Browser Automation (Playwright/Puppeteer/CDP)",
+      "BullMQ",
+      "FHIR R4",
+      "Toast/Square/Clover POS APIs"
+    ],
+    "proofRepos": [
+      {
+        "name": "omnivore-pos-proxy",
+        "url": "https://github.com/nadimtuhin/omnivore-pos-proxy",
+        "description": "Idempotent POS order ingestion and event loop backpressure handling."
+      },
+      {
+        "name": "fhir-stream-parser",
+        "url": "https://github.com/nadimtuhin/fhir-stream-parser",
+        "description": "Memory-bounded streaming XML C-CDA to FHIR R4 JSON pipeline."
+      },
+      {
+        "name": "stealth-cdp-cluster",
+        "url": "https://github.com/nadimtuhin/stealth-cdp-cluster",
+        "description": "Chromium CDP connection pooling with Turnstile evasion and WebGL fingerprint spoofing."
+      }
+    ],
+    "portfolioUrl": "https://pad.nadimtuhin.com/outreach/"
+  },
+  "rules": {
+    "targetVerticals": [
+      "food_pos_integration",
+      "healthcare_fhir_automation",
+      "browser_automation_infrastructure",
+      "developer_workflows_queues",
+      "unified_apis"
+    ],
+    "targetTitles": [
+      "Founder",
+      "Co-Founder",
+      "CEO",
+      "CTO",
+      "VP Engineering",
+      "Head of Engineering",
+      "Engineering Director",
+      "Head of Product",
+      "Principal Engineer"
+    ],
+    "minHalalScore": 85,
+    "prohibitedKeywords": [
+      "gambling",
+      "casino",
+      "sportsbook",
+      "tobacco",
+      "liquor",
+      "brewery",
+      "adult",
+      "payday loan",
+      "predatory lending"
+    ],
+    "minRemoteScore": 75,
+    "minApacScore": 70,
+    "requireApacHires": false,
+    "wordCountLimit": 150,
+    "voiceRules": {
+      "noEmDashes": true,
+      "noNumberedLists": true,
+      "bareProofUrlsOnTop": true,
+      "tone": "direct"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "template",
+  "name": "Template Project - Custom Profile & Search Rules",
+  "description": "Copy this file to projects/<your-project-id>.json to scout leads for a new profile, vertical, or business offering.",
+  "createdAt": "2026-10-17T00:00:00.000Z",
+  "profile": {
+    "name": "Your Name",
+    "senderName": "YourFirstName",
+    "headline": "Specialist Title | Value Proposition & Core Domain",
+    "email": "you@example.com",
+    "calendlyUrl": "https://calendly.com/your-handle/30min",
+    "location": "Your Country (Timezone)",
+    "timezone": "UTC+0",
+    "experienceYears": 8,
+    "coreSkills": [
+      "Skill 1",
+      "Skill 2",
+      "Skill 3"
+    ],
+    "proofRepos": [
+      {
+        "name": "demo-repo",
+        "url": "https://github.com/yourname/demo-repo",
+        "description": "Working proof of competence solving a production failure mode."
+      }
+    ],
+    "portfolioUrl": "https://yourdomain.com"
+  },
+  "rules": {
+    "targetVerticals": [
+      "developer_workflows_queues",
+      "unified_apis"
+    ],
+    "targetTitles": [
+      "Founder",
+      "CEO",
+      "CTO",
+      "VP Engineering",
+      "Head of Engineering"
+    ],
+    "minHalalScore": 80,
+    "prohibitedKeywords": [
+      "gambling",
+      "casino",
+      "tobacco",
+      "adult"
+    ],
+    "minRemoteScore": 70,
+    "minApacScore": 60,
+    "requireApacHires": false,
+    "wordCountLimit": 150,
+    "voiceRules": {
+      "noEmDashes": true,
+      "noNumberedLists": true,
+      "bareProofUrlsOnTop": true,
+      "tone": "direct"
+    }
+  }
+}
