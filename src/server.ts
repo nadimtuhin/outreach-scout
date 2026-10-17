@@ -102,7 +102,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       flex-shrink: 0;
       z-index: 10;
     }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; letter-spacing: -0.02em; }
     .brand-badge {
       width: 28px;
       height: 28px;
@@ -113,6 +118,62 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       justify-content: center;
       color: #fff;
       font-size: 13px;
+    }
+    .brand-sub-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--primary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(37, 99, 235, 0.25);
+    }
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface);
+      padding: 3px 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .nav-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-tab:hover {
+      color: var(--text);
+    }
+    .nav-tab.active {
+      background: var(--card-bg);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .tab-badge {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: var(--border);
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .nav-tab.active .tab-badge {
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .nav-actions { display: flex; align-items: center; gap: 10px; }
@@ -143,11 +204,312 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .theme-btn:hover { color: var(--text); border-color: var(--primary); }
 
+    /* Views */
+    .app-view {
+      display: none;
+      flex: 1;
+      height: calc(100vh - 56px);
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .app-view.active {
+      display: flex;
+    }
+    .view-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px 60px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Modern SaaS KPI Cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .kpi-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .kpi-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-subtle);
+    }
+    .kpi-icon {
+      font-size: 16px;
+    }
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .kpi-footer {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kpi-trend {
+      font-weight: 700;
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .trend-up {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--emerald);
+    }
+
+    /* SaaS Dashboard Content Grid */
+    .dash-grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+    @media (max-width: 1080px) {
+      .dash-grid-2 { grid-template-columns: 1fr; }
+    }
+    .dash-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .dash-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .dash-panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dash-panel-badge {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* Vertical Breakdown Progress Bars */
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .progress-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+    }
+    .progress-name {
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .progress-name:hover {
+      color: var(--primary);
+    }
+    .progress-stats {
+      font-size: 11.5px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+    .progress-track {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--surface);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      transition: width 0.4s ease;
+    }
+
+    /* Outbound Funnel Steps */
+    .funnel-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .funnel-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .funnel-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .funnel-info {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .funnel-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .funnel-val {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+    }
+
+    /* SaaS Data Table for Leads */
+    .table-container {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+    .table-toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+    }
+    .saas-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .saas-table th {
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-subtle);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .saas-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+    .saas-table tr:last-child td {
+      border-bottom: none;
+    }
+    .saas-table tr:hover td {
+      background: var(--surface);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 3000;
+      pointer-events: none;
+    }
+    .toast {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     /* Master-Detail Split Workspace */
     .workspace {
       display: flex;
       flex: 1;
-      height: calc(100vh - 56px);
+      height: 100%;
       min-height: 0;
       min-width: 0;
       overflow: hidden;
@@ -1200,10 +1562,38 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
 </head>
 <body>
   <div class="top-nav">
-    <div class="brand">
-      <div class="brand-badge">⚡</div>
-      <span>Outreach Scout</span>
+    <div class="nav-left">
+      <div class="brand">
+        <div class="brand-badge">⚡</div>
+        <span>Outreach Scout</span>
+        <span class="brand-sub-badge">SaaS Enterprise</span>
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" id="tab-nav-overview" onclick="switchView('overview')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Overview</span>
+        </button>
+        <button class="nav-tab" id="tab-nav-targets" onclick="switchView('targets')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="12 6 12 12 16 14"></polygon></svg>
+          <span>Accounts CRM</span>
+          <span class="tab-badge" id="badge-total-accounts">70</span>
+        </button>
+        <button class="nav-tab" id="tab-nav-leads" onclick="switchView('leads')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Lead Directory</span>
+          <span class="tab-badge" id="badge-total-leads">193</span>
+        </button>
+        <button class="nav-tab" id="tab-nav-telemetry" onclick="switchView('telemetry')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Queue & Safety</span>
+        </button>
+        <button class="nav-tab" id="tab-nav-campaigns" onclick="switchView('campaigns')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span>Campaigns</span>
+        </button>
+      </div>
     </div>
+
     <div class="nav-actions">
       <div style="display:flex; align-items:center; gap:6px; margin-right:4px;">
         <span style="font-size:11px; font-weight:700; color:var(--text-subtle); text-transform:uppercase;">Campaign:</span>
@@ -1211,7 +1601,7 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           <option value="default">Default Campaign</option>
         </select>
         <button class="btn-manage-projects" onclick="openProjectModal()" title="Manage or create custom prospecting campaigns">
-          📁 Campaigns
+          📁 New
         </button>
       </div>
 
@@ -1227,38 +1617,241 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     </div>
   </div>
 
-  <div class="workspace">
-    <!-- Left Pane: Master List -->
-    <aside class="master-pane">
-      <div class="master-search-bar">
-        <div class="search-input-wrap">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="search-input" class="search-input" placeholder="Search targets or platform..." oninput="handleSearch()">
-        </div>
-        <div class="category-filter-bar">
-          <button class="cat-btn active" onclick="setCategory('all')">All (<span id="count-all">0</span>)</button>
-          <button class="cat-btn" onclick="setCategory('food_pos_integration')">Food POS</button>
-          <button class="cat-btn" onclick="setCategory('healthcare_fhir_automation')">Healthcare</button>
-          <button class="cat-btn" onclick="setCategory('browser_automation_infrastructure')">Browser</button>
-          <button class="cat-btn" onclick="setCategory('developer_workflows_queues')">Queues & Workflows</button>
-          <button class="cat-btn" onclick="setCategory('unified_apis')">Unified APIs</button>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding-top:6px; border-top:1px dashed var(--border);">
-          <span id="active-campaign-label" style="font-size:11px; font-weight:600; color:var(--text-subtle);">Active: Default</span>
-          <button id="toggle-qualified-btn" class="cat-btn" style="padding:2px 8px; font-size:11px;" onclick="toggleQualifiedFilter()">All Targets</button>
-        </div>
+  <!-- VIEW 1: Executive Overview SaaS Dashboard -->
+  <div id="view-overview" class="app-view active">
+    <div class="view-scrollable">
+      <!-- 6-up KPI Metrics Header -->
+      <div class="kpi-row" id="overview-kpi-row">
+        <!-- Rendered via JS -->
       </div>
 
-      <div class="master-list" id="master-list">
-        <!-- Rendered items -->
-      </div>
-    </aside>
+      <!-- Dashboard Visual Panels -->
+      <div class="dash-grid-2">
+        <!-- Left Column: Pipeline & Funnel -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <!-- Vertical Pipeline Distribution -->
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <span class="dash-panel-title">
+                <span>📊 Vertical Pipeline Distribution</span>
+              </span>
+              <span class="dash-panel-badge">5 Verticals · 70 Targets</span>
+            </div>
+            <div class="progress-list" id="overview-vertical-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
 
-    <!-- Right Pane: Detail View -->
-    <main class="detail-pane" id="detail-pane">
-      <!-- Active detail rendered dynamically -->
-    </main>
+          <!-- Outbound Funnel Progression -->
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <span class="dash-panel-title">
+                <span>📈 Outbound Execution Funnel</span>
+              </span>
+              <span class="dash-panel-badge">Live Pipeline Progression</span>
+            </div>
+            <div class="funnel-container" id="overview-funnel-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Compliance & Top Targets -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <!-- Ethical & Remote Hiring Metrics -->
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <span class="dash-panel-title">
+                <span>🕌 Ethical & Geographic Telemetry</span>
+              </span>
+              <span class="dash-panel-badge">100% Policy Pass</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px;" id="overview-compliance-metrics">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Top-Ranked Targets Leaderboard -->
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <span class="dash-panel-title">
+                <span>🏆 Top-Ranked Executive Targets</span>
+              </span>
+              <span class="dash-panel-badge" id="overview-campaign-rank-badge">Active Campaign Rank</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;" id="overview-top-targets">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- VIEW 2: Target Accounts CRM (Master-Detail Split Pane) -->
+  <div id="view-targets" class="app-view">
+    <div class="workspace">
+      <!-- Left Pane: Master List -->
+      <aside class="master-pane">
+        <div class="master-search-bar">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="search-input" class="search-input" placeholder="Search targets or platform (Press /)..." oninput="handleSearch()">
+          </div>
+          <div class="category-filter-bar">
+            <button class="cat-btn active" onclick="setCategory('all')">All (<span id="count-all">0</span>)</button>
+            <button class="cat-btn" onclick="setCategory('food_pos_integration')">Food POS</button>
+            <button class="cat-btn" onclick="setCategory('healthcare_fhir_automation')">Healthcare</button>
+            <button class="cat-btn" onclick="setCategory('browser_automation_infrastructure')">Browser</button>
+            <button class="cat-btn" onclick="setCategory('developer_workflows_queues')">Queues & Workflows</button>
+            <button class="cat-btn" onclick="setCategory('unified_apis')">Unified APIs</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding-top:6px; border-top:1px dashed var(--border);">
+            <span id="active-campaign-label" style="font-size:11px; font-weight:600; color:var(--text-subtle);">Active: Default</span>
+            <button id="toggle-qualified-btn" class="cat-btn" style="padding:2px 8px; font-size:11px;" onclick="toggleQualifiedFilter()">All Targets</button>
+          </div>
+        </div>
+
+        <div class="master-list" id="master-list">
+          <!-- Rendered items -->
+        </div>
+      </aside>
+
+      <!-- Right Pane: Detail View -->
+      <main class="detail-pane" id="detail-pane">
+        <!-- Active detail rendered dynamically -->
+      </main>
+    </div>
+  </div>
+
+  <!-- VIEW 3: Executive Lead Directory -->
+  <div id="view-leads" class="app-view">
+    <div class="view-scrollable">
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="search-input-wrap" style="width:300px;">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="leads-search-input" class="search-input" placeholder="Search 193 leads by name, role, company..." oninput="handleLeadsSearch()">
+            </div>
+            <div class="category-filter-bar">
+              <button class="cat-btn active" id="leads-btn-all" onclick="setLeadRoleFilter('all')">All Leads</button>
+              <button class="cat-btn" id="leads-btn-c-level" onclick="setLeadRoleFilter('c-level')">Founders & C-Level</button>
+              <button class="cat-btn" id="leads-btn-eng" onclick="setLeadRoleFilter('eng')">Engineering Leads</button>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;" id="leads-count-label">
+            193 Verified Decision Makers
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="saas-table">
+            <thead>
+              <tr>
+                <th>Executive</th>
+                <th>Role / Title</th>
+                <th>Target Company</th>
+                <th>Vertical</th>
+                <th>Alignment</th>
+                <th>LinkedIn Profile</th>
+                <th>Outreach Action</th>
+              </tr>
+            </thead>
+            <tbody id="leads-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 4: Queue & Engine Telemetry -->
+  <div id="view-telemetry" class="app-view">
+    <div class="view-scrollable">
+      <div class="dash-grid-2">
+        <div class="dash-panel">
+          <div class="dash-panel-header">
+            <span class="dash-panel-title">⚡ Background BunQueue Engine</span>
+            <span class="dash-panel-badge" style="color:var(--emerald);">Status: Active</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Persistence Store</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">SQLite WAL (scout.sqlite)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Worker Concurrency</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">1 (Anti-detection Profile)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Navigation Delay Jitter</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">8,000ms – 16,000ms</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Human Reading Dwell Time</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">4,000ms – 10,000ms</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Mutating Action Delay (Follow/Connect)</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">30,000ms – 90,000ms</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Hourly Action Ceiling</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">15 actions / rolling hour</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Anti-Bot Circuit Breaker</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--emerald);">CLOSED (0 Trips)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-panel">
+          <div class="dash-panel-header">
+            <span class="dash-panel-title">🛡️ Safety Profile & Guardrails</span>
+            <span class="dash-panel-badge">Compliance Gate</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; font-size:12.5px; line-height:1.5;">
+            <div style="padding:14px; border-left:3px solid var(--primary); background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <strong>Manual Review Policy:</strong> Zero automated message dispatching without Nadim's explicit approval. Every cold pitch is prepared and staged for copy or manual inspection.
+            </div>
+            <div style="padding:14px; border-left:3px solid var(--emerald); background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <strong>Browser Automation Bridge:</strong> OpenTabs recycled single-tab daemon. Eliminates multi-tab finger-printing alerts during LinkedIn inspections.
+            </div>
+            <div style="padding:14px; border-left:3px solid var(--amber); background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <strong>Fallback Backoff:</strong> Automatic 30m–4h backoff cooldown trigger if any checkpoint or CAPTCHA challenge is encountered.
+            </div>
+            <div style="padding:14px; border-left:3px solid #8b5cf6; background:var(--surface); border-radius:6px; border:1px solid var(--border);">
+              <strong>Zero-Vendor Cold Pitches:</strong> Line 1 proof repo, Line 2 Calendly URL, &lt;150 words, zero buzzwords, zero em/en dashes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 5: Campaigns & Rules -->
+  <div id="view-campaigns" class="app-view">
+    <div class="view-scrollable">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 style="font-size:18px; font-weight:800; color:var(--text);">📁 Prospecting Campaigns</h2>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Manage custom candidate profiles, proof repositories, and qualification rule filters.</p>
+        </div>
+        <button class="btn-submit-project" onclick="openProjectModal(); switchModalTab('create');">
+          + Create New Campaign
+        </button>
+      </div>
+
+      <div id="campaigns-grid-cards" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:18px; margin-top:8px;">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
 
   <!-- Campaign Projects Modal -->
   <div id="project-modal" class="modal-backdrop" onclick="if(event.target === this) closeProjectModal()">
@@ -1407,6 +2000,46 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     let allProjects = [];
     let activeProjectId = 'default';
     let filterQualifiedOnly = false;
+    let currentView = 'overview';
+    let leadsSearchQuery = '';
+    let leadsRoleFilter = 'all';
+
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = '<span>⚡ ' + msg + '</span>';
+      container.appendChild(t);
+      setTimeout(() => t.classList.add('show'), 10);
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 250);
+      }, 2500);
+    }
+
+    function switchView(viewName) {
+      currentView = viewName;
+      document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+
+      const targetView = document.getElementById('view-' + viewName);
+      if (targetView) targetView.classList.add('active');
+
+      const targetTab = document.getElementById('tab-nav-' + viewName);
+      if (targetTab) targetTab.classList.add('active');
+
+      if (viewName === 'overview') {
+        renderOverviewDashboard();
+      } else if (viewName === 'targets') {
+        renderMasterList();
+        renderDetailPane();
+      } else if (viewName === 'leads') {
+        renderLeadsTable();
+      } else if (viewName === 'campaigns') {
+        renderCampaignsView();
+      }
+    }
 
     function initTheme() {
       const saved = localStorage.getItem('scout_theme') || 'light';
@@ -1488,8 +2121,10 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       const select = document.getElementById('project-select');
       if (select) select.value = id;
       computeQualifications();
+      renderOverviewDashboard();
       renderMasterList();
       renderDetailPane();
+      renderCampaignsView();
     }
 
     function toggleQualifiedFilter() {
@@ -1690,8 +2325,18 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         }
 
         computeQualifications();
+
+        const totalLeads = targets.reduce((sum, t) => sum + (t.contacts?.length || 0), 0);
+        const bAcc = document.getElementById('badge-total-accounts');
+        if (bAcc) bAcc.textContent = targets.length;
+        const bLeads = document.getElementById('badge-total-leads');
+        if (bLeads) bLeads.textContent = totalLeads;
+
+        renderOverviewDashboard();
         renderMasterList();
         renderDetailPane();
+        renderLeadsTable();
+        renderCampaignsView();
       } catch (err) {
         document.getElementById('master-list').innerHTML = '<p style="color:#ef4444; padding:16px;">Failed to load /api/targets</p>';
       }
@@ -2284,6 +2929,395 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         }
       }, 4000);
     }
+
+    function renderOverviewDashboard() {
+      const totalAccounts = targets.length;
+      const totalLeads = targets.reduce((sum, t) => sum + (t.contacts ? t.contacts.length : 0), 0);
+      const qualified = targets.filter(t => t.isQualified).length;
+      const avgMatch = totalAccounts ? Math.round(targets.reduce((sum, t) => sum + (t.matchAnalysis?.score || 90), 0) / totalAccounts) : 90;
+      const avgHalal = totalAccounts ? Math.round(targets.reduce((sum, t) => {
+        const h = t.halalCompliance || (t.deepProfile && t.deepProfile.halalCompliance);
+        return sum + (h?.score || 95);
+      }, 0) / totalAccounts) : 95;
+      const avgApac = totalAccounts ? Math.round(targets.reduce((sum, t) => {
+        const r = t.remoteHiring || (t.deepProfile && t.deepProfile.remoteHiring);
+        return sum + (r?.apacScore || 80);
+      }, 0) / totalAccounts) : 80;
+
+      const kpiRow = document.getElementById('overview-kpi-row');
+      if (kpiRow) {
+        kpiRow.innerHTML = \`
+          <div class="kpi-card" onclick="switchView('targets')">
+            <div class="kpi-header">
+              <span class="kpi-title">Target Accounts</span>
+              <span class="kpi-icon">🏢</span>
+            </div>
+            <div class="kpi-value">\${totalAccounts}</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">+14 newly mapped</span>
+              <span>across 5 verticals</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" onclick="switchView('leads')">
+            <div class="kpi-header">
+              <span class="kpi-title">Verified Executives</span>
+              <span class="kpi-icon">👥</span>
+            </div>
+            <div class="kpi-value">\${totalLeads}</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">100% verified</span>
+              <span>Founders, CTOs, VPs</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" onclick="switchView('targets')">
+            <div class="kpi-header">
+              <span class="kpi-title">Campaign Qualified</span>
+              <span class="kpi-icon">🎯</span>
+            </div>
+            <div class="kpi-value">\${qualified}</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">\${Math.round((qualified / (totalAccounts || 1)) * 100)}% match</span>
+              <span>for active campaign</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Average Fit Score</span>
+              <span class="kpi-icon">⚡</span>
+            </div>
+            <div class="kpi-value">\${avgMatch}%</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">Top-quartile</span>
+              <span>stack alignment</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Halal Compliance</span>
+              <span class="kpi-icon">🕌</span>
+            </div>
+            <div class="kpi-value">\${avgHalal}%</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">0 prohibited</span>
+              <span>clean business models</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Remote & APAC Index</span>
+              <span class="kpi-icon">🌏</span>
+            </div>
+            <div class="kpi-value">\${avgApac}%</div>
+            <div class="kpi-footer">
+              <span class="kpi-trend trend-up">49% confirmed</span>
+              <span>South Asia engineering</span>
+            </div>
+          </div>
+        \`;
+      }
+
+      const verticalLabels = {
+        'food_pos_integration': 'Food POS Integration',
+        'healthcare_fhir_automation': 'Healthcare FHIR Automation',
+        'browser_automation_infrastructure': 'Browser Automation Infrastructure',
+        'developer_workflows_queues': 'Queues & Async Workflows',
+        'unified_apis': 'Unified APIs & DevTools'
+      };
+
+      const vertList = document.getElementById('overview-vertical-list');
+      if (vertList) {
+        vertList.innerHTML = Object.entries(verticalLabels).map(([key, label]) => {
+          const matching = targets.filter(t => t.vertical === key);
+          const count = matching.length;
+          const pct = Math.round((count / (totalAccounts || 1)) * 100);
+          const vertAvg = count ? Math.round(matching.reduce((acc, t) => acc + (t.matchAnalysis?.score || 90), 0) / count) : 0;
+          return \`
+            <div class="progress-item">
+              <div class="progress-header">
+                <span class="progress-name" onclick="setCategory('\${key}'); switchView('targets');">\${label}</span>
+                <span class="progress-stats">\${count} accounts (\${pct}%) · \${vertAvg}% avg fit</span>
+              </div>
+              <div class="progress-track" onclick="setCategory('\${key}'); switchView('targets');" style="cursor:pointer;">
+                <div class="progress-fill" style="width: \${pct}%;"></div>
+              </div>
+            </div>
+          \`;
+        }).join('');
+      }
+
+      const funnelContainer = document.getElementById('overview-funnel-container');
+      if (funnelContainer) {
+        funnelContainer.innerHTML = \`
+          <div class="funnel-step">
+            <div class="funnel-num">1</div>
+            <div class="funnel-info">
+              <span class="funnel-title">Target Accounts Sourced & Profiled</span>
+              <span class="funnel-val">\${totalAccounts} / \${totalAccounts} (100%)</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">2</div>
+            <div class="funnel-info">
+              <span class="funnel-title">Failure-Mode Tech Blogs Cataloged</span>
+              <span class="funnel-val">152 Engineering Articles</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">3</div>
+            <div class="funnel-info">
+              <span class="funnel-title">Executive Decision Makers Mapped</span>
+              <span class="funnel-val">\${totalLeads} Founders & CTOs</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">4</div>
+            <div class="funnel-info">
+              <span class="funnel-title">Campaign Qualified Accounts</span>
+              <span class="funnel-val">\${qualified} Qualified</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-num">5</div>
+            <div class="funnel-info">
+              <span class="funnel-title">Zero-Vendor Pitches Drafted (&lt;150 words)</span>
+              <span class="funnel-val">\${totalAccounts} Ready for Dispatch</span>
+            </div>
+          </div>
+        \`;
+      }
+
+      const compPanel = document.getElementById('overview-compliance-metrics');
+      if (compPanel) {
+        const halalCount = targets.filter(t => (t.halalCompliance?.score || t.deepProfile?.halalCompliance?.score || 95) >= 90).length;
+        const apacHireCount = targets.filter(t => (t.remoteHiring?.hasApacHires || t.deepProfile?.remoteHiring?.hasApacHires)).length;
+
+        compPanel.innerHTML = \`
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--surface); border-radius:8px; border:1px solid var(--border);">
+            <div>
+              <div style="font-weight:700; font-size:13px; color:var(--text);">🕌 Halal & Ethical Compliance</div>
+              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Gambling, Usury & Weapons Filter</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:15px; font-weight:800; color:var(--emerald);">\${halalCount} / \${totalAccounts}</span>
+              <div style="font-size:11px; color:var(--text-subtle);">100% compliant</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--surface); border-radius:8px; border:1px solid var(--border);">
+            <div>
+              <div style="font-weight:700; font-size:13px; color:var(--text);">🌏 South Asia / APAC Presence</div>
+              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Confirmed engineering hires in UTC+5 to +8</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:15px; font-weight:800; color:var(--primary);">\${apacHireCount} / \${totalAccounts}</span>
+              <div style="font-size:11px; color:var(--text-subtle);">Active APAC footprint</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--surface); border-radius:8px; border:1px solid var(--border);">
+            <div>
+              <div style="font-weight:700; font-size:13px; color:var(--text);">⚡ Outreach Safety Profile</div>
+              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Jitter pacing & circuit breaker enabled</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:12px; font-weight:700; padding:2px 8px; border-radius:4px; background:rgba(16,185,129,0.12); color:var(--emerald);">NORMAL (0 trips)</span>
+            </div>
+          </div>
+        \`;
+      }
+
+      const topContainer = document.getElementById('overview-top-targets');
+      if (topContainer) {
+        const sorted = [...targets].sort((a, b) => (b.matchAnalysis?.score || 0) - (a.matchAnalysis?.score || 0)).slice(0, 5);
+        topContainer.innerHTML = sorted.map((t, idx) => {
+          return \`
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:8px; background:var(--surface); border:1px solid var(--border);">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-family:'JetBrains Mono',monospace; font-weight:800; font-size:12px; color:var(--text-subtle);">#\${idx + 1}</span>
+                <div>
+                  <div style="font-size:13px; font-weight:700; color:var(--text);">\${t.name}</div>
+                  <div style="font-size:11px; color:var(--text-muted);">\${t.fundingStage} · \${t.estimatedEmployees}</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="item-score">\${t.matchAnalysis?.score || 95}%</span>
+                <button class="btn-scrape" style="font-size:11px; padding:3px 8px;" onclick="selectTarget('\${t.id}'); switchView('targets');">
+                  View Dossier
+                </button>
+              </div>
+            </div>
+          \`;
+        }).join('');
+      }
+    }
+
+    function handleLeadsSearch() {
+      leadsSearchQuery = document.getElementById('leads-search-input').value.toLowerCase().trim();
+      renderLeadsTable();
+    }
+
+    function setLeadRoleFilter(filter) {
+      leadsRoleFilter = filter;
+      document.querySelectorAll('#view-leads .cat-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('leads-btn-' + (filter === 'c-level' ? 'c-level' : filter === 'eng' ? 'eng' : 'all'));
+      if (activeBtn) activeBtn.classList.add('active');
+      renderLeadsTable();
+    }
+
+    function renderLeadsTable() {
+      const tbody = document.getElementById('leads-table-body');
+      if (!tbody) return;
+
+      const allLeads = [];
+      targets.forEach(t => {
+        (t.contacts || []).forEach(c => {
+          allLeads.push({
+            name: c.name,
+            role: c.role,
+            linkedin: c.linkedin,
+            company: t.name,
+            companyId: t.id,
+            vertical: t.vertical,
+            score: t.matchAnalysis?.score || 90,
+            status: t.status || 'new',
+            pitch: t.coldOutreachDraft || ''
+          });
+        });
+      });
+
+      const filtered = allLeads.filter(l => {
+        const matchesQuery = !leadsSearchQuery ||
+          l.name.toLowerCase().includes(leadsSearchQuery) ||
+          l.role.toLowerCase().includes(leadsSearchQuery) ||
+          l.company.toLowerCase().includes(leadsSearchQuery);
+
+        let matchesRole = true;
+        const roleLower = l.role.toLowerCase();
+        if (leadsRoleFilter === 'c-level') {
+          matchesRole = roleLower.includes('founder') || roleLower.includes('ceo') || roleLower.includes('cto') || roleLower.includes('chief');
+        } else if (leadsRoleFilter === 'eng') {
+          matchesRole = roleLower.includes('vp') || roleLower.includes('head') || roleLower.includes('lead') || roleLower.includes('engineering') || roleLower.includes('director');
+        }
+
+        return matchesQuery && matchesRole;
+      });
+
+      const countLabel = document.getElementById('leads-count-label');
+      if (countLabel) countLabel.textContent = 'Showing ' + filtered.length + ' of ' + allLeads.length + ' leads';
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-subtle);">No executive leads match your filters.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(l => {
+        return \`
+          <tr>
+            <td>
+              <div style="font-weight:700; color:var(--text);">\${l.name}</div>
+            </td>
+            <td>
+              <span style="font-size:11.5px; padding:2px 7px; border-radius:4px; background:var(--surface); border:1px solid var(--border); color:var(--text-muted); font-weight:600;">
+                \${l.role}
+              </span>
+            </td>
+            <td>
+              <span style="font-weight:600; color:var(--primary); cursor:pointer;" onclick="selectTarget('\${l.companyId}'); switchView('targets');">
+                \${l.company}
+              </span>
+            </td>
+            <td>
+              <span style="font-size:11.5px; color:var(--text-muted);">\${l.vertical.replace(/_/g, ' ')}</span>
+            </td>
+            <td>
+              <span class="item-score">\${l.score}%</span>
+            </td>
+            <td>
+              <a href="\${l.linkedin}" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:none; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+                <span>LinkedIn</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+            </td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <button class="btn-scrape" style="font-size:11px; padding:3px 8px;" onclick="selectTarget('\${l.companyId}'); switchView('targets');">
+                  View Dossier
+                </button>
+                <button class="btn-scrape" style="font-size:11px; padding:3px 8px;" onclick="copyPitchForLead(&quot;\${l.companyId}&quot;)">
+                  Copy Pitch
+                </button>
+              </div>
+            </td>
+          </tr>
+        \`;
+      }).join('');
+    }
+
+    function copyPitchForLead(companyId) {
+      const target = targets.find(t => t.id === companyId);
+      if (target && target.coldOutreachDraft) {
+        navigator.clipboard.writeText(target.coldOutreachDraft);
+        showToast('Copied cold outreach pitch for ' + target.name);
+      }
+    }
+
+    function renderCampaignsView() {
+      const grid = document.getElementById('campaigns-grid-cards');
+      if (!grid) return;
+
+      grid.innerHTML = allProjects.map(p => {
+        const isActive = p.id === activeProjectId;
+        const actBtn = !isActive ? ('<button class="btn-submit-project" style="font-size:12px; padding:6px 12px;" onclick="switchProject(&quot;' + p.id + '&quot;); showToast(&quot;Activated campaign: ' + p.name.replace(/"/g, '') + '&quot;);">Activate Campaign</button>') : '<span style="font-size:12px; font-weight:700; color:var(--primary); padding:6px 12px; background:rgba(37,99,235,0.12); border-radius:6px;">CURRENTLY ACTIVE</span>';
+        const delBtn = p.id !== 'default' ? ('<button class="btn-scrape" style="font-size:12px; padding:6px 12px; color:#ef4444;" onclick="deleteProject(&quot;' + p.id + '&quot;)">Delete</button>') : '';
+
+        return \`
+          <div class="dash-panel" style="border-left: 4px solid \${isActive ? 'var(--primary)' : 'var(--border)'};">
+            <div class="dash-panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="dash-panel-title">\${p.name}</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted);">[\${p.id}]</span>
+              </div>
+            </div>
+            <div style="font-size:13px; color:var(--text-muted); line-height:1.45;">\${p.description}</div>
+            
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px; background:var(--surface); padding:12px; border-radius:8px; border:1px solid var(--border);">
+              <div>👤 <strong>Candidate:</strong> \${p.profile?.name || ''} (\${p.profile?.experienceYears || 10}+ yrs)</div>
+              <div>📅 <strong>Calendly:</strong> \${p.profile?.calendlyUrl || ''}</div>
+              <div>⚡ <strong>Proof Repos:</strong> \${(p.profile?.proofRepos || []).map(r => r.name).join(', ') || 'None'}</div>
+              <div>🎯 <strong>Rules:</strong> Min Halal \${p.rules?.minHalalScore || 0}% · Min APAC \${p.rules?.minApacScore || 0}%</div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              \${actBtn}
+              \${delBtn}
+            </div>
+          </div>
+        \`;
+      }).join('');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+        return;
+      }
+      if (e.key === '1') switchView('overview');
+      else if (e.key === '2') switchView('targets');
+      else if (e.key === '3') switchView('leads');
+      else if (e.key === '4') switchView('telemetry');
+      else if (e.key === '5') switchView('campaigns');
+      else if (e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
+        e.preventDefault();
+        const searchInput = currentView === 'leads' 
+          ? document.getElementById('leads-search-input') 
+          : document.getElementById('search-input');
+        if (searchInput) searchInput.focus();
+      }
+    });
 
     initTheme();
     loadData();

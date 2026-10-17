@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 import { ScoutDatabase } from './db.ts';
+import { listProjects } from './projects.ts';
 
 async function syncRemote(): Promise<void> {
   const dbPath = join(import.meta.dir, '..', 'scout.sqlite');
@@ -16,6 +17,8 @@ async function syncRemote(): Promise<void> {
 
   const payload = {
     updatedAt: new Date().toISOString(),
+    totalTargets: rows.length,
+    projects: listProjects(),
     targets: rows.map((r) => {
       const match = JSON.parse(r.match_analysis || '{}') as {
         score?: number;
