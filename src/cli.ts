@@ -207,6 +207,24 @@ function handleShow(targetId: string): void {
     }
   }
 
+  const blogs = (deep.blogs || []) as Array<{
+    title: string;
+    url: string;
+    summary: string;
+    tags?: string[];
+    date?: string;
+  }>;
+
+  if (blogs.length > 0) {
+    console.log('\n--- ENGINEERING BLOGS & ARCHITECTURE SIGNALS ---');
+    for (const b of blogs) {
+      console.log(`\n  [BLOG] ${b.title} (${b.date || 'Recent'})`);
+      console.log(`         URL:     ${b.url}`);
+      console.log(`         Summary: ${b.summary}`);
+      if (b.tags && b.tags.length > 0) console.log(`         Tags:    ${b.tags.join(', ')}`);
+    }
+  }
+
   console.log('\n--- TARGETED CONTACTS & PERSONA PITCHES ---');
   if (contacts.length === 0) {
     console.log(`Primary Contact: ${t.leader_name}`);
