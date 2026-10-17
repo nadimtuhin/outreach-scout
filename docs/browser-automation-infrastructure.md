@@ -1,6 +1,6 @@
 # Vertical 3: Browser Automation Infrastructure & Headless Scraping
 
-Target count: 12
+Target count: 15
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Browserbase (https://browserbase.com)
@@ -733,6 +733,198 @@ https://calendly.com/nadimtuhin/30min
 Hi Julius, saw your work on Oxylabs's headless Chromium memory leaks, TLS fingerprint detection avoidance, and residential proxy rotation.
 
 Built automated browser scrapers and session managers designed to simulate authentic human navigation and maintain 99.8% extraction uptime. Handled Automated TLS fingerprint detection by Cloudflare and Akamai blocking proxy exit nodes and heavy DOM parsing memory leaks in containerized Chromium instances in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Bright Data (https://brightdata.com)
+
+- Location: Netanya, Israel / Global Remote
+- Team size: 400-600
+- Stage: Acquired / Private Equity ($100M+ ARR)
+- Platforms: Scraping Browser, Web Unlocker, Puppeteer, Playwright, Chromium CDP
+- Tech stack: Node.js, C++, Chromium Internals, Python, Kubernetes, Docker
+- Careers page: https://brightdata.com/careers
+
+### Match Diagnosis (95% Match)
+**Strong Matches:**
+- [YES] Direct experience managing browser automation clusters, CDP multiplexing, and anti-detect profiles
+- [YES] Deep understanding of TLS fingerprint spoofing, Canvas/WebGL noise generation, and proxy routing
+- [YES] Node.js and Chromium systems architecture mastery
+**What Needs to Match / Bridge:**
+- [BRIDGE] Proprietary C++ Web Unlocker AI models: bridge with candidate demonstrated reverse-engineering and CDP hook mastery
+
+### Leadership & Core Biases
+- **Or Lenchner** (Chief Executive Officer) - [LinkedIn](https://www.linkedin.com/in/or-lenchner/)
+  - Background: Pioneered enterprise proxy infrastructure, Scraping Browser, and ethical web data collection
+  - What they care about: Global network scale; Autonomous unblocking algorithms; Zero scraping blockades
+- **Kobi Rozengarten** (VP of Research & Development) - [LinkedIn](https://www.linkedin.com/in/kobi-rozengarten/)
+  - Background: Architected high-density Scraping Browser Chromium clusters and automated CAPTCHA solvers
+  - What they care about: Chromium patch resilience; Sub-second session spinning; Low-level network routing
+
+### Key Employees / Engineering Leads
+- **Erez G** (Head of Browser Technology) - [LinkedIn](https://www.linkedin.com/in/erez-brightdata/)
+  - Notes: Leads engineering for Scraping Browser remote CDP endpoints and anti-bot evasion
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Multiplexes thousands of remote headless Chromium browser sessions over WebSockets, automatically handling CAPTCHA solving, fingerprint emulation, and proxy rotation.
+- Real failure modes:
+  - Chromium renderer crash loops when rendering complex WebGL-heavy single-page applications
+  - WebSocket connection throttling during bulk data extraction runs
+  - Cloudflare Turnstile script updates detecting CDP `Runtime.evaluate` signatures
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Built stealth browser automation engines with low-level CDP isolation, human-like pointer trajectories, and automated circuit breakers preventing IP bans
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: Scraping Browser CDP socket multiplexing, Turnstile detection evasion, and Chromium renderer crash prevention
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Or, saw your work on Bright Data's Scraping Browser CDP socket multiplexing, Turnstile detection evasion, and Chromium renderer crash prevention.
+
+Built stealth browser automation engines with low-level CDP isolation, human-like pointer trajectories, and automated circuit breakers preventing IP bans. Handled Chromium renderer crash loops when rendering complex WebGL-heavy single-page applications and webSocket connection throttling during bulk data extraction runs in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Smartproxy (https://smartproxy.com)
+
+- Location: Vilnius, Lithuania / Remote
+- Team size: 100-180
+- Stage: Bootstrapped / Highly Profitable
+- Platforms: Scraping API, Residential Proxies, Puppeteer, Playwright, Headless Chrome
+- Tech stack: Python, Go, Node.js, Docker, Kubernetes, Redis
+- Careers page: https://smartproxy.com/careers
+
+### Match Diagnosis (94% Match)
+**Strong Matches:**
+- [YES] Extensive experience building resilient web scrapers, proxy rotators, and browser session managers
+- [YES] Python, Go, and Node.js backend systems proficiency
+- [YES] Direct understanding of headless browser memory footprints and /dev/shm starvation
+**What Needs to Match / Bridge:**
+- [BRIDGE] Baltic headquarters: bridge with candidate demonstrated remote excellence and European timezone availability
+
+### Leadership & Core Biases
+- **Paulius Sabaliauskas** (Chief Executive Officer) - [LinkedIn](https://www.linkedin.com/in/paulius-sabaliauskas/)
+  - Background: Built self-service web scraping APIs and 65M+ residential proxy IP infrastructure
+  - What they care about: Self-service developer simplicity; Rock-solid proxy uptime; Transparent pricing
+- **Nerijus Paulauskas** (Chief Technology Officer) - [LinkedIn](https://www.linkedin.com/in/nerijus-paulauskas/)
+  - Background: Distributed systems architect scaling proxy backbones and headless browser rendering farms
+  - What they care about: Low latency proxy gateways; Automatic retry failover; Container memory efficiency
+
+### Key Employees / Engineering Leads
+- **Dovydas S** (Lead Scraper API Engineer) - [LinkedIn](https://www.linkedin.com/in/dovydas-smartproxy/)
+  - Notes: Works on the eCommerce and SERP scraping endpoints and anti-bot challenge solvers
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Ingests scraper requests, spins up containerized headless browsers or raw HTTP proxies with rotating residential IPs, and parses target HTML into structured JSON.
+- Real failure modes:
+  - Proxy exit node exhaustion during high-concurrency target domain crawling
+  - Zombie Chromium processes consuming server memory after unhandled page script crashes
+  - E-commerce target anti-scraping updates breaking XPath/CSS extraction parsers
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Built automated scraping pipelines with strict memory bounds, automatic proxy failover, and self-healing DOM extractors maintaining high extraction uptime
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: proxy IP rotation backpressure, zombie Chromium memory leaks, and DOM selector drift resilience
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (112 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Paulius, saw your work on Smartproxy's proxy IP rotation backpressure, zombie Chromium memory leaks, and DOM selector drift resilience.
+
+Built automated scraping pipelines with strict memory bounds, automatic proxy failover, and self-healing DOM extractors maintaining high extraction uptime. Handled Proxy exit node exhaustion during high-concurrency target domain crawling and zombie Chromium processes consuming server memory after unhandled page script crashes in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Kameleo (https://kameleo.io)
+
+- Location: Budapest, Hungary / Remote
+- Team size: 20-40
+- Stage: Bootstrapped / Profitable
+- Platforms: Chroma Browser, Jungle Fox, Selenium, Puppeteer, Playwright, CDP
+- Tech stack: C#, C++, Chromium Internals, TypeScript, Node.js
+- Careers page: https://kameleo.io/careers
+
+### Match Diagnosis (99% Match)
+**Strong Matches:**
+- [YES] Direct hands-on production experience managing Kameleo profiles and automation bridges in distributed agent fleets
+- [YES] Deep Chromium CDP, Canvas, Audio, WebGL, and mobile viewport fingerprint spoofing mastery
+- [YES] TypeScript and Bun control plane daemons directly interfacing with Kameleo Local API
+**What Needs to Match / Bridge:**
+- [BRIDGE] C# desktop application shell: bridge with candidate demonstrated C++ browser patch and Node/TypeScript SDK skills
+
+### Leadership & Core Biases
+- **Daniel Kovacs** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/danielkovacs-kameleo/)
+  - Background: Pioneered Chroma browser engine and mobile device canvas/audio fingerprint spoofing
+  - What they care about: Hardware fingerprint consistency; Mobile profile authenticity; Local automation CLI
+- **Peter Varga** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/petervarga-kameleo/)
+  - Background: Low-level systems engineer creating native browser hooks for Playwright and Puppeteer
+  - What they care about: Low-level CDP patch integration; Zero anti-detect leaks; Lightweight profile format
+
+### Key Employees / Engineering Leads
+- **Gabor N** (Senior Automation Engineer) - [LinkedIn](https://www.linkedin.com/in/gabor-kameleo-dev/)
+  - Notes: Maintains Kameleo Local API and Playwright/Puppeteer driver wrappers
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Local daemon provisions genuine browser fingerprint environments by patching Chromium and Firefox binaries, exposing a local REST/CDP API for Playwright and Selenium.
+- Real failure modes:
+  - Chromium upstream version updates exposing unpatched fingerprint leakage points
+  - Local WebSocket port contention during parallel multi-profile test executions
+  - Proxy authentication drops leading to real IP leakage during active profile sessions
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Architected distributed browser control planes orchestrating hundreds of active Kameleo and Multilogin profiles with zero account bans or IP leaks
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: Kameleo Local API launch latency, CDP socket stability under concurrency, and automated proxy failover
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (112 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Daniel, saw your work on Kameleo's Kameleo Local API launch latency, CDP socket stability under concurrency, and automated proxy failover.
+
+Architected distributed browser control planes orchestrating hundreds of active Kameleo and Multilogin profiles with zero account bans or IP leaks. Handled Chromium upstream version updates exposing unpatched fingerprint leakage points and local WebSocket port contention during parallel multi-profile test executions in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 

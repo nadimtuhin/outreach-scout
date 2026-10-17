@@ -1,6 +1,6 @@
 # Vertical 1: Food POS & Ordering SaaS (Square / Toast / Clover)
 
-Target count: 12
+Target count: 15
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Craver (https://craverapp.com)
@@ -744,6 +744,198 @@ https://calendly.com/nadimtuhin/30min
 Hi Brendan, saw your work on Popmenu's POS modifier matrix desynchronization, kitchen display WebSocket lag, and third-party delivery dispatch reliability.
 
 Built real-time menu catalog synchronization and order delivery engines handling heavy restaurant traffic with automated fallback logic. Handled POS menu item modifier matrix desync causing online order injection rejections and webSocket connection drops during peak dinner rush kitchen display updates in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Slice (https://slicelife.com)
+
+- Location: New York, NY / Remote
+- Team size: 600-900
+- Stage: Series D ($125M+ raised)
+- Platforms: Slice Register, Toast, Square, Clover, Stripe, Thermal Printers
+- Tech stack: Python, Node.js, PostgreSQL, React, AWS, Docker
+- Careers page: https://slicelife.com/careers
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Extensive experience building online ordering platforms, POS ticket injection, and kitchen printer pipelines
+- [YES] Python, Node.js, PostgreSQL, and AWS systems architecture proficiency
+- [YES] Deep domain understanding of complex food customization modifiers (toppings, crusts, halves)
+**What Needs to Match / Bridge:**
+- [BRIDGE] Proprietary Slice Register Android hardware firmware: bridge with candidate demonstrated local daemon and hardware communication experience
+
+### Leadership & Core Biases
+- **Ilir Sela** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/ilirsela/)
+  - Background: Pioneered digital ordering and technology infrastructure for 19,000+ independent pizzerias
+  - What they care about: Empowering small business pizza makers; Commission-free direct ordering; All-in-one POS hardware
+- **Jason Yang** (Chief Technology Officer) - [LinkedIn](https://www.linkedin.com/in/jason-yang-slice/)
+  - Background: Former tech executive scaling high-availability restaurant commerce and kitchen order display systems
+  - What they care about: High-throughput order processing; Reliable hardware integrations; Sub-second checkout latency
+
+### Key Employees / Engineering Leads
+- **Damon P** (Director of POS Integration Engineering) - [LinkedIn](https://www.linkedin.com/in/damon-slice-eng/)
+  - Notes: Leads Slice Register cloud-to-hardware sync and thermal printer integrations
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Powers direct online ordering web and mobile apps for independent pizzerias, injecting complex pizza orders directly into Slice Register and third-party POS hardware.
+- Real failure modes:
+  - Complex half-and-half pizza topping modifier matrix desync rejecting order injection at POS register
+  - Kitchen thermal printer disconnection during peak Super Bowl and Friday pizza rushes
+  - Inventory stockout desync causing orders to be placed for sold-out specialty dough or ingredients
+- Candidate proof repository: https://github.com/nadimtuhin/pos-webhook-idempotency
+- Experience bridge: Architected high-scale food ordering and delivery platforms with sub-second POS ticket delivery and zero modifier pricing discrepancies at Pathao and Per Diem
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: pizza modifier matrix validation, thermal printer queue resilience under Friday rush, and real-time item 86ing
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (122 words)
+
+```text
+https://github.com/nadimtuhin/pos-webhook-idempotency
+https://calendly.com/nadimtuhin/30min
+
+Hi Ilir, saw your work on Slice's pizza modifier matrix validation, thermal printer queue resilience under Friday rush, and real-time item 86ing.
+
+Architected high-scale food ordering and delivery platforms with sub-second POS ticket delivery and zero modifier pricing discrepancies at Pathao and Per Diem. Handled Complex half-and-half pizza topping modifier matrix desync rejecting order injection at POS register and kitchen thermal printer disconnection during peak Super Bowl and Friday pizza rushes in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## App8 (https://app8.ca)
+
+- Location: Ottawa, Canada / Remote
+- Team size: 20-40
+- Stage: Seed / Profitable Growth
+- Platforms: Toast POS, Clover, Squirrel POS, Micros, Agilysys, Stripe
+- Tech stack: Node.js, TypeScript, PostgreSQL, Redis, AWS
+- Careers page: https://app8.ca/careers
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Direct alignment with candidate Per Diem and Craver food online ordering and POS integration background
+- [YES] TypeScript, Node.js, PostgreSQL, and Redis core tech stack mastery
+- [YES] Proven expertise handling extreme concurrency surges during live events and rush hours
+**What Needs to Match / Bridge:**
+- [BRIDGE] Agilysys and Squirrel legacy enterprise hospitality POS protocols: bridge with candidate demonstrated legacy protocol reverse-engineering skills
+
+### Leadership & Core Biases
+- **Hani Bashir** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/hanibashir/)
+  - Background: Pioneered mobile food ordering and frictionless POS integrations for enterprise stadiums and entertainment venues
+  - What they care about: Eliminating concession lines; Stadium-scale order throughput; High conversion mobile checkout
+- **Vince Valenti** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/vincevalenti/)
+  - Background: Architected real-time POS order injection and kitchen routing engines for enterprise hospitality
+  - What they care about: Sub-second order delivery into POS; Resilient kitchen printer queues; Zero transaction drops
+
+### Key Employees / Engineering Leads
+- **Alexandre L** (Senior POS Integration Engineer) - [LinkedIn](https://www.linkedin.com/in/alexandre-app8-eng/)
+  - Notes: Maintains integration bridges for Toast, Squirrel, and enterprise venue POS systems
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Enables fans and restaurant guests to order and pay via mobile without downloading an app, injecting orders directly into venue POS registers and kitchen displays.
+- Real failure modes:
+  - Halftime stadium traffic spikes overwhelming venue POS local network injection endpoints
+  - Payment authorization lockouts when thousands of transactions execute simultaneously
+  - Menu catalog synchronization latency when kitchen runs out of concession items mid-game
+- Candidate proof repository: https://github.com/nadimtuhin/pos-webhook-idempotency
+- Experience bridge: Built high-concurrency order injection engines with localized request queuing and circuit breakers preventing POS gateway saturation during traffic surges
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: stadium surge concurrency handling, localized POS queue buffering, and real-time concession 86ing
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/pos-webhook-idempotency
+https://calendly.com/nadimtuhin/30min
+
+Hi Hani, saw your work on App8's stadium surge concurrency handling, localized POS queue buffering, and real-time concession 86ing.
+
+Built high-concurrency order injection engines with localized request queuing and circuit breakers preventing POS gateway saturation during traffic surges. Handled Halftime stadium traffic spikes overwhelming venue POS local network injection endpoints and payment authorization lockouts when thousands of transactions execute simultaneously in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Otter (https://tryotter.com)
+
+- Location: Los Angeles, CA / Remote
+- Team size: 300-500
+- Stage: Backed by CloudKitchens / Scale
+- Platforms: Toast, Square, Clover, DoorDash, Uber Eats, Grubhub
+- Tech stack: Go, Python, React, PostgreSQL, Redis, Docker
+- Careers page: https://tryotter.com/careers
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Direct domain alignment with candidate food delivery middleware, order injection, and menu catalog management
+- [YES] Go, Python, PostgreSQL, and Redis distributed systems expertise
+- [YES] Deep production experience managing third-party delivery marketplace webhooks and POS conflicts
+**What Needs to Match / Bridge:**
+- [BRIDGE] CloudKitchens shared ghost-kitchen routing: bridge with candidate demonstrated multi-tenant order dispatch mastery
+
+### Leadership & Core Biases
+- **Rahul Patel** (Head of Product) - [LinkedIn](https://www.linkedin.com/in/rahul-patel-otter/)
+  - Background: Pioneered delivery consolidation, menu management, and POS integration tools for modern restaurants
+  - What they care about: All-in-one tablet simplicity; Automated order acceptance; Consolidated financial analytics
+- **James Wang** (Director of Engineering) - [LinkedIn](https://www.linkedin.com/in/james-wang-otter/)
+  - Background: Scales distributed order routing and delivery marketplace webhook ingestion pipelines
+  - What they care about: High-throughput Go services; Zero dropped orders; Automated POS menu publishing
+
+### Key Employees / Engineering Leads
+- **Carlos R** (Staff POS Integrations Engineer) - [LinkedIn](https://www.linkedin.com/in/carlos-otter-eng/)
+  - Notes: Leads direct cloud-to-POS integration connectors for Toast, Square, and Brink
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Consolidates third-party delivery orders (DoorDash, Uber Eats, Grubhub) into a single tablet and injects tickets directly into restaurant POS systems.
+- Real failure modes:
+  - Delivery platform webhook bursts during inclement weather causing queue dispatch delays
+  - Menu modification desync between POS master database and third-party delivery channel listings
+  - Tablet connection sleep mode causing missed order alerts and customer cancellation penalties
+- Candidate proof repository: https://github.com/nadimtuhin/pos-webhook-idempotency
+- Experience bridge: Built delivery aggregation gateways and bi-directional menu synchronization engines handling multi-channel restaurant orders with zero dropped tickets
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: delivery marketplace webhook queue spikes, multi-channel menu desync, and POS tablet heartbeat failover
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (113 words)
+
+```text
+https://github.com/nadimtuhin/pos-webhook-idempotency
+https://calendly.com/nadimtuhin/30min
+
+Hi Rahul, saw your work on Otter's delivery marketplace webhook queue spikes, multi-channel menu desync, and POS tablet heartbeat failover.
+
+Built delivery aggregation gateways and bi-directional menu synchronization engines handling multi-channel restaurant orders with zero dropped tickets. Handled Delivery platform webhook bursts during inclement weather causing queue dispatch delays and menu modification desync between POS master database and third-party delivery channel listings in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 

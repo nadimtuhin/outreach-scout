@@ -1,6 +1,6 @@
 # Vertical 2: Healthcare Automation on EHR (Epic / SMART on FHIR)
 
-Target count: 13
+Target count: 15
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Metriport (https://metriport.com)
@@ -805,6 +805,134 @@ https://calendly.com/nadimtuhin/30min
 Hi Nate, saw your work on Ribbon Health's provider entity resolution collisions, geo-fenced directory search latency, and bulk data ingestion lag.
 
 Built high-scale entity linkage and data normalization pipelines reconciling conflicting records across disparate enterprise databases. Handled Entity resolution matching collisions causing incorrect insurance network in-network designations and database query latency spikes when searching geo-fenced doctor directories with complex specialty filters in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Health Samurai (https://health-samurai.io)
+
+- Location: San Francisco, CA / Remote
+- Team size: 40-70
+- Stage: Bootstrapped / Profitable Growth
+- Platforms: Aidbox, FHIR R4, PostgreSQL, SMART on FHIR, HL7 v2
+- Tech stack: Clojure, PostgreSQL, FHIR R4, TypeScript, Docker
+- Careers page: https://health-samurai.io/careers
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Direct experience designing FHIR R4 clinical data stores and PostgreSQL JSONB index tuning
+- [YES] Deep healthcare compliance, HIPAA, and SMART on FHIR authorization background
+- [YES] TypeScript and modern developer tooling proficiency matching Aidbox client ecosystem
+**What Needs to Match / Bridge:**
+- [BRIDGE] Clojure backend language: bridge with candidate demonstrated functional programming and PostgreSQL internals mastery
+
+### Leadership & Core Biases
+- **Pavel Smirnov** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/pavelsmirnov/)
+  - Background: Pioneered Aidbox FHIR platform and developer tools powering digital health startups
+  - What they care about: FHIR-native data modeling; Developer productivity in healthcare; Open interoperability standards
+- **Nikolai Ryzhikov** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/nikolairyzhikov/)
+  - Background: Key contributor to the FHIR standard, architecting PostgreSQL JSONB FHIR engines and Aidbox core
+  - What they care about: Data-driven Clojure systems; PostgreSQL JSONB optimization; Zero impedance mismatch with FHIR
+
+### Key Employees / Engineering Leads
+- **Sergey B** (Head of Aidbox Core Engineering) - [LinkedIn](https://www.linkedin.com/in/sergey-healthsamurai/)
+  - Notes: Leads PostgreSQL JSONB query optimization, FHIR schema validation, and access control
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provides a developer-first FHIR backend (Aidbox) built directly on PostgreSQL JSONB, enabling healthcare apps to store, query, and validate clinical data compliantly.
+- Real failure modes:
+  - Complex FHIR chained search queries causing expensive sequential table scans without JSONB GIN indexes
+  - SMART on FHIR OAuth token refresh deadlock during simultaneous clinical workstation logins
+  - HL7 v2 to FHIR message translation failures on malformed hospital feed segments
+- Candidate proof repository: https://github.com/nadimtuhin/clinical-fhir-audit-pipeline
+- Experience bridge: Built high-scale clinical data pipelines and FHIR R4 resource stores with PostgreSQL JSONB optimization and strict HIPAA audit compliance
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: FHIR PostgreSQL JSONB chained query tuning, SMART on FHIR token lifecycle, and HL7 v2 parsing resilience
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (122 words)
+
+```text
+https://github.com/nadimtuhin/clinical-fhir-audit-pipeline
+https://calendly.com/nadimtuhin/30min
+
+Hi Pavel, saw your work on Health Samurai's FHIR PostgreSQL JSONB chained query tuning, SMART on FHIR token lifecycle, and HL7 v2 parsing resilience.
+
+Built high-scale clinical data pipelines and FHIR R4 resource stores with PostgreSQL JSONB optimization and strict HIPAA audit compliance. Handled Complex FHIR chained search queries causing expensive sequential table scans without JSONB GIN indexes and SMART on FHIR OAuth token refresh deadlock during simultaneous clinical workstation logins in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Welkin Health (https://welkinhealth.com)
+
+- Location: San Francisco, CA / Remote
+- Team size: 50-80
+- Stage: Series B ($30M raised)
+- Platforms: EHR Integration, FHIR, Care Management, HIPAA, AWS
+- Tech stack: Python, TypeScript, PostgreSQL, AWS, Docker
+- Careers page: https://welkinhealth.com/careers
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Extensive experience building healthcare workflow automation, clinical state machines, and EHR data syncs
+- [YES] Python, TypeScript, and PostgreSQL backend systems expertise
+- [YES] Deep domain background in patient data privacy, HIPAA audit logging, and clinical task queues
+**What Needs to Match / Bridge:**
+- [BRIDGE] Custom care pathway visual builder: bridge with candidate demonstrated workflow engine and state machine mastery
+
+### Leadership & Core Biases
+- **Michelle Davey** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/michelledavey/)
+  - Background: Pioneered configurable care management platforms for chronic condition programs and clinical teams
+  - What they care about: Patient relationship centricity; Configurable clinical workflows; Frictionless care coordination
+- **Chase Adams** (VP of Engineering) - [LinkedIn](https://www.linkedin.com/in/chaseadams-welkin/)
+  - Background: Scales HIPAA-compliant cloud infrastructure, workflow automation engines, and EHR integrations
+  - What they care about: Strict healthcare compliance; Configurable workflow state machines; High availability clinical APIs
+
+### Key Employees / Engineering Leads
+- **Brian K** (Lead Workflow Automation Engineer) - [LinkedIn](https://www.linkedin.com/in/brian-welkin-eng/)
+  - Notes: Maintains patient care pathway state machines and EHR data sync pipelines
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Configurable care management platform orchestrating patient outreach, clinical tasks, and EHR data synchronization across multi-disciplinary care teams.
+- Real failure modes:
+  - Clinical task queue state transition race conditions causing duplicate clinician task assignments
+  - EHR integration webhook drops leaving care plans out of sync with hospital records
+  - Patient communication scheduling delays during multi-tenant morning reminder broadcasts
+- Candidate proof repository: https://github.com/nadimtuhin/clinical-fhir-audit-pipeline
+- Experience bridge: Built resilient clinical workflow engines and healthcare data sync pipelines with transactional state machines and strict audit trails
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: clinical task state machine race conditions, EHR webhook sync reliability, and patient reminder queue scheduling
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (119 words)
+
+```text
+https://github.com/nadimtuhin/clinical-fhir-audit-pipeline
+https://calendly.com/nadimtuhin/30min
+
+Hi Michelle, saw your work on Welkin Health's clinical task state machine race conditions, EHR webhook sync reliability, and patient reminder queue scheduling.
+
+Built resilient clinical workflow engines and healthcare data sync pipelines with transactional state machines and strict audit trails. Handled Clinical task queue state transition race conditions causing duplicate clinician task assignments and EHR integration webhook drops leaving care plans out of sync with hospital records in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 

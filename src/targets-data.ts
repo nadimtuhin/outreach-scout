@@ -3,6 +3,7 @@ import { countWords, generateColdOutreach, generateTailoredPitchForContact } fro
 import { EXTENDED_CONTACTS_MAP, EXTENDED_RAW_TARGETS } from './extended-targets.ts';
 import { MORE_CONTACTS_MAP, MORE_RAW_TARGETS } from './more-targets.ts';
 import { COHORT4_CONTACTS_MAP, COHORT4_RAW_TARGETS } from './cohort4-targets.ts';
+import { COHORT5_CONTACTS_MAP, COHORT5_RAW_TARGETS } from './cohort5-targets.ts';
 import { COMPANY_PROFILES } from './profiler.ts';
 
 const RAW_TARGETS = [
@@ -1073,8 +1074,8 @@ const COMPANY_CONTACTS_MAP: Record<
   ],
 };
 
-const ALL_RAW_TARGETS = [...RAW_TARGETS, ...EXTENDED_RAW_TARGETS, ...MORE_RAW_TARGETS, ...COHORT4_RAW_TARGETS];
-const ALL_CONTACTS_MAP = { ...COMPANY_CONTACTS_MAP, ...EXTENDED_CONTACTS_MAP, ...MORE_CONTACTS_MAP, ...COHORT4_CONTACTS_MAP };
+const ALL_RAW_TARGETS = [...RAW_TARGETS, ...EXTENDED_RAW_TARGETS, ...MORE_RAW_TARGETS, ...COHORT4_RAW_TARGETS, ...COHORT5_RAW_TARGETS];
+const ALL_CONTACTS_MAP = { ...COMPANY_CONTACTS_MAP, ...EXTENDED_CONTACTS_MAP, ...MORE_CONTACTS_MAP, ...COHORT4_CONTACTS_MAP, ...COHORT5_CONTACTS_MAP };
 
 export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
   const primaryLeader = t.leadership[0]!;

@@ -1,6 +1,6 @@
 # Vertical 5: Unified APIs & Multi-Tenant SaaS Integration Platforms
 
-Target count: 8
+Target count: 11
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Merge.dev (https://merge.dev)
@@ -499,6 +499,198 @@ https://calendly.com/nadimtuhin/30min
 Hi Zach, saw your work on Vessel's Salesforce API limit budgeting, bidirectional CRM write race conditions, and webhook loss prevention.
 
 Built rate-limited sync workers and conflict-free bidirectional data synchronization pipelines for enterprise multi-tenant applications. Handled Salesforce daily API limit exhaustion during initial full tenant historical syncs and CRM write race conditions causing duplicate deal or contact record creation in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Knit (https://getknit.dev)
+
+- Location: Austin, TX / Bengaluru / Remote
+- Team size: 25-45
+- Stage: Seed ($5M raised)
+- Platforms: HRIS, ATS, CRM, Accounting, 100+ Connectors, OAuth
+- Tech stack: TypeScript, Node.js, PostgreSQL, Redis, Docker
+- Careers page: https://getknit.dev/careers
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Complete TypeScript, Node.js, and PostgreSQL backend systems alignment
+- [YES] Proven history building multi-tenant integration connectors and schema normalizers
+- [YES] Deep understanding of upstream API rate limits, OAuth credential vaults, and sync queues
+**What Needs to Match / Bridge:**
+- [BRIDGE] Proprietary unified data mapping DSL: bridge with candidate demonstrated AST and schema mapping implementations
+
+### Leadership & Core Biases
+- **Elizabeth Varghese** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/elizabeth-varghese-knit/)
+  - Background: Pioneered developer-first unified API and embedded integration platform for B2B SaaS
+  - What they care about: Universal data models; Speed of connector development; Zero integration maintenance
+- **Sandeep Chhaparia** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/sandeep-chhaparia/)
+  - Background: Distributed systems architect building scalable data synchronization engines and connector SDKs
+  - What they care about: Deterministic schema normalization; Idempotent sync workers; Strict rate-limit handling
+
+### Key Employees / Engineering Leads
+- **Ankit M** (Lead Connector Architect) - [LinkedIn](https://www.linkedin.com/in/ankit-knit-dev/)
+  - Notes: Builds unified connector models for HRIS, ATS, and ERP platforms
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Normalizes disparate third-party SaaS APIs into standardized REST endpoints, managing authentication, delta synchronization, and real-time webhook routing.
+- Real failure modes:
+  - Upstream SaaS API token expiry during large background historical syncs
+  - Schema drift when third-party vendors modify undocumented REST response shapes
+  - Redis queue lock starvation during concurrent multi-tenant sync runs
+- Candidate proof repository: https://github.com/nadimtuhin/unified-api-connector-harness
+- Experience bridge: Built multi-tenant integration harnesses with automated schema drift detection and resilient OAuth token refresh locking
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: OAuth token refresh race conditions, connector schema drift detection, and multi-tenant sync queue isolation
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (109 words)
+
+```text
+https://github.com/nadimtuhin/unified-api-connector-harness
+https://calendly.com/nadimtuhin/30min
+
+Hi Elizabeth, saw your work on Knit's OAuth token refresh race conditions, connector schema drift detection, and multi-tenant sync queue isolation.
+
+Built multi-tenant integration harnesses with automated schema drift detection and resilient OAuth token refresh locking. Handled Upstream SaaS API token expiry during large background historical syncs and schema drift when third-party vendors modify undocumented REST response shapes in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## RootFi (https://rootfi.dev)
+
+- Location: Singapore / London / Bengaluru / Remote
+- Team size: 20-40
+- Stage: Seed ($2.5M raised)
+- Platforms: QuickBooks, Xero, Zoho Books, Tally, NetSuite, Shopify
+- Tech stack: TypeScript, Node.js, Python, PostgreSQL, Redis
+- Careers page: https://rootfi.dev/careers
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Direct experience building financial ledger synchronizers, double-entry accounting models, and API integrations
+- [YES] TypeScript, Node.js, Python, and PostgreSQL backend systems expertise
+- [YES] Proven history resolving data conflict and sync lag across disparate accounting systems
+**What Needs to Match / Bridge:**
+- [BRIDGE] On-premise Tally XML/ODBC sync desktop bridges: bridge with candidate demonstrated desktop agent engineering background
+
+### Leadership & Core Biases
+- **Ishan Kaul** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/ishan-kaul/)
+  - Background: Pioneered unified financial APIs connecting fintech and lending platforms to accounting software
+  - What they care about: Financial data integrity; Standardized double-entry models; Developer speed
+- **Rishabh Goel** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/rishabh-goel-rootfi/)
+  - Background: Architected enterprise accounting data sync engines and desktop ERP sync agents
+  - What they care about: Strict accounting schema reconciliation; Idempotent ledger writes; Resilient sync agents
+
+### Key Employees / Engineering Leads
+- **Prateek S** (Senior Integration Engineer) - [LinkedIn](https://www.linkedin.com/in/prateek-rootfi/)
+  - Notes: Maintains connector integrations with QuickBooks, Xero, and on-premise Tally
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Extracts invoices, balance sheets, and bank transactions from accounting software, normalizing data into a unified financial model for underwriting and B2B SaaS.
+- Real failure modes:
+  - Accounting ledger rounding discrepancies during foreign currency invoice translation
+  - QuickBooks/Xero API daily rate limit exhaustion during initial full tenant historical syncs
+  - Desktop ERP sync agent connection drops during network re-routing
+- Candidate proof repository: https://github.com/nadimtuhin/unified-api-connector-harness
+- Experience bridge: Built financial integration pipelines with deterministic decimal rounding, token bucket rate limiting, and conflict-free ledger reconciliation
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: accounting ledger rounding consistency, QuickBooks rate limit budgeting, and desktop ERP sync agent resilience
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/unified-api-connector-harness
+https://calendly.com/nadimtuhin/30min
+
+Hi Ishan, saw your work on RootFi's accounting ledger rounding consistency, QuickBooks rate limit budgeting, and desktop ERP sync agent resilience.
+
+Built financial integration pipelines with deterministic decimal rounding, token bucket rate limiting, and conflict-free ledger reconciliation. Handled Accounting ledger rounding discrepancies during foreign currency invoice translation and quickBooks/Xero API daily rate limit exhaustion during initial full tenant historical syncs in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Chift (https://chift.eu)
+
+- Location: Brussels, Belgium / Remote
+- Team size: 15-30
+- Stage: Seed (€3M raised)
+- Platforms: POS Systems, Accounting Software, eCommerce, Lightspeed, Deliverect
+- Tech stack: Python, TypeScript, PostgreSQL, Docker, FastAPI
+- Careers page: https://chift.eu/careers
+
+### Match Diagnosis (98% Match)
+**Strong Matches:**
+- [YES] Rare dual-vertical expertise matching both POS integration middleware and Unified APIs
+- [YES] Python, TypeScript, PostgreSQL, and FastAPI systems architecture mastery
+- [YES] Direct experience syncing restaurant POS order data into accounting and inventory ledgers
+**What Needs to Match / Bridge:**
+- [BRIDGE] Belgian and French fiscal law POS certification nuances: bridge with candidate demonstrated audit logging experience
+
+### Leadership & Core Biases
+- **Maurice Chelli** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/maurice-chelli/)
+  - Background: Pioneered European unified API connecting POS, accounting, and eCommerce software for B2B SaaS
+  - What they care about: European SaaS interoperability; POS-to-accounting automation; Developer velocity
+- **Matthieu de Fabribeckers** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/matthieu-de-fabribeckers/)
+  - Background: Distributed systems engineer designing normalized data models for POS registers and ERPs
+  - What they care about: Python FastAPI performance; Strict schema validation; Deterministic synchronization
+
+### Key Employees / Engineering Leads
+- **Arthur D** (Lead POS Connector Engineer) - [LinkedIn](https://www.linkedin.com/in/arthur-chift-dev/)
+  - Notes: Works on the European POS integration connectors and invoice synchronization engines
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provides a single unified API allowing European B2B SaaS applications to connect to POS systems, accounting platforms, and eCommerce stores.
+- Real failure modes:
+  - Tax calculation discrepancy between physical POS receipt and downstream accounting ledger
+  - POS order sync queue lag during high-volume restaurant weekend shifts
+  - Third-party POS vendor API authentication token invalidation during night shifts
+- Candidate proof repository: https://github.com/nadimtuhin/pos-webhook-idempotency
+- Experience bridge: Built bi-directional POS integration gateways connecting restaurant ordering systems directly to ERP and payment backends with zero data loss
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: POS-to-accounting tax calculation consistency, weekend order sync queue backpressure, and POS token auto-healing
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (113 words)
+
+```text
+https://github.com/nadimtuhin/pos-webhook-idempotency
+https://calendly.com/nadimtuhin/30min
+
+Hi Maurice, saw your work on Chift's POS-to-accounting tax calculation consistency, weekend order sync queue backpressure, and POS token auto-healing.
+
+Built bi-directional POS integration gateways connecting restaurant ordering systems directly to ERP and payment backends with zero data loss. Handled Tax calculation discrepancy between physical POS receipt and downstream accounting ledger and POS order sync queue lag during high-volume restaurant weekend shifts in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 

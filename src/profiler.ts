@@ -2,6 +2,7 @@ import type { CompanyDeepProfile } from './types.ts';
 import { EXTENDED_COMPANY_PROFILES } from './extended-profiles.ts';
 import { MORE_COMPANY_PROFILES } from './more-profiles.ts';
 import { COHORT4_COMPANY_PROFILES } from './cohort4-profiles.ts';
+import { COHORT5_COMPANY_PROFILES } from './cohort5-profiles.ts';
 import { SCRAPED_JOB_POSTS } from './job-posts.ts';
 
 export const BASE_COMPANY_PROFILES: Record<string, CompanyDeepProfile> = {
@@ -665,6 +666,7 @@ const RAW_COMBINED_PROFILES = {
   ...EXTENDED_COMPANY_PROFILES,
   ...MORE_COMPANY_PROFILES,
   ...COHORT4_COMPANY_PROFILES,
+  ...COHORT5_COMPANY_PROFILES,
 };
 
 export const COMPANY_PROFILES: Record<string, CompanyDeepProfile> = Object.fromEntries(

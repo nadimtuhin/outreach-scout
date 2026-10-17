@@ -1,6 +1,6 @@
 # Outreach Pipeline: High-Leverage Per Diem Style Targets
 
-Total targets: 56
+Total targets: 70
 Compiled for: Omar Faruque Tuhin (Nadim Tuhin)
 Mode: Manual send only. Review drafts and send from personal email / LinkedIn.
 
@@ -62,6 +62,20 @@ Mode: Manual send only. Review drafts and send from personal email / LinkedIn.
 | **[BentoBox](https://getbento.com)** | food_pos_integration | **96%** | [Krystle Mobayeni](https://www.linkedin.com/in/krystlemobayeni/) (Co-founder & Strategic Advisor) | Ready to review | `docs/food-pos-integration.md` |
 | **[Popmenu](https://popmenu.com)** | food_pos_integration | **95%** | [Brendan Sweeney](https://www.linkedin.com/in/brendanmsweeney/) (CEO & Co-founder) | Ready to review | `docs/food-pos-integration.md` |
 | **[Airbyte](https://airbyte.com)** | developer_workflows_queues | **95%** | [Michel Tricot](https://www.linkedin.com/in/micheltricot/) (CEO & Co-founder) | Ready to review | `docs/developer-workflows-queues.md` |
+| **[Knock](https://knock.app)** | developer_workflows_queues | **97%** | [Sam Seely](https://www.linkedin.com/in/samseely/) (CEO & Co-founder) | Ready to review | `docs/developer-workflows-queues.md` |
+| **[Novu](https://novu.co)** | developer_workflows_queues | **98%** | [Tomer Barnea](https://www.linkedin.com/in/tomer-barnea/) (CEO & Co-founder) | Ready to review | `docs/developer-workflows-queues.md` |
+| **[Courier](https://courier.com)** | developer_workflows_queues | **95%** | [Troy Goode](https://www.linkedin.com/in/troygoode/) (Founder & CEO) | Ready to review | `docs/developer-workflows-queues.md` |
+| **[Bright Data](https://brightdata.com)** | browser_automation_infrastructure | **95%** | [Or Lenchner](https://www.linkedin.com/in/or-lenchner/) (Chief Executive Officer) | Ready to review | `docs/browser-automation-infrastructure.md` |
+| **[Smartproxy](https://smartproxy.com)** | browser_automation_infrastructure | **94%** | [Paulius Sabaliauskas](https://www.linkedin.com/in/paulius-sabaliauskas/) (Chief Executive Officer) | Ready to review | `docs/browser-automation-infrastructure.md` |
+| **[Kameleo](https://kameleo.io)** | browser_automation_infrastructure | **99%** | [Daniel Kovacs](https://www.linkedin.com/in/danielkovacs-kameleo/) (CEO & Co-founder) | Ready to review | `docs/browser-automation-infrastructure.md` |
+| **[Knit](https://getknit.dev)** | unified_apis | **97%** | [Elizabeth Varghese](https://www.linkedin.com/in/elizabeth-varghese-knit/) (CEO & Co-founder) | Ready to review | `docs/unified-apis.md` |
+| **[RootFi](https://rootfi.dev)** | unified_apis | **96%** | [Ishan Kaul](https://www.linkedin.com/in/ishan-kaul/) (CEO & Co-founder) | Ready to review | `docs/unified-apis.md` |
+| **[Chift](https://chift.eu)** | unified_apis | **98%** | [Maurice Chelli](https://www.linkedin.com/in/maurice-chelli/) (CEO & Co-founder) | Ready to review | `docs/unified-apis.md` |
+| **[Slice](https://slicelife.com)** | food_pos_integration | **96%** | [Ilir Sela](https://www.linkedin.com/in/ilirsela/) (Founder & CEO) | Ready to review | `docs/food-pos-integration.md` |
+| **[App8](https://app8.ca)** | food_pos_integration | **97%** | [Hani Bashir](https://www.linkedin.com/in/hanibashir/) (CEO & Co-founder) | Ready to review | `docs/food-pos-integration.md` |
+| **[Otter](https://tryotter.com)** | food_pos_integration | **96%** | [Rahul Patel](https://www.linkedin.com/in/rahul-patel-otter/) (Head of Product) | Ready to review | `docs/food-pos-integration.md` |
+| **[Health Samurai](https://health-samurai.io)** | healthcare_fhir_automation | **97%** | [Pavel Smirnov](https://www.linkedin.com/in/pavelsmirnov/) (CEO & Co-founder) | Ready to review | `docs/healthcare-fhir-automation.md` |
+| **[Welkin Health](https://welkinhealth.com)** | healthcare_fhir_automation | **96%** | [Michelle Davey](https://www.linkedin.com/in/michelledavey/) (CEO & Co-founder) | Ready to review | `docs/healthcare-fhir-automation.md` |
 
 
 ## Action Checklist

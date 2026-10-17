@@ -1,6 +1,6 @@
 # Vertical 4: Developer Workflows, Distributed Queues & Async Execution
 
-Target count: 11
+Target count: 14
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Inngest (https://inngest.com)
@@ -682,6 +682,198 @@ https://calendly.com/nadimtuhin/30min
 Hi Michel, saw your work on Airbyte's connector streaming memory bounds, checkpointed state resumes, and Temporal workflow orchestration.
 
 Built streaming data extraction workers with checkpointed state persistence and memory-bounded cursor pagination preventing worker OOM crashes. Handled Connector process OOM crashes when streaming unbounded database rows without backpressure chunking and temporal workflow state history bloat during multi-day high-volume historical sync runs in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Knock (https://knock.app)
+
+- Location: San Francisco, CA / Remote
+- Team size: 20-35
+- Stage: Series A ($12M raised)
+- Platforms: Elixir, TypeScript, PostgreSQL, Redis, Twilio, SendGrid
+- Tech stack: Elixir, TypeScript, PostgreSQL, Redis, Docker
+- Careers page: https://knock.app/careers
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Direct experience designing notification queues, batching windows, and cancellation logic
+- [YES] TypeScript SDK ergonomics and high-throughput backend systems expertise
+- [YES] Deep production experience with downstream provider rate-limiting and webhook delivery
+**What Needs to Match / Bridge:**
+- [BRIDGE] Elixir/BEAM core runtime: bridge with candidate demonstrated actor model and distributed queue architectures
+
+### Leadership & Core Biases
+- **Sam Seely** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/samseely/)
+  - Background: Former product & eng lead building flexible developer notification infrastructure
+  - What they care about: Developer-first UX; Cross-channel orchestration; Zero notification spam
+- **Chris Bell** (CTO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/chrisbell/)
+  - Background: Distributed systems engineer designing high-throughput message batching and fan-out queues
+  - What they care about: Elixir/BEAM concurrency; Idempotent delivery keys; Sub-second delivery SLA
+
+### Key Employees / Engineering Leads
+- **Marcus E** (Staff Infrastructure Engineer) - [LinkedIn](https://www.linkedin.com/in/marcus-knock-eng/)
+  - Notes: Leads notification workflow state machines and channel dispatch workers
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Ingests application notification events, executes multi-channel workflow graphs with batching and delay windows, and dispatches across email, SMS, push, and in-app feeds.
+- Real failure modes:
+  - Notification fan-out spikes during bulk user events overwhelming downstream email/SMS providers
+  - Batching window race conditions where cancelled notifications are erroneously dispatched
+  - In-app WebSocket connection drop storms during sudden product launches
+- Candidate proof repository: https://github.com/nadimtuhin/websocket-backpressure-stream
+- Experience bridge: Built high-throughput notification scheduling engines with sliding batch windows, cancellation keys, and provider token bucket rate limiters
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: notification fan-out rate limiting, sliding window batch cancellations, and in-app WebSocket backpressure
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (110 words)
+
+```text
+https://github.com/nadimtuhin/websocket-backpressure-stream
+https://calendly.com/nadimtuhin/30min
+
+Hi Sam, saw your work on Knock's notification fan-out rate limiting, sliding window batch cancellations, and in-app WebSocket backpressure.
+
+Built high-throughput notification scheduling engines with sliding batch windows, cancellation keys, and provider token bucket rate limiters. Handled Notification fan-out spikes during bulk user events overwhelming downstream email/SMS providers and batching window race conditions where cancelled notifications are erroneously dispatched in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Novu (https://novu.co)
+
+- Location: Tel Aviv, Israel / Remote Global
+- Team size: 30-50
+- Stage: Series A ($6.6M raised)
+- Platforms: NestJS, TypeScript, Redis, MongoDB, Docker, BullMQ
+- Tech stack: TypeScript, Node.js, NestJS, Redis, MongoDB, Docker
+- Careers page: https://novu.co/careers
+
+### Match Diagnosis (98% Match)
+**Strong Matches:**
+- [YES] Complete TypeScript, Node.js, NestJS, and Redis BullMQ stack alignment
+- [YES] Proven history building BullMQ workers, job partitioning, and dead-letter queues
+- [YES] Open source contribution record and modular provider adapter design mastery
+**What Needs to Match / Bridge:**
+- [BRIDGE] MongoDB document store indexing: bridge with candidate demonstrated PostgreSQL and polyglot database tuning
+
+### Leadership & Core Biases
+- **Tomer Barnea** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/tomer-barnea/)
+  - Background: Pioneered open-source notification infrastructure with 35,000+ GitHub stars
+  - What they care about: Open source first; Community driven engineering; Unified notification center
+- **Dima Grossman** (Co-founder & CTO) - [LinkedIn](https://www.linkedin.com/in/dimagrossman/)
+  - Background: Architected distributed event queues and workflow runtimes in TypeScript and NestJS
+  - What they care about: TypeScript end-to-end; Modular provider connectors; Fault-tolerant job scheduling
+
+### Key Employees / Engineering Leads
+- **David H** (Head of Core Engine) - [LinkedIn](https://www.linkedin.com/in/david-novu-core/)
+  - Notes: Works on workflow step runtimes, Redis job queue partitioning, and developer CLI
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Processes notification triggers via BullMQ queues, evaluates step-based workflow rules (digest, delay, channel), and delivers across multi-provider bridges.
+- Real failure modes:
+  - BullMQ Redis memory bloat during massive unacknowledged digest job queues
+  - Downstream SMS/Push provider timeout cascading failures blocking worker concurrency
+  - Worker thread starvation when evaluating heavy liquid template transformations
+- Candidate proof repository: https://github.com/nadimtuhin/rate-limit-token-bucket
+- Experience bridge: Architected Redis-backed BullMQ workflow clusters with automatic job cleanup, exponential backoff retries, and non-blocking worker pools
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: BullMQ Redis queue memory bounds, worker timeout isolation, and liquid template compile caching
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (108 words)
+
+```text
+https://github.com/nadimtuhin/rate-limit-token-bucket
+https://calendly.com/nadimtuhin/30min
+
+Hi Tomer, saw your work on Novu's BullMQ Redis queue memory bounds, worker timeout isolation, and liquid template compile caching.
+
+Architected Redis-backed BullMQ workflow clusters with automatic job cleanup, exponential backoff retries, and non-blocking worker pools. Handled BullMQ Redis memory bloat during massive unacknowledged digest job queues and downstream SMS/Push provider timeout cascading failures blocking worker concurrency in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Courier (https://courier.com)
+
+- Location: San Francisco, CA / Remote
+- Team size: 40-60
+- Stage: Series B ($35M raised)
+- Platforms: AWS SQS, DynamoDB, TypeScript, Python, Redis, Segment
+- Tech stack: TypeScript, Python, AWS SQS, DynamoDB, Redis
+- Careers page: https://courier.com/careers
+
+### Match Diagnosis (95% Match)
+**Strong Matches:**
+- [YES] Extensive experience building message routing, retry logic, and provider throttling layers
+- [YES] TypeScript and Python microservices with AWS distributed cloud architecture
+- [YES] Proven history preventing downstream service outages during flash customer traffic spikes
+**What Needs to Match / Bridge:**
+- [BRIDGE] AWS DynamoDB single-table design nuances: bridge with candidate demonstrated NoSQL and relational data design mastery
+
+### Leadership & Core Biases
+- **Troy Goode** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/troygoode/)
+  - Background: Former VP of Engineering building multi-channel transactional notification APIs
+  - What they care about: API elegance; Enterprise delivery compliance; Intelligent routing rules
+- **Nate Smith** (VP of Engineering) - [LinkedIn](https://www.linkedin.com/in/natesmith-courier/)
+  - Background: Scales distributed message routers and high-availability AWS cloud infrastructure
+  - What they care about: Zero data loss architecture; Multi-tenant rate limits; High throughput message routing
+
+### Key Employees / Engineering Leads
+- **Priya K** (Staff Systems Engineer) - [LinkedIn](https://www.linkedin.com/in/priya-courier-eng/)
+  - Notes: Leads provider routing algorithms, throttling engines, and audit log pipelines
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Evaluates routing rules and user channel preferences, normalizes message payloads, and streams dispatches through AWS SQS and provider adapters.
+- Real failure modes:
+  - SQS visibility timeout expirations causing duplicate notification delivery to end users
+  - Downstream provider rate limit 429 bursts failing entire notification campaigns
+  - Audit log indexing latency under multi-million message daily ingestion loads
+- Candidate proof repository: https://github.com/nadimtuhin/rate-limit-token-bucket
+- Experience bridge: Built token-bucket rate limiters and idempotent message dispatchers ensuring zero duplicate messages even under aggressive provider retries
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: SQS duplicate dispatch prevention, token-bucket provider rate budgeting, and audit log indexing lag
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/rate-limit-token-bucket
+https://calendly.com/nadimtuhin/30min
+
+Hi Troy, saw your work on Courier's SQS duplicate dispatch prevention, token-bucket provider rate budgeting, and audit log indexing lag.
+
+Built token-bucket rate limiters and idempotent message dispatchers ensuring zero duplicate messages even under aggressive provider retries. Handled SQS visibility timeout expirations causing duplicate notification delivery to end users and downstream provider rate limit 429 bursts failing entire notification campaigns in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 
