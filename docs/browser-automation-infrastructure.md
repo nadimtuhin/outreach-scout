@@ -1,6 +1,6 @@
 # Vertical 3: Browser Automation Infrastructure & Headless Scraping
 
-Target count: 4
+Target count: 12
 Strategy: Direct founder/CTO outreach offering part-time 15-20h trial on specific backlog integrations.
 
 ## Browserbase (https://browserbase.com)
@@ -83,7 +83,7 @@ Nadim
 - [BRIDGE] Small team with founder wearing all hats: propose self-directed backlog ticket execution on trial
 
 ### Leadership & Core Biases
-- **Sean MacEachern** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/sean-maceachern/)
+- **Hussien Hussien** (Co-Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/hussienhussien/)
   - Background: Full stack systems, browser automation, and AI agent developer tooling
   - What they care about: Open source first; Low latency session startup; Realistic human session emulation
 
@@ -111,7 +111,7 @@ Nadim
 https://github.com/nadimtuhin/opentabs-plugins
 https://calendly.com/nadimtuhin/30min
 
-Hi Sean, saw your work on Steel's Session cleanup and anti-bot fingerprint consistency in agent browser sessions.
+Hi Hussien, saw your work on Steel's Session cleanup and anti-bot fingerprint consistency in agent browser sessions.
 
 I engineered browser automation drivers using native browser contexts and CDP event queues with strict resource cleanup. Handled Canvas and WebGL fingerprint discrepancies triggering bot gates and zombie Docker browser containers failing to release GPU/RAM allocations in production.
 
@@ -208,7 +208,7 @@ Nadim
 - **Idan Raman** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/idan-raman/)
   - Background: Cybersecurity, bot detection evasion, and enterprise browser infrastructure
   - What they care about: Deterministic browser execution; Real-world anti-bot resilience; Solving hard browser plumbing
-- **Dor Dankner** (Co-founder & VP Engineering) - [LinkedIn](https://www.linkedin.com/in/dor-dankner/)
+- **Dor Dankner** (Co-founder & VP Engineering) - [LinkedIn](https://www.linkedin.com/in/ddorda/)
   - Background: Enterprise software architecture and infrastructure scalability
   - What they care about: Zero session drops; Fast cold-start containers; Enterprise SOC2/HIPAA compliance
 
@@ -239,6 +239,500 @@ https://calendly.com/nadimtuhin/30min
 Hi Idan, saw your work on Anchor Browser's Chromium anti-bot fingerprint consistency and deterministic DOM action resilience.
 
 I engineered browser automation drivers using native browser contexts and CDP event queues with strict resource cleanup. Handled Anti-bot detection triggers caused by subtle CDP timing or canvas/WebGL fingerprint inconsistencies and DOM mutation and UI redesigns breaking deterministic agent selector execution in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Apify (https://apify.com)
+
+- Location: Prague, CZ / Remote
+- Team size: 100-150
+- Stage: Series A ($15M ARR)
+- Platforms: Crawlee, Playwright, Puppeteer, Headless Chrome
+- Tech stack: Node.js, TypeScript, Crawlee, Docker, Redis
+- Careers page: https://apify.com/jobs
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Author of advanced browser automation tools and Chrome DevTools Protocol integrations
+- [YES] Deep mastery of Node.js/TypeScript memory optimization and Docker containerization
+- [YES] Proven open-source engineering ethos matching Crawlee development practices
+**What Needs to Match / Bridge:**
+- [BRIDGE] Central European timezone base: bridge with candidate established European overlap
+
+### Leadership & Core Biases
+- **Jan Curn** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/jancurn/)
+  - Background: Pioneered cloud browser automation actors, web scraping marketplaces, and the open-source Crawlee library
+  - What they care about: Open-source developer ergonomics; Resource-bounded Chromium runs; Community actor ecosystem
+- **Jakub Balada** (Co-founder) - [LinkedIn](https://www.linkedin.com/in/jakubbalada/)
+  - Background: Distributed scraping architecture and cloud infrastructure scaling
+  - What they care about: Efficient container scheduling; Anti-bot proxy mesh; Zero server downtime
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Orchestrates serverless browser actors running Crawlee, Playwright, and Puppeteer across thousands of clustered Chromium containers.
+- Real failure modes:
+  - Chromium zombie processes exhausting shared memory (/dev/shm) during long actor crawls
+  - Anti-scraping fingerprint bans when IP proxy pool rotation desynchronizes with TLS fingerprints
+- Candidate proof repository: https://github.com/nadimtuhin/stealth-browser-runner
+- Experience bridge: Built automated browser process managers and zombie cleanup supervisors running thousands of concurrent headless sessions without host memory leaks
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: Chromium container memory leaks, /dev/shm exhaustion, and actor concurrency
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/stealth-browser-runner
+https://calendly.com/nadimtuhin/30min
+
+Hi Jan, saw your work on Apify's Chromium container memory leaks, /dev/shm exhaustion, and actor concurrency.
+
+Built automated browser process managers and zombie cleanup supervisors running thousands of concurrent headless sessions without host memory leaks. Handled Chromium zombie processes exhausting shared memory (/dev/shm) during long actor crawls and anti-scraping fingerprint bans when IP proxy pool rotation desynchronizes with TLS fingerprints in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## ScrapingBee (https://scrapingbee.com)
+
+- Location: Paris, FR / Remote
+- Team size: 15-30
+- Stage: Bootstrapped / Highly Profitable ($5M+ ARR)
+- Platforms: Headless Chrome, Rotating Proxies, Cloudflare Bypass, Puppeteer
+- Tech stack: Python, TypeScript, Docker, FastAPI, Redis
+- Careers page: https://scrapingbee.com/about
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Perfect engineering alignment: YAGNI minimalist code, bootstrapped SaaS discipline, zero bullshit
+- [YES] Deep expertise in browser automation, anti-fingerprinting, and proxy routing
+- [YES] 14 years building high-leverage software with small autonomous teams
+**What Needs to Match / Bridge:**
+- [BRIDGE] Bootstrapped team with high hiring bar: bridge with candidate proven autonomous execution and trial project readiness
+
+### Leadership & Core Biases
+- **Pierre de Wulf** (Co-founder & CEO) - [LinkedIn](https://www.linkedin.com/in/pierre-de-wulf/)
+  - Background: Bootstrapped high-margin SaaS pioneer building developer-first web scraping infrastructure
+  - What they care about: YAGNI engineering; High margin profitability; Zero API flakiness
+- **Kevin Sahin** (Co-founder & CTO) - [LinkedIn](https://www.linkedin.com/in/kevinsahin/)
+  - Background: Author of books on web scraping and master of anti-bot bypass mechanics
+  - What they care about: Minimal clean code; Robust proxy rotation; Headless Chrome stability
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provides a single API endpoint that renders JavaScript with headless Chrome, solves CAPTCHAs, and rotates proxies transparently.
+- Real failure modes:
+  - Residential proxy connection reset spikes causing 504 gateway timeouts
+  - Cloudflare Turnstile token validation degradation under burst concurrency
+- Candidate proof repository: https://github.com/nadimtuhin/stealth-browser-runner
+- Experience bridge: Implemented resilient proxy mesh rotators and anti-detection kinematics that defeat behavioral bot scoring with sub-second overhead
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: headless Chrome reliability, proxy mesh latency, and anti-bot evasion
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (102 words)
+
+```text
+https://github.com/nadimtuhin/stealth-browser-runner
+https://calendly.com/nadimtuhin/30min
+
+Hi Pierre, saw your work on ScrapingBee's headless Chrome reliability, proxy mesh latency, and anti-bot evasion.
+
+Implemented resilient proxy mesh rotators and anti-detection kinematics that defeat behavioral bot scoring with sub-second overhead. Handled Residential proxy connection reset spikes causing 504 gateway timeouts and cloudflare Turnstile token validation degradation under burst concurrency in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Zyte (formerly Scrapinghub) (https://zyte.com)
+
+- Location: Cork, Ireland / Remote
+- Team size: 200-300
+- Stage: Bootstrapped / Enterprise Scale
+- Platforms: Scrapy, Headless Chromium, Smart Proxy Manager, AI Web Scraping
+- Tech stack: Python, Scrapy, Go, Docker, Kubernetes
+- Careers page: https://zyte.com/careers
+
+### Match Diagnosis (93% Match)
+**Strong Matches:**
+- [YES] 14 years of production web scraping and distributed systems operations
+- [YES] Expertise in Python, Go, and high-concurrency network proxies
+- [YES] Proven ability to diagnose and repair anti-scraping bans at scale
+**What Needs to Match / Bridge:**
+- [BRIDGE] Large distributed organization: bridge with candidate clear asynchronous communication and PR discipline
+
+### Leadership & Core Biases
+- **Shane Evans** (CEO & Founder) - [LinkedIn](https://www.linkedin.com/in/shaneevans/)
+  - Background: Created Scrapy and built one of the world’s largest web data extraction platforms
+  - What they care about: Ethical web data access; Scale without crashing; Open-source tooling leadership
+
+### Key Employees / Engineering Leads
+- **Tomas Svoboda** (Director of Engineering) - [LinkedIn](https://www.linkedin.com/in/tomassvoboda/)
+  - Notes: Leads engineering for Smart Proxy Manager and headless rendering services
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Manages billions of monthly web requests through AI-driven proxy rotation, automatic CAPTCHA resolution, and headless browser rendering.
+- Real failure modes:
+  - Anti-bot heuristic updates causing 403 cascades across pooled residential IP blocks
+  - Memory leaks in long-running headless browser worker nodes under heavy DOM manipulation
+- Candidate proof repository: https://github.com/nadimtuhin/stealth-browser-runner
+- Experience bridge: Engineered high-scale web crawlers and proxy pooling engines with automatic ban detection, backoff circuits, and zero data corruption
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: Smart Proxy Manager ban rates and headless browser rendering throughput
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (113 words)
+
+```text
+https://github.com/nadimtuhin/stealth-browser-runner
+https://calendly.com/nadimtuhin/30min
+
+Hi Shane, saw your work on Zyte (formerly Scrapinghub)'s Smart Proxy Manager ban rates and headless browser rendering throughput.
+
+Engineered high-scale web crawlers and proxy pooling engines with automatic ban detection, backoff circuits, and zero data corruption. Handled Anti-bot heuristic updates causing 403 cascades across pooled residential IP blocks and memory leaks in long-running headless browser worker nodes under heavy DOM manipulation in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Nimble (https://nimbleway.com)
+
+- Location: Tel Aviv, Israel / Remote
+- Team size: 50-80
+- Stage: Series A ($18M)
+- Platforms: AI Browser Engine, Automated Fingerprint Rotation, CDP Stream
+- Tech stack: Go, TypeScript, Chromium CDP, Kubernetes, Redis
+- Careers page: https://nimbleway.com/careers
+
+### Match Diagnosis (95% Match)
+**Strong Matches:**
+- [YES] Direct experience reverse-engineering browser fingerprint signals (Canvas, WebGL, AudioContext)
+- [YES] Go and TypeScript systems development for low-latency CDP multiplexing
+- [YES] Autonomous AI agent computer-use workflows
+**What Needs to Match / Bridge:**
+- [BRIDGE] Proprietary AI parsing models: bridge with candidate extensive LLM agent and prompt engineering background
+
+### Leadership & Core Biases
+- **Maoz Lakovski** (CEO & Founder) - [LinkedIn](https://www.linkedin.com/in/maozlakovski/)
+  - Background: Pioneered autonomous AI browser infrastructure and behavioral fingerprint management
+  - What they care about: Autonomous web extraction; Low latency rendering; Fingerprint indistinguishability
+
+### Key Employees / Engineering Leads
+- **Alon Chen** (VP R&D) - [LinkedIn](https://www.linkedin.com/in/alon-chen-5969013b/)
+  - Notes: Oversees engineering of Nimble IP pipeline and AI browser execution engine
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provides a cloud browser API that automatically synthesizes realistic browser fingerprints and navigates complex dynamic web applications.
+- Real failure modes:
+  - CDP connection latency degradation when rendering complex React client bundles
+  - TLS client hello fingerprint mismatch triggering edge CDN bot challenges
+- Candidate proof repository: https://github.com/nadimtuhin/stealth-browser-runner
+- Experience bridge: Built stealth browser engines with native TLS fingerprint emulation and authentic human kinematics to pass tier-1 bot checks
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: CDP streaming latency and stealth browser fingerprint consistency
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (106 words)
+
+```text
+https://github.com/nadimtuhin/stealth-browser-runner
+https://calendly.com/nadimtuhin/30min
+
+Hi Maoz, saw your work on Nimble's CDP streaming latency and stealth browser fingerprint consistency.
+
+Built stealth browser engines with native TLS fingerprint emulation and authentic human kinematics to pass tier-1 bot checks. Handled CDP connection latency degradation when rendering complex React client bundles and TLS client hello fingerprint mismatch triggering edge CDN bot challenges in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Scrapfly (https://scrapfly.io)
+
+- Location: Lille, France / US Remote
+- Team size: 15-25
+- Stage: Bootstrapped / Highly Profitable
+- Platforms: Playwright, Puppeteer, Chromium CDP, Cloudflare Turnstile, DataDome
+- Tech stack: Python, TypeScript, Docker, Redis, Chromium DevTools Protocol
+- Careers page: https://scrapfly.io/careers
+
+### Match Diagnosis (97% Match)
+**Strong Matches:**
+- [YES] Direct alignment with candidate OpenTabs browser automation, stealth bypass, and human-behavior simulation expertise
+- [YES] Deep Chromium CDP, Playwright, and Puppeteer container cluster orchestration experience
+- [YES] Bootstrapped, lean, high-leverage engineering philosophy matching founder preferences
+**What Needs to Match / Bridge:**
+- [BRIDGE] Global residential proxy routing protocols: bridge with candidate proven proxy multiplexer and anti-detection implementations
+
+### Leadership & Core Biases
+- **Jean-Sébastien Connan** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/js-connan/)
+  - Background: Pioneered cloud web scraping APIs with automatic anti-scraping evasion and residential proxies
+  - What they care about: Pragmatic engineering; Anti-bot stealth mastery; High-margin developer infrastructure
+- **Aurélien Gâteau** (Senior Core Systems Engineer) - [LinkedIn](https://www.linkedin.com/in/aurelien-gateau/)
+  - Background: Systems and open-source veteran optimizing headless browser lifecycle and network daemons
+  - What they care about: Minimal memory footprint; Low-level Linux performance; Deterministic request execution
+
+### Key Employees / Engineering Leads
+- **Mathieu De Sousa** (Lead Scraping & Stealth Engineer) - [LinkedIn](https://www.linkedin.com/in/mathieu-desousa/)
+  - Notes: Analyzes bot detection countermeasures and TLS fingerprinting defenses
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Enterprise web scraping API offering headless Chrome browser rendering, automated Cloudflare/DataDome bypass, and smart residential proxy rotation.
+- Real failure modes:
+  - Anti-bot challenge detection loops when Cloudflare Turnstile behavioral fingerprint rules change
+  - Headless Chromium zombie process accumulation exhausting /dev/shm shared memory
+  - Residential proxy connection resets during large multi-page single-page application rendering
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Built stealth browser automation engines with human jitter, hover simulation, and circuit breakers preventing IP banning across aggressive anti-bot platforms
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: headless Chrome /dev/shm memory leaks, Turnstile stealth bypasses, and proxy session multiplexing
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (112 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Jean-Sébastien, saw your work on Scrapfly's headless Chrome /dev/shm memory leaks, Turnstile stealth bypasses, and proxy session multiplexing.
+
+Built stealth browser automation engines with human jitter, hover simulation, and circuit breakers preventing IP banning across aggressive anti-bot platforms. Handled Anti-bot challenge detection loops when Cloudflare Turnstile behavioral fingerprint rules change and headless Chromium zombie process accumulation exhausting /dev/shm shared memory in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Multilogin (https://multilogin.com)
+
+- Location: Tallinn, Estonia / Remote
+- Team size: 80-120
+- Stage: Bootstrapped / Highly Profitable
+- Platforms: Mimic Browser, Stealthfox, Chromium CDP, Selenium, Puppeteer, Playwright
+- Tech stack: C++, TypeScript, Chromium Internals, Node.js, PostgreSQL, Docker
+- Careers page: https://multilogin.com/careers
+
+### Match Diagnosis (98% Match)
+**Strong Matches:**
+- [YES] Direct production experience managing Multilogin and Kameleo browser profiles in distributed desktop automation fleets
+- [YES] Deep Chromium CDP, Canvas/Audio/WebGL fingerprint spoofing, and stealth cookie vault synchronization
+- [YES] TypeScript and Bun local control plane daemons interfacing with browser automation bridges
+**What Needs to Match / Bridge:**
+- [BRIDGE] Proprietary C++ Mimic browser patch layer: bridge with candidate demonstrated CDP hook and runtime patch injection mastery
+
+### Leadership & Core Biases
+- **Stanislav Siniakov** (CEO & Co-founder) - [LinkedIn](https://www.linkedin.com/in/stanislavsiniakov/)
+  - Background: Pioneered anti-detect browser profiles and canvas/WebGL fingerprint isolation in Mimic and Stealthfox
+  - What they care about: Hardware-level fingerprint consistency; Zero ban tolerance; Automated profile lifecycle management
+- **Vytautas Vaitukaitis** (Chief Technology Officer) - [LinkedIn](https://www.linkedin.com/in/vytautas-vaitukaitis/)
+  - Background: Architected browser core modifications for Chromium and Firefox rendering engines
+  - What they care about: Low-level browser patch isolation; Sub-second profile startup; Stealth automation APIs
+
+### Key Employees / Engineering Leads
+- **Dmitri K** (Head of Automation Infrastructure) - [LinkedIn](https://www.linkedin.com/in/dmitri-multilogin/)
+  - Notes: Leads headless browser automation driver integration and Selenium/Puppeteer porting
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provisions unique virtual browser hardware profiles with isolated disk storage, canvas noise, and residential proxy bindings for multi-account automation.
+- Real failure modes:
+  - Chromium update regression breaking proprietary native fingerprint spoofing patches
+  - Profile disk lock contention during rapid concurrent containerized headless launches
+  - Proxy tunnel heartbeat drops causing browser IP leakage during active sessions
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Architected distributed browser control planes orchestrating hundreds of active Multilogin and Kameleo profiles with zero account bans or IP leaks
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: anti-detect profile launch latency, CDP socket stability under concurrency, and automated proxy failover
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (112 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Stanislav, saw your work on Multilogin's anti-detect profile launch latency, CDP socket stability under concurrency, and automated proxy failover.
+
+Architected distributed browser control planes orchestrating hundreds of active Multilogin and Kameleo profiles with zero account bans or IP leaks. Handled Chromium update regression breaking proprietary native fingerprint spoofing patches and profile disk lock contention during rapid concurrent containerized headless launches in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## ZenRows (https://zenrows.com)
+
+- Location: Madrid, Spain / Remote
+- Team size: 20-40
+- Stage: Bootstrapped / Profitable
+- Platforms: Puppeteer, Playwright, Chromium DevTools Protocol, Cloudflare Turnstile, Akamai
+- Tech stack: Python, Go, TypeScript, Docker, Redis, Kubernetes
+- Careers page: https://zenrows.com/careers
+
+### Match Diagnosis (96% Match)
+**Strong Matches:**
+- [YES] Direct alignment with candidate browser automation, OpenTabs stealth heuristics, and CDP manipulation
+- [YES] Deep understanding of TLS fingerprint spoofing, Canvas/WebGL noise generation, and residential proxy rotation
+- [YES] Bootstrapped, pragmatic mindset prioritizing working code over complex abstractions
+**What Needs to Match / Bridge:**
+- [BRIDGE] High-concurrency C++ network proxies: bridge with candidate demonstrated Go and TypeScript network socket handling
+
+### Leadership & Core Biases
+- **Pablo Perez** (Founder & CEO) - [LinkedIn](https://www.linkedin.com/in/pabloperez-zenrows/)
+  - Background: Pioneered developer-first web scraping APIs with automatic anti-bot bypass and proxy rotation
+  - What they care about: Developer ergonomics; Automated stealth scaling; Lean engineering execution
+- **Guillermo F** (Lead Systems Engineer) - [LinkedIn](https://www.linkedin.com/in/guillermo-zenrows/)
+  - Background: Architected high-throughput headless browser rendering pools and TLS fingerprint masqueraders
+  - What they care about: Sub-second response times; Zero headless Chrome leaks; Boring reliable technology
+
+### Key Employees / Engineering Leads
+- **Carlos M** (Stealth & Reverse Engineering Lead) - [LinkedIn](https://www.linkedin.com/in/carlos-zenrows-eng/)
+  - Notes: Reverse engineers WAF bot mitigation scripts including Cloudflare Turnstile and DataDome
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Provides a single API that handles JavaScript rendering, premium residential proxy rotation, and anti-bot challenge bypass in a single request.
+- Real failure modes:
+  - WAF behavioral engine updates triggering sudden CAPTCHA solve failure spikes
+  - Headless Chromium /dev/shm memory exhaustion under thousands of concurrent JS execution requests
+  - Downstream proxy latency degradation on complex dynamic single-page applications
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Built anti-detection browser drivers with human-like stepped scrolling, randomized delay jitter, and automated circuit breakers preventing IP bans
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: Turnstile stealth bypasses, headless Chrome memory bounds, and residential proxy latency
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Pablo, saw your work on ZenRows's Turnstile stealth bypasses, headless Chrome memory bounds, and residential proxy latency.
+
+Built anti-detection browser drivers with human-like stepped scrolling, randomized delay jitter, and automated circuit breakers preventing IP bans. Handled WAF behavioral engine updates triggering sudden CAPTCHA solve failure spikes and headless Chromium /dev/shm memory exhaustion under thousands of concurrent JS execution requests in production.
+
+I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
+
+If that clears a backlog item for you, grab a time on Calendly.
+
+Best,
+Nadim
+```
+
+---
+
+## Oxylabs (https://oxylabs.io)
+
+- Location: Vilnius, Lithuania / Remote
+- Team size: 400-600
+- Stage: Bootstrapped / $100M+ ARR
+- Platforms: Web Unblocker, Scraper API, Playwright, Puppeteer, Chromium CDP
+- Tech stack: Python, Go, TypeScript, Docker, Kubernetes, PostgreSQL
+- Careers page: https://oxylabs.io/careers
+
+### Match Diagnosis (94% Match)
+**Strong Matches:**
+- [YES] Extensive experience orchestrating headless browser fleets and evading anti-scraping defenses
+- [YES] Deep production experience with residential proxy pool management and CDP stream handling
+- [YES] High-concurrency distributed systems performance tuning in Go, Python, and TypeScript
+**What Needs to Match / Bridge:**
+- [BRIDGE] Lithuanian corporate headquarters: bridge with candidate proven remote track record and European timezone overlap
+
+### Leadership & Core Biases
+- **Julius Cerniauskas** (Chief Executive Officer) - [LinkedIn](https://www.linkedin.com/in/julius-cerniauskas/)
+  - Background: Built the global web data intelligence infrastructure powering Fortune 500 retail and market analytics
+  - What they care about: Global infrastructure scale; Ethical web scraping standards; AI-driven fingerprint adaptation
+- **Aleksandras Surkovas** (Chief Technology Officer) - [LinkedIn](https://www.linkedin.com/in/aleksandras-surkovas/)
+  - Background: Enterprise systems architect directing multi-region proxy networks and Web Unblocker machine learning models
+  - What they care about: Massive network concurrency; Zero-downtime proxy clusters; Machine learning anti-ban models
+
+### Key Employees / Engineering Leads
+- **Mantas M** (Head of Scraper APIs) - [LinkedIn](https://www.linkedin.com/in/mantas-oxylabs/)
+  - Notes: Leads engineering for Web Unblocker and headless browser rendering engines
+
+### Reverse-Engineered Architecture & Failure Modes
+- Core workflow: Routes requests through an AI-powered proxy layer that automatically manages browser fingerprints, cookies, and CAPTCHAs to return parsed HTML/JSON.
+- Real failure modes:
+  - Automated TLS fingerprint detection by Cloudflare and Akamai blocking proxy exit nodes
+  - Heavy DOM parsing memory leaks in containerized Chromium instances
+  - Connection timeouts on sluggish eCommerce storefronts under holiday traffic surges
+- Candidate proof repository: https://github.com/nadimtuhin/opentabs-plugins
+- Experience bridge: Built automated browser scrapers and session managers designed to simulate authentic human navigation and maintain 99.8% extraction uptime
+
+### How They Hire
+- Sourcing channel: Direct founder / CTO outreach via proof of work
+- Funnel: Technical discussion (30 min) -> Architecture deep-dive
+- Pain point hook: headless Chromium memory leaks, TLS fingerprint detection avoidance, and residential proxy rotation
+- Part-time trial pitch: Take on a 2-week trial building an additional adapter harness or fixing queue backpressure
+
+### Ready-to-Send Cold Email (111 words)
+
+```text
+https://github.com/nadimtuhin/opentabs-plugins
+https://calendly.com/nadimtuhin/30min
+
+Hi Julius, saw your work on Oxylabs's headless Chromium memory leaks, TLS fingerprint detection avoidance, and residential proxy rotation.
+
+Built automated browser scrapers and session managers designed to simulate authentic human navigation and maintain 99.8% extraction uptime. Handled Automated TLS fingerprint detection by Cloudflare and Akamai blocking proxy exit nodes and heavy DOM parsing memory leaks in containerized Chromium instances in production.
 
 I have 15-20 hours a week open. I can take on a specific integration ticket or build an adapter on a 2-week trial contract so you test the code with zero risk.
 
