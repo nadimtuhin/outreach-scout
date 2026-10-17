@@ -18,6 +18,7 @@ export interface StoredTargetRow {
   tech_stack: string;
   match_analysis: string;
   key_employees: string;
+  contacts: string;
 }
 
 export class ScoutDatabase {
@@ -43,6 +44,7 @@ export class ScoutDatabase {
         tech_stack TEXT NOT NULL,
         match_analysis TEXT NOT NULL DEFAULT '{}',
         key_employees TEXT NOT NULL DEFAULT '[]',
+        contacts TEXT NOT NULL DEFAULT '[]',
         status TEXT NOT NULL DEFAULT 'drafted',
         created_at TEXT NOT NULL
       );
@@ -61,6 +63,11 @@ export class ScoutDatabase {
     }
     try {
       this.db.run("ALTER TABLE targets ADD COLUMN key_employees TEXT NOT NULL DEFAULT '[]'");
+    } catch {
+      // Column may already exist
+    }
+    try {
+      this.db.run("ALTER TABLE targets ADD COLUMN contacts TEXT NOT NULL DEFAULT '[]'");
     } catch {
       // Column may already exist
     }
@@ -108,8 +115,8 @@ export class ScoutDatabase {
       INSERT OR REPLACE INTO targets (
         id, name, vertical, website, careers_url, platform_ecosystem,
         headquarters, estimated_employees, funding_stage, tech_stack,
-        match_analysis, key_employees, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        match_analysis, key_employees, contacts, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertLeadership = this.db.prepare(`
@@ -146,6 +153,7 @@ export class ScoutDatabase {
           JSON.stringify(item.metadata.techStack),
           JSON.stringify(item.matchAnalysis),
           JSON.stringify(item.keyEmployees),
+          JSON.stringify(item.contacts),
           new Date().toISOString()
         );
 
@@ -191,7 +199,7 @@ export class ScoutDatabase {
         SELECT 
           t.id, t.name, t.vertical, t.website, t.careers_url, t.headquarters,
           t.estimated_employees, t.funding_stage, t.status,
-          t.platform_ecosystem, t.tech_stack, t.match_analysis, t.key_employees,
+          t.platform_ecosystem, t.tech_stack, t.match_analysis, t.key_employees, t.contacts,
           o.leader_name, o.draft_markdown, o.word_count
         FROM targets t
         LEFT JOIN outreach o ON t.id = o.target_id

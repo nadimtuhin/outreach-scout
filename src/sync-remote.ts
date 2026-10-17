@@ -30,6 +30,17 @@ async function syncRemote(): Promise<void> {
       }>;
       const platforms = JSON.parse(r.platform_ecosystem || '[]') as string[];
       const stack = JSON.parse(r.tech_stack || '[]') as string[];
+      const contacts = JSON.parse(r.contacts || '[]') as Array<{
+        id: string;
+        name: string;
+        role: string;
+        email: string;
+        linkedInUrl: string;
+        angle: string;
+        notes?: string;
+        tailoredPitch: string;
+        wordCount: number;
+      }>;
 
       return {
         id: r.id,
@@ -48,6 +59,7 @@ async function syncRemote(): Promise<void> {
         wordCount: r.word_count,
         matchAnalysis: match,
         keyEmployees: employees,
+        contacts,
       };
     }),
   };

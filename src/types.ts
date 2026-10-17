@@ -19,6 +19,7 @@ export interface TargetMetadata {
 export interface PersonProfile {
   name: string;
   role: string;
+  email?: string;
   linkedInUrl: string;
   location?: string;
   notes?: string;
@@ -49,10 +50,23 @@ export interface HiringPattern {
   partTimeTrialProposal: string;
 }
 
+export interface ContactLead {
+  id: string;
+  name: string;
+  role: string;
+  email: string;
+  linkedInUrl: string;
+  angle: 'founder_ceo' | 'cto_eng' | 'product_ops';
+  notes?: string;
+  tailoredPitch: string;
+  wordCount: number;
+}
+
 export interface TargetDossier {
   metadata: TargetMetadata;
   leadership: LeadershipProfile[];
   keyEmployees: PersonProfile[];
+  contacts: ContactLead[];
   matchAnalysis: MatchAnalysis;
   architecture: ArchitectureReverseEngineering;
   hiring: HiringPattern;

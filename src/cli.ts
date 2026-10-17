@@ -4,10 +4,24 @@ import { ScoutDatabase, type StoredTargetRow } from './db.ts';
 const dbPath = join(import.meta.dir, '..', 'scout.sqlite');
 const db = new ScoutDatabase(dbPath);
 
+interface ContactData {
+  id: string;
+  name: string;
+  role: string;
+  email: string;
+  linkedInUrl: string;
+  angle: string;
+  notes?: string;
+  tailoredPitch: string;
+  wordCount: number;
+}
+
 function formatRow(t: StoredTargetRow): string {
   const match = JSON.parse(t.match_analysis || '{}') as { score?: number };
   const score = match.score ? `${match.score}%` : 'N/A';
-  return `[${t.id.padEnd(14)}] ${t.name.padEnd(16)} | ${t.vertical.padEnd(34)} | Match: ${score.padEnd(4)} | Status: ${t.status.padEnd(8)} | Contact: ${t.leader_name}`;
+  const contacts = JSON.parse(t.contacts || '[]') as ContactData[];
+  const contactsCount = contacts.length > 0 ? `${contacts.length} leads` : '1 lead';
+  return `[${t.id.padEnd(14)}] ${t.name.padEnd(16)} | ${t.vertical.padEnd(34)} | Match: ${score.padEnd(4)} | ${contactsCount.padEnd(7)} | Status: ${t.status}`;
 }
 
 function handleList(verticalFilter?: string): void {
@@ -21,9 +35,9 @@ function handleList(verticalFilter?: string): void {
     console.log(formatRow(r));
   }
   console.log('\nCommands:');
-  console.log('  bun run cli show <id>         View full profile, match breakdown, and draft');
-  console.log('  bun run cli copy <id>         Copy cold email draft to macOS clipboard');
-  console.log('  bun run cli status <id> <st>  Update status (drafted, sent, replied, declined)\n');
+  console.log('  bun run cli show <id>                View profile, contacts, and pitches');
+  console.log('  bun run cli copy <id> [contact]      Copy pitch for target or specific contact to clipboard');
+  console.log('  bun run cli status <id> <state>      Update status (drafted, sent, replied, declined)\n');
 }
 
 function handleShow(targetId: string): void {
@@ -40,12 +54,7 @@ function handleShow(targetId: string): void {
     strongMatches?: string[];
     gapsOrBridges?: string[];
   };
-  const employees = JSON.parse(t.key_employees || '[]') as Array<{
-    name: string;
-    role: string;
-    linkedInUrl: string;
-    notes?: string;
-  }>;
+  const contacts = JSON.parse(t.contacts || '[]') as ContactData[];
   const platforms = (JSON.parse(t.platform_ecosystem || '[]') as string[]).join(', ');
   const stack = (JSON.parse(t.tech_stack || '[]') as string[]).join(', ');
 
@@ -71,20 +80,30 @@ function handleShow(targetId: string): void {
     console.log(`  [~] ${g}`);
   }
 
-  console.log('\n--- KEY LEADS & PROFILES ---');
-  console.log(`Primary Contact: ${t.leader_name}`);
-  for (const emp of employees) {
-    console.log(`  - ${emp.name} (${emp.role}) - ${emp.linkedInUrl}`);
-    if (emp.notes) console.log(`    Note: ${emp.notes}`);
+  console.log('\n--- TARGETED CONTACTS & PERSONA PITCHES ---');
+  if (contacts.length === 0) {
+    console.log(`Primary Contact: ${t.leader_name}`);
+    console.log(`Pitch Draft (${t.word_count} words):\n${t.draft_markdown}\n`);
+  } else {
+    contacts.forEach((c, idx) => {
+      console.log(`\n[${idx + 1}] ${c.name} (${c.role})`);
+      console.log(`    Email:    ${c.email}`);
+      console.log(`    LinkedIn: ${c.linkedInUrl}`);
+      if (c.notes) console.log(`    Angle:    ${c.notes}`);
+      console.log(`    Pitch (${c.wordCount} words):\n`);
+      console.log(
+        c.tailoredPitch
+          .split('\n')
+          .map((line) => '      ' + line)
+          .join('\n')
+      );
+    });
   }
-
-  console.log('\n--- COLD EMAIL DRAFT (under 150 words) ---');
-  console.log(t.draft_markdown);
-  console.log('----------------------------------------------------------------');
-  console.log(`Word count: ${t.word_count} words | Run 'bun run cli copy ${t.id}' to copy\n`);
+  console.log('\n----------------------------------------------------------------');
+  console.log(`Run 'bun run cli copy ${t.id} [contact-name-or-num]' to copy to clipboard\n`);
 }
 
-async function handleCopy(targetId: string): Promise<void> {
+async function handleCopy(targetId: string, contactArg?: string): Promise<void> {
   const all = db.getAllTargets();
   const t = all.find((r) => r.id === targetId);
 
@@ -93,14 +112,46 @@ async function handleCopy(targetId: string): Promise<void> {
     process.exit(1);
   }
 
+  const contacts = JSON.parse(t.contacts || '[]') as ContactData[];
+  let pitchToCopy = t.draft_markdown;
+  let contactName = t.leader_name;
+
+  if (contacts.length > 0) {
+    if (contactArg) {
+      const num = parseInt(contactArg, 10);
+      let found: ContactData | undefined;
+      if (!isNaN(num) && num >= 1 && num <= contacts.length) {
+        found = contacts[num - 1];
+      } else {
+        found = contacts.find((c) => c.name.toLowerCase().includes(contactArg.toLowerCase()));
+      }
+      if (found) {
+        pitchToCopy = found.tailoredPitch;
+        contactName = `${found.name} (${found.role})`;
+      } else {
+        console.log(`Contact '${contactArg}' not matched, copying primary contact.`);
+        const first = contacts[0];
+        if (first) {
+          pitchToCopy = first.tailoredPitch;
+          contactName = `${first.name} (${first.role})`;
+        }
+      }
+    } else {
+      const first = contacts[0];
+      if (first) {
+        pitchToCopy = first.tailoredPitch;
+        contactName = `${first.name} (${first.role})`;
+      }
+    }
+  }
+
   const proc = Bun.spawn(['pbcopy'], { stdin: 'pipe' });
-  proc.stdin.write(t.draft_markdown);
+  proc.stdin.write(pitchToCopy);
   proc.stdin.flush();
   proc.stdin.end();
   await proc.exited;
 
-  console.log(`\nCopied cold email draft for ${t.name} to clipboard.`);
-  console.log(`Primary contact: ${t.leader_name}`);
+  console.log(`\nCopied tailored pitch for ${contactName} at ${t.name} to clipboard.`);
   console.log(`Next step: paste into email or LinkedIn note, then run:`);
   console.log(`  bun run cli status ${t.id} sent\n`);
 }
@@ -137,10 +188,10 @@ function main(): void {
     }
     case 'copy': {
       if (!args[1]) {
-        console.error('Usage: bun run cli copy <target-id>');
+        console.error('Usage: bun run cli copy <target-id> [contact-name-or-num]');
         process.exit(1);
       }
-      void handleCopy(args[1]);
+      void handleCopy(args[1], args[2]);
       break;
     }
     case 'status': {

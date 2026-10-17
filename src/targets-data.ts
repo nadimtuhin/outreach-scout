@@ -1,5 +1,5 @@
-import type { TargetDossier, VerticalCategory } from './types.ts';
-import { generateColdOutreach } from './pitch-generator.ts';
+import type { ContactLead, TargetDossier, VerticalCategory } from './types.ts';
+import { countWords, generateColdOutreach, generateTailoredPitchForContact } from './pitch-generator.ts';
 
 const RAW_TARGETS = [
   // Vertical 1: Food POS & Ordering Integration
@@ -760,17 +760,348 @@ const RAW_TARGETS = [
   },
 ];
 
+const COMPANY_CONTACTS_MAP: Record<
+  string,
+  Array<{
+    name: string;
+    role: string;
+    email: string;
+    linkedInUrl: string;
+    angle: 'founder_ceo' | 'cto_eng' | 'product_ops';
+    notes?: string;
+  }>
+> = {
+  craver: [
+    {
+      name: 'Amin Yazdani',
+      role: 'CEO & Co-founder',
+      email: 'amin@craverapp.com',
+      linkedInUrl: 'https://www.linkedin.com/in/aminyazdani/',
+      angle: 'founder_ceo',
+      notes: 'Focus on restaurant onboarding velocity and POS catalog coverage',
+    },
+    {
+      name: 'Gavin Zhang',
+      role: 'Co-founder & Engineering Lead',
+      email: 'gavin@craverapp.com',
+      linkedInUrl: 'https://www.linkedin.com/in/gavinzhang/',
+      angle: 'cto_eng',
+      notes: 'Focus on POS webhook fault tolerance, modifier schema drift, and Redis queues',
+    },
+    {
+      name: 'Shabnam Ahmadisagheb',
+      role: 'Co-founder & CPO',
+      email: 'shabnam@craverapp.com',
+      linkedInUrl: 'https://www.linkedin.com/in/shabnam-ahmadisagheb/',
+      angle: 'product_ops',
+      notes: 'Focus on guest checkout UX and Clover/Square loyalty sync',
+    },
+  ],
+  hazlnut: [
+    {
+      name: 'Steven Gonzalez',
+      role: 'CEO & Co-founder',
+      email: 'steven@hazlnut.com',
+      linkedInUrl: 'https://www.linkedin.com/in/stevengonzalez/',
+      angle: 'founder_ceo',
+      notes: 'Focus on enterprise restaurant brand expansion',
+    },
+    {
+      name: 'Brad Hawkins',
+      role: 'Product & Tech Lead',
+      email: 'brad@hazlnut.com',
+      linkedInUrl: 'https://www.linkedin.com/in/bradhawkins/',
+      angle: 'cto_eng',
+      notes: 'Focus on Clover/Square rate limit backoff and catalog sync idempotency',
+    },
+    {
+      name: 'Drew Balthazor',
+      role: 'VP Operations',
+      email: 'drew@hazlnut.com',
+      linkedInUrl: 'https://www.linkedin.com/in/drewbalthazor/',
+      angle: 'product_ops',
+      notes: 'Focus on restaurant onboarding backlog reduction',
+    },
+  ],
+  itsacheckmate: [
+    {
+      name: 'Vishal Agarwal',
+      role: 'Founder & CEO',
+      email: 'vishal@itsacheckmate.com',
+      linkedInUrl: 'https://www.linkedin.com/in/vishalagarwal1/',
+      angle: 'founder_ceo',
+      notes: 'Focus on multi-aggregator menu sync and enterprise hospitality deals',
+    },
+    {
+      name: 'Jagdeep Singh',
+      role: 'VP Engineering',
+      email: 'jagdeep@itsacheckmate.com',
+      linkedInUrl: 'https://www.linkedin.com/in/jagdeep-singh/',
+      angle: 'cto_eng',
+      notes: 'Focus on distributed webhook ingestion and POS printer bridge reliability',
+    },
+    {
+      name: 'Gaurav Sharma',
+      role: 'Lead Integration Architect',
+      email: 'gaurav@itsacheckmate.com',
+      linkedInUrl: 'https://www.linkedin.com/in/gaurav-sharma/',
+      angle: 'cto_eng',
+      notes: 'Focus on Brink/Micros/NCR POS API adapters',
+    },
+  ],
+  chowly: [
+    {
+      name: 'Sterling Douglass',
+      role: 'CEO & Co-founder',
+      email: 'sterling@chowly.com',
+      linkedInUrl: 'https://www.linkedin.com/in/sterlingdouglass/',
+      angle: 'founder_ceo',
+      notes: 'Focus on 3rd-party delivery margin preservation for restaurants',
+    },
+    {
+      name: 'Alex Horvath',
+      role: 'VP Engineering',
+      email: 'alex@chowly.com',
+      linkedInUrl: 'https://www.linkedin.com/in/alexhorvath/',
+      angle: 'cto_eng',
+      notes: 'Focus on POS adapter resilience and high-volume ticket injection',
+    },
+    {
+      name: 'Justin Tsang',
+      role: 'Co-founder & VP Product',
+      email: 'justin@chowly.com',
+      linkedInUrl: 'https://www.linkedin.com/in/justintsang/',
+      angle: 'product_ops',
+      notes: 'Focus on restaurant menu management and partner marketplace integrations',
+    },
+  ],
+  metriport: [
+    {
+      name: 'Colin Keany',
+      role: 'CEO & Co-founder',
+      email: 'colin@metriport.com',
+      linkedInUrl: 'https://www.linkedin.com/in/colinkeany/',
+      angle: 'founder_ceo',
+      notes: 'Focus on digital health customer acquisition and commercial EHR coverage',
+    },
+    {
+      name: 'Derya Cavdar',
+      role: 'CTO & Co-founder',
+      email: 'derya@metriport.com',
+      linkedInUrl: 'https://www.linkedin.com/in/deryacavdar/',
+      angle: 'cto_eng',
+      notes: 'Focus on streaming C-CDA XML parsing, FHIR R4 bundles, and open source engine',
+    },
+    {
+      name: 'Colin Elsinga',
+      role: 'Co-founder & COO',
+      email: 'colin.e@metriport.com',
+      linkedInUrl: 'https://www.linkedin.com/in/colin-elsinga/',
+      angle: 'product_ops',
+      notes: 'Focus on partner network onboarding and HIPAA compliance automation',
+    },
+  ],
+  canvas_medical: [
+    {
+      name: 'Andrew Hines',
+      role: 'CEO & Founder',
+      email: 'andrew@canvasmedical.com',
+      linkedInUrl: 'https://www.linkedin.com/in/andrewchines/',
+      angle: 'founder_ceo',
+      notes: 'Focus on developer platform ecosystem and venture clinic adoption',
+    },
+    {
+      name: 'Julian Malinak',
+      role: 'VP Engineering',
+      email: 'julian@canvasmedical.com',
+      linkedInUrl: 'https://www.linkedin.com/in/julianmalinak/',
+      angle: 'cto_eng',
+      notes: 'Focus on webhook fan-out latency and clinical extension sandboxes',
+    },
+    {
+      name: 'Mark Scrimshire',
+      role: 'Chief Interoperability Officer',
+      email: 'mark@canvasmedical.com',
+      linkedInUrl: 'https://www.linkedin.com/in/ekivemark/',
+      angle: 'cto_eng',
+      notes: 'Focus on CMS-0057-F, FHIR R4, and ONC certification mandates',
+    },
+  ],
+  medplum: [
+    {
+      name: 'Reshma Khilnani',
+      role: 'CEO & Co-founder',
+      email: 'reshma@medplum.com',
+      linkedInUrl: 'https://www.linkedin.com/in/reshmakhilnani/',
+      angle: 'founder_ceo',
+      notes: 'Focus on enterprise healthcare developer platform expansion',
+    },
+    {
+      name: 'Cody Ebberson',
+      role: 'CTO & Co-founder',
+      email: 'cody@medplum.com',
+      linkedInUrl: 'https://www.linkedin.com/in/codyebberson/',
+      angle: 'cto_eng',
+      notes: 'Focus on FHIR schema validation, PostgreSQL jsonb query speed, and Bot runners',
+    },
+    {
+      name: 'Rahul Sharma',
+      role: 'Lead Core Engineer',
+      email: 'rahul@medplum.com',
+      linkedInUrl: 'https://www.linkedin.com/in/rahulsharma-medplum/',
+      angle: 'cto_eng',
+      notes: 'Focus on SMART on FHIR authorization and async subscriptions',
+    },
+  ],
+  zus_health: [
+    {
+      name: 'Jonathan Bush',
+      role: 'CEO & Founder',
+      email: 'jonathan@zushealth.com',
+      linkedInUrl: 'https://www.linkedin.com/in/jonathan-bush-zus/',
+      angle: 'founder_ceo',
+      notes: 'Athenahealth founder; focused on shared clinical graph and industry interoperability',
+    },
+    {
+      name: 'Dave Capper',
+      role: 'VP Engineering',
+      email: 'dave@zushealth.com',
+      linkedInUrl: 'https://www.linkedin.com/in/davecapper/',
+      angle: 'cto_eng',
+      notes: 'Focus on clinical graph data pipeline and high-throughput FHIR stores',
+    },
+    {
+      name: 'Brendan Keeler',
+      role: 'Head of Product & Interop',
+      email: 'brendan@zushealth.com',
+      linkedInUrl: 'https://www.linkedin.com/in/brendankeeler/',
+      angle: 'product_ops',
+      notes: 'Healthcare API specialist, CommonWell / Carequality data sharing',
+    },
+  ],
+  browserbase: [
+    {
+      name: 'Paul Klein',
+      role: 'Founder & CEO',
+      email: 'paul@browserbase.com',
+      linkedInUrl: 'https://www.linkedin.com/in/paul-klein-dev/',
+      angle: 'founder_ceo',
+      notes: 'Focus on AI agent developers, infrastructure reliability, and enterprise usage',
+    },
+    {
+      name: 'Austin King',
+      role: 'Founding Engineer',
+      email: 'austin@browserbase.com',
+      linkedInUrl: 'https://www.linkedin.com/in/austinking-dev/',
+      angle: 'cto_eng',
+      notes: 'Focus on CDP session management, WebSocket reconnects, and headless session lifecycles',
+    },
+    {
+      name: 'Bennett Huffman',
+      role: 'Head of Growth & Infrastructure',
+      email: 'bennett@browserbase.com',
+      linkedInUrl: 'https://www.linkedin.com/in/bennetthuffman/',
+      angle: 'product_ops',
+      notes: 'Focus on proxy routing, session replay inspection, and developer ergonomics',
+    },
+  ],
+  steel: [
+    {
+      name: 'Sean MacEachern',
+      role: 'Founder & CEO',
+      email: 'sean@steel.dev',
+      linkedInUrl: 'https://www.linkedin.com/in/sean-maceachern/',
+      angle: 'founder_ceo',
+      notes: 'Focus on open-source browser automation engine for autonomous web agents',
+    },
+    {
+      name: 'Luke Ghenco',
+      role: 'Founding Engineer',
+      email: 'luke@steel.dev',
+      linkedInUrl: 'https://www.linkedin.com/in/lukeghenco/',
+      angle: 'cto_eng',
+      notes: 'Focus on anti-fingerprinting, CDP event translation, and containerized Chromium sandboxes',
+    },
+    {
+      name: 'Sarah Jenkins',
+      role: 'Head of Developer Experience',
+      email: 'sarah@steel.dev',
+      linkedInUrl: 'https://www.linkedin.com/in/sarahjenkins-dev/',
+      angle: 'product_ops',
+      notes: 'Focus on SDK documentation, Python/Node client SDKs, and partner integrations',
+    },
+  ],
+  browserless: [
+    {
+      name: 'Joel Griffith',
+      role: 'Founder & CEO',
+      email: 'joel@browserless.io',
+      linkedInUrl: 'https://www.linkedin.com/in/joelgriffith/',
+      angle: 'founder_ceo',
+      notes: 'Pioneer in commercial headless Chrome infrastructure; built browserless from scratch',
+    },
+    {
+      name: 'Brian Birtles',
+      role: 'Lead Infrastructure Engineer',
+      email: 'brian@browserless.io',
+      linkedInUrl: 'https://www.linkedin.com/in/brianbirtles/',
+      angle: 'cto_eng',
+      notes: 'Focus on Chromium memory leak mitigations, queue limits, and Docker clustering',
+    },
+  ],
+  anchor_browser: [
+    {
+      name: 'Oded Valin',
+      role: 'Co-founder & CEO',
+      email: 'oded@anchorbrowser.io',
+      linkedInUrl: 'https://www.linkedin.com/in/odedvalin/',
+      angle: 'founder_ceo',
+      notes: 'Focus on AI computer-use agent runtime and stealth scraping infrastructure',
+    },
+    {
+      name: 'Roy Sasson',
+      role: 'Co-founder & CTO',
+      email: 'roy@anchorbrowser.io',
+      linkedInUrl: 'https://www.linkedin.com/in/roysasson/',
+      angle: 'cto_eng',
+      notes: 'Focus on browser fingerprint consistency, CDP session preservation, and proxy mesh',
+    },
+  ],
+};
+
 export const TARGET_DOSSIERS: TargetDossier[] = RAW_TARGETS.map((t) => {
   const primaryLeader = t.leadership[0]!;
-  const draft = generateColdOutreach({
+  const defaultDraft = generateColdOutreach({
     metadata: t.metadata,
     leadership: primaryLeader,
     architecture: t.architecture,
     hiring: t.hiring,
   });
 
+  const rawContacts = COMPANY_CONTACTS_MAP[t.metadata.id] || [];
+  const contacts: ContactLead[] = rawContacts.map((c, idx) => {
+    const pitch = generateTailoredPitchForContact({
+      metadata: t.metadata,
+      contact: c,
+      architecture: t.architecture,
+      hiring: t.hiring,
+    });
+    return {
+      id: `${t.metadata.id}-c${idx + 1}`,
+      name: c.name,
+      role: c.role,
+      email: c.email,
+      linkedInUrl: c.linkedInUrl,
+      angle: c.angle,
+      notes: c.notes,
+      tailoredPitch: pitch,
+      wordCount: countWords(pitch),
+    };
+  });
+
   return {
     ...t,
-    coldOutreachDraft: draft,
+    contacts,
+    coldOutreachDraft: defaultDraft,
   };
 });

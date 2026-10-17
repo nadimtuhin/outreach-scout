@@ -13,14 +13,14 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Silicon Valley 2026 Light Design System (Stripe / Linear / Resend aesthetic) */
+    /* Silicon Valley 2026 Master-Detail Design System */
     :root, [data-theme="light"] {
       --bg: #f8f9fb;
+      --panel-bg: #ffffff;
       --card-bg: #ffffff;
-      --card-border: rgba(15, 23, 42, 0.08);
-      --card-border-hover: rgba(37, 99, 235, 0.28);
-      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 6px 16px -4px rgba(0, 0, 0, 0.04);
-      --card-shadow-hover: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(0, 0, 0, 0.02);
+      --border: rgba(15, 23, 42, 0.08);
+      --border-hover: rgba(37, 99, 235, 0.25);
+      --border-active: #2563eb;
       --surface: #f1f4f9;
       --surface-border: #e2e8f0;
       --text: #0f172a;
@@ -37,17 +37,19 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       --amber-border: #fde68a;
       --code-bg: #f8fafc;
       --code-text: #1e293b;
-      --radius: 12px;
-      --badge-radius: 6px;
+      --item-active-bg: #eff6ff;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+      --radius: 10px;
     }
 
     [data-theme="dark"] {
       --bg: #090a0f;
-      --card-bg: rgba(18, 20, 29, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-hover: rgba(255, 255, 255, 0.18);
-      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-      --card-shadow-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.8);
+      --panel-bg: #0f1118;
+      --card-bg: #141722;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(59, 130, 246, 0.3);
+      --border-active: #3b82f6;
       --surface: #141722;
       --surface-border: rgba(255, 255, 255, 0.06);
       --text: #f4f4f7;
@@ -64,6 +66,9 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       --amber-border: rgba(245, 158, 11, 0.25);
       --code-bg: #06070a;
       --code-text: #cbd5e1;
+      --item-active-bg: rgba(59, 130, 246, 0.12);
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,409 +76,513 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 50%),
-        radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
-      background-attachment: fixed;
       color: var(--text);
-      padding: 32px 24px;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .container { max-width: 1360px; margin: 0 auto; }
-
-    /* Modern 2026 Header */
-    header {
+      height: 100vh;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 16px;
+      flex-direction: column;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .brand-wrap { display: flex; align-items: center; gap: 14px; }
-    .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+    /* Top Nav Bar */
+    .top-nav {
+      height: 56px;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+    .brand-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-weight: 700;
-      font-size: 16px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+      font-size: 13px;
     }
-    h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.025em; color: var(--text); }
-    .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 500; margin-top: 1px; }
 
-    .header-actions { display: flex; align-items: center; gap: 10px; }
-    .live-pill {
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .live-status {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--emerald);
       background: var(--emerald-bg);
       border: 1px solid var(--emerald-border);
-      padding: 5px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
     }
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 6px var(--emerald);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-    .meta-pill {
-      font-size: 12px;
-      font-weight: 500;
+    .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+    .theme-btn {
+      background: transparent;
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 5px 12px;
-      border-radius: 20px;
-    }
-    .theme-toggle-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.15s;
     }
-    .theme-toggle-btn:hover { color: var(--text); border-color: var(--primary); }
+    .theme-btn:hover { color: var(--text); border-color: var(--primary); }
 
-    /* 2026 Segmented Control (Linear style) */
-    .filter-bar {
+    /* Master-Detail Split Workspace */
+    .workspace {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 56px);
+      overflow: hidden;
+    }
+
+    /* Left Sidebar: Master List */
+    .master-pane {
+      width: 380px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .master-search-bar {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .search-input-wrap {
+      position: relative;
       display: flex;
       align-items: center;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 10px 7px 30px;
+      font-size: 12.5px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: var(--primary); background: var(--card-bg); }
+    .search-icon { position: absolute; left: 10px; color: var(--text-subtle); width: 13px; height: 13px; }
+
+    .category-filter-bar {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .cat-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .cat-btn:hover { color: var(--text); }
+
+    /* Target Items List */
+    .master-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .target-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .target-item:hover { background: var(--surface); border-color: var(--border); }
+    .target-item.active {
+      background: var(--item-active-bg);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .target-item-header {
+      display: flex;
       justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
+      align-items: center;
+    }
+    .item-name { font-size: 14.5px; font-weight: 700; color: var(--text); }
+    .item-score {
+      font-size: 11.5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--emerald);
+      background: var(--emerald-bg);
+      border: 1px solid var(--emerald-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .item-subline {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .item-contacts-preview {
+      font-size: 11px;
+      color: var(--text-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Right Pane: Detail View */
+    .detail-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: var(--bg);
+    }
+
+    /* Detail Header */
+    .detail-header {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
       gap: 16px;
     }
-    .segmented-control {
-      display: inline-flex;
-      background: var(--surface);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 4px;
-      gap: 3px;
+    .detail-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-    .segment-btn {
-      background: transparent;
-      border: none;
+    .company-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .company-links-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .company-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .company-link:hover { text-decoration: underline; }
+
+    .meta-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .meta-chip {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
       color: var(--text-muted);
-      padding: 7px 15px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    /* Match Diagnosis Grid */
+    .diagnosis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .diagnosis-col {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+    .col-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-subtle);
+    }
+    .diag-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.45;
+    }
+    .diag-icon-yes { color: var(--emerald); font-weight: 700; }
+    .diag-icon-bridge { color: var(--amber); font-weight: 700; }
+
+    /* Contacts & Pitches Section */
+    .contacts-section {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .contacts-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+    }
+    .contact-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 14px;
       border-radius: 7px;
       font-size: 13px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
     }
-    .segment-btn:hover { color: var(--text); }
-    .segment-btn.active {
+    .contact-tab:hover { color: var(--text); }
+    .contact-tab.active {
       background: var(--card-bg);
       color: var(--text);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
-    }
-    .segment-count {
-      font-size: 11px;
-      font-weight: 600;
-      background: rgba(15, 23, 42, 0.06);
-      padding: 1px 6px;
-      border-radius: 10px;
-      color: var(--text-muted);
-    }
-    .segment-btn.active .segment-count {
-      background: var(--primary-light);
-      color: var(--primary);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Cards Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-      gap: 22px;
-    }
-
-    /* 2026 High-Craft Card */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
+    .contact-body {
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-    }
-    .card:hover {
-      border-color: var(--card-border-hover);
-      box-shadow: var(--card-shadow-hover);
-      transform: translateY(-2px);
+      gap: 18px;
     }
 
-    .card-head {
+    .contact-info-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-    .company-title-wrap { display: flex; flex-direction: column; gap: 4px; }
-    .company-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      text-decoration: none;
-      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      letter-spacing: -0.02em;
-    }
-    .company-name:hover { color: var(--primary); }
-    .company-meta { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
-
-    .score-badge {
-      font-size: 12.5px;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 4px 9px;
-      border-radius: var(--badge-radius);
-      background: var(--emerald-bg);
-      color: var(--emerald);
-      border: 1px solid var(--emerald-border);
-      white-space: nowrap;
-    }
-    .stage-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: var(--badge-radius);
-      background: var(--surface);
-      color: var(--text-muted);
-      border: 1px solid var(--surface-border);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    /* Links bar */
-    .link-row {
-      display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
-      background: var(--surface);
-      padding: 9px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--surface-border);
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
-    .link-item {
-      color: var(--primary);
+    .contact-name-role { display: flex; flex-direction: column; gap: 2px; }
+    .contact-name { font-size: 18px; font-weight: 700; color: var(--text); }
+    .contact-role { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    .contact-channels {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .channel-pill {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      font-weight: 600;
-      transition: color 0.15s;
-    }
-    .link-item:hover { color: var(--primary-hover); text-decoration: underline; }
-    .link-sep { color: var(--text-subtle); }
-
-    /* Match Diagnosis Section */
-    .diagnosis-box {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: 9px;
-      padding: 13px 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 12.5px;
-    }
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--text-subtle);
-      margin-bottom: 2px;
-    }
-    .match-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.45;
-      color: var(--text);
-    }
-    .match-icon-yes { color: var(--emerald); font-weight: 700; }
-    .match-icon-bridge { color: var(--amber); font-weight: 700; }
-    .match-text-bridge { color: var(--text); }
-
-    /* Pitch container */
-    .draft-container {
-      display: flex;
-      flex-direction: column;
       gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid var(--border);
     }
-    .draft-header {
+    .channel-pill:hover { border-color: var(--primary); color: var(--primary); }
+
+    .contact-notes-banner {
+      background: var(--surface);
+      border-left: 3px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* Pitch Box */
+    .pitch-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pitch-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-subtle);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .draft-box {
+    .pitch-box {
       background: var(--code-bg);
-      border: 1px solid var(--surface-border);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 13px 15px;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 12px;
+      padding: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
       color: var(--code-text);
-      line-height: 1.6;
+      line-height: 1.65;
       white-space: pre-wrap;
       word-break: break-word;
-      max-height: 160px;
-      overflow-y: auto;
     }
 
-    /* Actions bar */
-    .card-footer {
+    .pitch-actions-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: auto;
       padding-top: 6px;
     }
-    .status-select {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 7px 11px;
-      border-radius: 7px;
-      font-size: 12.5px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.15s;
-    }
-    .status-select:hover, .status-select:focus { border-color: var(--primary); }
-
-    .btn-copy {
+    .btn-copy-pitch {
       background: #0f172a;
-      color: #ffffff;
+      color: #fff;
       border: none;
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 7px;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
-      font-family: inherit;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      transition: all 0.15s;
     }
-    .btn-copy:hover {
-      background: #1e293b;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    .btn-copy-pitch:hover { background: #1e293b; transform: translateY(-1px); }
+    .btn-copy-pitch.copied { background: var(--emerald); }
+
+    .status-select {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
     }
-    .btn-copy.copied {
-      background: var(--emerald);
-      color: #ffffff;
-    }
+    .status-select:focus { border-color: var(--primary); }
 
     /* Scrollbars */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.12); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.22); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand-wrap">
-        <div class="brand-icon">⚡</div>
-        <div>
-          <h1>Outreach Scout</h1>
-          <p class="subtitle">High-Signal B2B Integration Targets & Pitch Intelligence</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <div class="live-pill">
-          <span class="pulse-dot"></span>
-          <span>Local Engine Active</span>
-        </div>
-        <div class="meta-pill">Zero-Auth Local</div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" id="theme-btn">🌙</button>
-      </div>
-    </header>
-
-    <div class="filter-bar">
-      <div class="segmented-control">
-        <button class="segment-btn active" onclick="filterVertical('all')">
-          <span>All Leads</span>
-          <span class="segment-count" id="count-all">0</span>
-        </button>
-        <button class="segment-btn" onclick="filterVertical('food_pos_integration')">
-          <span>Food POS</span>
-          <span class="segment-count" id="count-pos">0</span>
-        </button>
-        <button class="segment-btn" onclick="filterVertical('healthcare_fhir_automation')">
-          <span>Healthcare FHIR</span>
-          <span class="segment-count" id="count-fhir">0</span>
-        </button>
-        <button class="segment-btn" onclick="filterVertical('browser_automation_infrastructure')">
-          <span>Browser Infra</span>
-          <span class="segment-count" id="count-browser">0</span>
-        </button>
-      </div>
+  <div class="top-nav">
+    <div class="brand">
+      <div class="brand-badge">⚡</div>
+      <span>Outreach Scout</span>
     </div>
-
-    <div id="grid" class="grid">
-      <!-- Target cards rendered dynamically -->
+    <div class="nav-actions">
+      <div class="live-status">
+        <span class="pulse-dot"></span>
+        <span>Local Engine Active</span>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌙</button>
     </div>
   </div>
 
+  <div class="workspace">
+    <!-- Left Pane: Master List -->
+    <aside class="master-pane">
+      <div class="master-search-bar">
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search targets or platform..." oninput="handleSearch()">
+        </div>
+        <div class="category-filter-bar">
+          <button class="cat-btn active" onclick="setCategory('all')">All (<span id="count-all">0</span>)</button>
+          <button class="cat-btn" onclick="setCategory('food_pos_integration')">Food POS</button>
+          <button class="cat-btn" onclick="setCategory('healthcare_fhir_automation')">Healthcare</button>
+          <button class="cat-btn" onclick="setCategory('browser_automation_infrastructure')">Browser</button>
+        </div>
+      </div>
+
+      <div class="master-list" id="master-list">
+        <!-- Rendered items -->
+      </div>
+    </aside>
+
+    <!-- Right Pane: Detail View -->
+    <main class="detail-pane" id="detail-pane">
+      <!-- Active detail rendered dynamically -->
+    </main>
+  </div>
+
   <script>
-    let allTargets = [];
-    let currentFilter = 'all';
+    let targets = [];
+    let activeTargetId = null;
+    let activeContactIndex = 0;
+    let selectedCategory = 'all';
+    let searchQuery = '';
 
     function initTheme() {
       const saved = localStorage.getItem('scout_theme') || 'light';
@@ -489,133 +598,273 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       document.getElementById('theme-btn').textContent = next === 'light' ? '🌙' : '☀️';
     }
 
-    async function loadTargets() {
-      const res = await fetch('/api/targets');
-      allTargets = await res.json();
-      
-      document.getElementById('count-all').textContent = allTargets.length;
-      document.getElementById('count-pos').textContent = allTargets.filter(t => t.vertical === 'food_pos_integration').length;
-      document.getElementById('count-fhir').textContent = allTargets.filter(t => t.vertical === 'healthcare_fhir_automation').length;
-      document.getElementById('count-browser').textContent = allTargets.filter(t => t.vertical === 'browser_automation_infrastructure').length;
+    async function loadData() {
+      try {
+        const res = await fetch('/api/targets');
+        const rawRows = await res.json();
+        
+        targets = rawRows.map(r => {
+          return {
+            id: r.id,
+            name: r.name,
+            vertical: r.vertical,
+            website: r.website,
+            careersUrl: r.careers_url,
+            headquarters: r.headquarters,
+            estimatedEmployees: r.estimated_employees,
+            fundingStage: r.funding_stage,
+            status: r.status,
+            platformEcosystem: JSON.parse(r.platform_ecosystem || '[]'),
+            techStack: JSON.parse(r.tech_stack || '[]'),
+            matchAnalysis: JSON.parse(r.match_analysis || '{}'),
+            contacts: JSON.parse(r.contacts || '[]'),
+            coldOutreachDraft: r.draft_markdown,
+            wordCount: r.word_count
+          };
+        });
 
-      renderCards();
+        document.getElementById('count-all').textContent = targets.length;
+
+        if (targets.length > 0) {
+          activeTargetId = targets[0].id;
+        }
+
+        renderMasterList();
+        renderDetailPane();
+      } catch (err) {
+        document.getElementById('master-list').innerHTML = '<p style="color:#ef4444; padding:16px;">Failed to load /api/targets</p>';
+      }
     }
 
-    function filterVertical(v) {
-      currentFilter = v;
-      document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+    function setCategory(cat) {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       event.currentTarget.classList.add('active');
-      renderCards();
+      renderMasterList();
     }
 
-    function renderCards() {
-      const grid = document.getElementById('grid');
-      const filtered = currentFilter === 'all' 
-        ? allTargets 
-        : allTargets.filter(t => t.vertical === currentFilter);
+    function handleSearch() {
+      searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+      renderMasterList();
+    }
 
-      grid.innerHTML = filtered.map(t => {
-        const platforms = JSON.parse(t.platform_ecosystem || '[]').join(', ');
-        const match = JSON.parse(t.match_analysis || '{}');
-        const employees = JSON.parse(t.key_employees || '[]');
-        const score = match.score ? match.score + '%' : '90%';
+    function getFilteredTargets() {
+      return targets.filter(t => {
+        const matchesCat = selectedCategory === 'all' || t.vertical === selectedCategory;
+        const matchesQuery = !searchQuery || 
+          t.name.toLowerCase().includes(searchQuery) ||
+          (t.platformEcosystem || []).some(p => p.toLowerCase().includes(searchQuery)) ||
+          (t.contacts || []).some(c => c.name.toLowerCase().includes(searchQuery));
+        return matchesCat && matchesQuery;
+      });
+    }
 
-        const strongItems = (match.strongMatches || []).slice(0, 2).map(s => 
-          '<div class="match-row"><span class="match-icon-yes">✓</span><span>' + s + '</span></div>'
-        ).join('');
+    function renderMasterList() {
+      const listEl = document.getElementById('master-list');
+      const filtered = getFilteredTargets();
 
-        const bridgeItems = (match.gapsOrBridges || []).slice(0, 2).map(g => 
-          '<div class="match-row"><span class="match-icon-bridge">⚡</span><span class="match-text-bridge">' + g + '</span></div>'
-        ).join('');
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-subtle); font-size:13px;">No targets match your filter</div>';
+        return;
+      }
 
-        const employeeLinks = employees.map(e => 
-          '<a class="link-item" href="' + e.linkedInUrl + '" target="_blank">' + e.name + ' <span style="color:var(--text-subtle); font-weight:400;">(' + e.role + ')</span></a>'
-        ).join('<span class="link-sep">•</span>');
+      listEl.innerHTML = filtered.map(t => {
+        const isActive = t.id === activeTargetId;
+        const score = t.matchAnalysis?.score ? t.matchAnalysis.score + '%' : '90%';
+        const contactsPreview = (t.contacts || []).map(c => c.name.split(' ')[0]).join(', ');
 
         return \`
-          <div class="card">
-            <div class="card-head">
-              <div class="company-title-wrap">
-                <a class="company-name" href="\${t.website}" target="_blank">
-                  \${t.name}
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                </a>
-                <div class="company-meta">\${t.headquarters} • \${t.estimated_employees} people</div>
-              </div>
-              <div style="display:flex; gap:6px; align-items:center;">
-                <span class="score-badge">\${score}</span>
-                <span class="stage-badge">\${t.funding_stage}</span>
-              </div>
+          <div class="target-item \${isActive ? 'active' : ''}" onclick="selectTarget('\${t.id}')">
+            <div class="target-item-header">
+              <span class="item-name">\${t.name}</span>
+              <span class="item-score">\${score}</span>
             </div>
-
-            <div class="link-row">
-              <a class="link-item" href="\${t.website}" target="_blank">Website</a>
-              \${t.careers_url ? '<span class="link-sep">•</span><a class="link-item" href="' + t.careers_url + '" target="_blank">Careers</a>' : ''}
-              <span class="link-sep">•</span>
-              <span style="color:var(--text-muted);">Lead: <strong style="color:var(--text);">' + t.leader_name + '</strong></span>
-              \${employeeLinks ? '<span class="link-sep">•</span>' + employeeLinks : ''}
+            <div class="item-subline">
+              <span>\${t.fundingStage}</span>
+              <span>\${t.estimatedEmployees}</span>
             </div>
-
-            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">
-              <span style="color:var(--text-subtle); font-weight:700;">PLATFORMS:</span> \${platforms}
-            </div>
-
-            <div class="diagnosis-box">
-              <div class="section-label">Strong Alignment</div>
-              \${strongItems}
-              <div class="section-label" style="margin-top:4px;">Technical Bridge / Need</div>
-              \${bridgeItems}
-            </div>
-
-            <div class="draft-container">
-              <div class="draft-header">
-                <span>PITCH DRAFT</span>
-                <span>\${t.word_count} words</span>
-              </div>
-              <div class="draft-box" id="draft-\${t.id}">\${t.draft_markdown}</div>
-            </div>
-
-            <div class="card-footer">
-              <select class="status-select" onchange="updateStatus('\${t.id}', this.value)">
-                <option value="drafted" \${t.status === 'drafted' ? 'selected' : ''}>Drafted</option>
-                <option value="sent" \${t.status === 'sent' ? 'selected' : ''}>Sent</option>
-                <option value="replied" \${t.status === 'replied' ? 'selected' : ''}>Replied</option>
-                <option value="declined" \${t.status === 'declined' ? 'selected' : ''}>Declined</option>
-              </select>
-              <button class="btn-copy" onclick="copyDraft('\${t.id}', this)">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                Copy Draft
-              </button>
+            <div class="item-contacts-preview">
+              👥 \${t.contacts?.length || 0} leads: \${contactsPreview}
             </div>
           </div>
         \`;
       }).join('');
     }
 
-    async function copyDraft(id, btn) {
-      const text = document.getElementById('draft-' + id).innerText;
+    function selectTarget(id) {
+      activeTargetId = id;
+      activeContactIndex = 0;
+      renderMasterList();
+      renderDetailPane();
+    }
+
+    function selectContact(index) {
+      activeContactIndex = index;
+      renderDetailPane();
+    }
+
+    function renderDetailPane() {
+      const pane = document.getElementById('detail-pane');
+      const t = targets.find(x => x.id === activeTargetId);
+
+      if (!t) {
+        pane.innerHTML = '<div style="padding:40px; text-align:center; color:var(--text-subtle);">Select a target from the list</div>';
+        return;
+      }
+
+      const score = t.matchAnalysis?.score ? t.matchAnalysis.score + '%' : '90%';
+      const contacts = t.contacts || [];
+      const activeContact = contacts[activeContactIndex] || contacts[0];
+
+      const strongList = (t.matchAnalysis?.strongMatches || []).map(s => 
+        \`<div class="diag-item"><span class="diag-icon-yes">✓</span><span>\${s}</span></div>\`
+      ).join('');
+
+      const bridgeList = (t.matchAnalysis?.gapsOrBridges || []).map(g => 
+        \`<div class="diag-item"><span class="diag-icon-bridge">⚡</span><span>\${g}</span></div>\`
+      ).join('');
+
+      const contactTabs = contacts.map((c, idx) => \`
+        <button class="contact-tab \${idx === activeContactIndex ? 'active' : ''}" onclick="selectContact(\${idx})">
+          <span>\${c.name}</span>
+          <span style="font-size:11px; opacity:0.75;">(\${c.role.split('&')[0].trim()})</span>
+        </button>
+      \`).join('');
+
+      const contactContent = activeContact ? \`
+        <div class="contact-body">
+          <div class="contact-info-row">
+            <div class="contact-name-role">
+              <div class="contact-name">\${activeContact.name}</div>
+              <div class="contact-role">\${activeContact.role}</div>
+            </div>
+            <div class="contact-channels">
+              <button class="channel-pill" onclick="copyText('\${activeContact.email}', this)">
+                <span>✉️</span>
+                <span>\${activeContact.email}</span>
+              </button>
+              <a class="channel-pill" href="\${activeContact.linkedInUrl}" target="_blank">
+                <span>LinkedIn ↗</span>
+              </a>
+            </div>
+          </div>
+
+          \${activeContact.notes ? \`<div class="contact-notes-banner"><strong>Lead Angle:</strong> \${activeContact.notes}</div>\` : ''}
+
+          <div class="pitch-container">
+            <div class="pitch-header">
+              <span>TAILORED COLD OUTREACH DRAFT</span>
+              <span>\${activeContact.wordCount || 0} words • Under 150 limit</span>
+            </div>
+            <div class="pitch-box" id="active-pitch">\${activeContact.tailoredPitch || t.coldOutreachDraft}</div>
+          </div>
+
+          <div class="pitch-actions-bar">
+            <select class="status-select" onchange="updateLeadStatus('\${t.id}', this.value)">
+              <option value="drafted" \${t.status === 'drafted' ? 'selected' : ''}>Status: Drafted</option>
+              <option value="sent" \${t.status === 'sent' ? 'selected' : ''}>Status: Sent</option>
+              <option value="replied" \${t.status === 'replied' ? 'selected' : ''}>Status: Replied</option>
+              <option value="declined" \${t.status === 'declined' ? 'selected' : ''}>Status: Declined</option>
+            </select>
+            <button class="btn-copy-pitch" onclick="copyPitch(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy Pitch for \${activeContact.name.split(' ')[0]}</span>
+            </button>
+          </div>
+        </div>
+      \` : '<div style="padding:24px;">No contacts listed</div>';
+
+      pane.innerHTML = \`
+        <div class="detail-header">
+          <div class="detail-title-row">
+            <div>
+              <div class="company-title">
+                <span>\${t.name}</span>
+                <span class="item-score">\${score} Match</span>
+              </div>
+              <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">
+                \${t.headquarters} • \${t.estimatedEmployees} employees • \${t.fundingStage}
+              </div>
+            </div>
+            <div class="company-links-bar">
+              <a class="company-link" href="\${t.website}" target="_blank">Website ↗</a>
+              \${t.careersUrl ? \`<a class="company-link" href="\${t.careersUrl}" target="_blank">Careers ↗</a>\` : ''}
+            </div>
+          </div>
+
+          <div class="meta-chip-row">
+            <span style="font-weight:700; color:var(--text-subtle);">PLATFORMS:</span>
+            \${(t.platformEcosystem || []).map(p => \`<span class="meta-chip">\${p}</span>\`).join('')}
+            <span style="font-weight:700; color:var(--text-subtle); margin-left:8px;">STACK:</span>
+            \${(t.techStack || []).map(s => \`<span class="meta-chip">\${s}</span>\`).join('')}
+          </div>
+        </div>
+
+        <div class="diagnosis-grid">
+          <div class="diagnosis-col">
+            <div class="col-title">Strong Alignment (\${t.matchAnalysis?.strongMatches?.length || 0})</div>
+            \${strongList}
+          </div>
+          <div class="diagnosis-col">
+            <div class="col-title">Technical Bridge / Gaps</div>
+            \${bridgeList}
+          </div>
+        </div>
+
+        <div class="contacts-section">
+          <div class="contacts-nav">
+            \${contactTabs}
+          </div>
+          \${contactContent}
+        </div>
+      \`;
+    }
+
+    async function copyText(text, btn) {
       await navigator.clipboard.writeText(text);
-      const originalHtml = btn.innerHTML;
-      btn.innerHTML = '✓ Copied';
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span>✓ Copied</span>';
+      setTimeout(() => { btn.innerHTML = original; }, 1500);
+    }
+
+    async function copyPitch(btn) {
+      const text = document.getElementById('active-pitch').innerText;
+      await navigator.clipboard.writeText(text);
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span>✓ Pitch Copied to Clipboard</span>';
       btn.classList.add('copied');
       setTimeout(() => {
-        btn.innerHTML = originalHtml;
+        btn.innerHTML = original;
         btn.classList.remove('copied');
       }, 1500);
     }
 
-    async function updateStatus(id, newStatus) {
+    async function updateLeadStatus(id, newStatus) {
       await fetch('/api/status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, status: newStatus })
       });
-      const t = allTargets.find(x => x.id === id);
+      const t = targets.find(x => x.id === id);
       if (t) t.status = newStatus;
     }
 
+    // Keyboard navigation (Up/Down arrow moves through targets)
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const filtered = getFilteredTargets();
+      const currentIndex = filtered.findIndex(t => t.id === activeTargetId);
+      if (e.key === 'ArrowDown' && currentIndex < filtered.length - 1) {
+        selectTarget(filtered[currentIndex + 1].id);
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp' && currentIndex > 0) {
+        selectTarget(filtered[currentIndex - 1].id);
+        e.preventDefault();
+      }
+    });
+
     initTheme();
-    loadTargets();
+    loadData();
   </script>
 </body>
 </html>`;
