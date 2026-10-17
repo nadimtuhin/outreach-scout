@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "globals": {
+    "Bun": "readonly"
+  },
+  "categories": {
+    "correctness": "deny",
+    "suspicious": "deny",
+    "perf": "deny"
+  },
+  "rules": {
+    "no-unused-vars": "deny",
+    "no-explicit-any": "deny",
+    "eqeqeq": "deny",
+    "no-console": "off",
+    "oxc/no-map-spread": "off"
+  }
+}
