@@ -1,6 +1,7 @@
 import type { ContactLead, TargetDossier, VerticalCategory } from './types.ts';
 import { countWords, generateColdOutreach, generateTailoredPitchForContact } from './pitch-generator.ts';
 import { EXTENDED_CONTACTS_MAP, EXTENDED_RAW_TARGETS } from './extended-targets.ts';
+import { MORE_CONTACTS_MAP, MORE_RAW_TARGETS } from './more-targets.ts';
 import { COMPANY_PROFILES } from './profiler.ts';
 
 const RAW_TARGETS = [
@@ -1071,8 +1072,8 @@ const COMPANY_CONTACTS_MAP: Record<
   ],
 };
 
-const ALL_RAW_TARGETS = [...RAW_TARGETS, ...EXTENDED_RAW_TARGETS];
-const ALL_CONTACTS_MAP = { ...COMPANY_CONTACTS_MAP, ...EXTENDED_CONTACTS_MAP };
+const ALL_RAW_TARGETS = [...RAW_TARGETS, ...EXTENDED_RAW_TARGETS, ...MORE_RAW_TARGETS];
+const ALL_CONTACTS_MAP = { ...COMPANY_CONTACTS_MAP, ...EXTENDED_CONTACTS_MAP, ...MORE_CONTACTS_MAP };
 
 export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
   const primaryLeader = t.leadership[0]!;
