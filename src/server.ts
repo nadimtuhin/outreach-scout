@@ -1,3 +1,5 @@
+import { existsSync, watch } from 'node:fs';
+import { join } from 'node:path';
 import { ScoutDatabase } from './db.ts';
 import { followLinkedInProfile } from './linkedin-follow.ts';
 import { TARGET_DOSSIERS } from './targets-data.ts';
@@ -1695,9 +1697,57 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
 
     initTheme();
     loadData();
+
+    // Hot-reload client
+    try {
+      let isReconnecting = false;
+      const sse = new EventSource('/api/live-reload');
+      sse.onmessage = (e) => {
+        if (e.data === 'reload') {
+          console.log('[HotReload] Code or data changed. Reloading...');
+          location.reload();
+        }
+      };
+      sse.onerror = () => {
+        if (isReconnecting) return;
+        isReconnecting = true;
+        const interval = setInterval(async () => {
+          try {
+            const res = await fetch('/api/targets');
+            if (res.ok) {
+              clearInterval(interval);
+              location.reload();
+            }
+          } catch {}
+        }, 800);
+      };
+    } catch {}
   </script>
 </body>
 </html>`;
+
+  const liveReloadClients = new Set<ReadableStreamDefaultController>();
+
+  try {
+    const watchPaths = [import.meta.dir, join(import.meta.dir, '..', 'projects')];
+    for (const wp of watchPaths) {
+      if (existsSync(wp)) {
+        watch(wp, { recursive: true }, (_event, filename) => {
+          if (filename && !filename.includes('scout.sqlite') && !filename.includes('node_modules')) {
+            for (const client of liveReloadClients) {
+              try {
+                client.enqueue(new TextEncoder().encode('data: reload\n\n'));
+              } catch {
+                liveReloadClients.delete(client);
+              }
+            }
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('[HotReload] Watcher notice:', err);
+  }
 
   Bun.serve({
     port,
@@ -1719,6 +1769,28 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       };
+
+      if (url.pathname === '/api/live-reload') {
+        let streamController: ReadableStreamDefaultController;
+        const stream = new ReadableStream({
+          start(controller) {
+            streamController = controller;
+            liveReloadClients.add(controller);
+            controller.enqueue(new TextEncoder().encode(': connected\n\n'));
+          },
+          cancel() {
+            liveReloadClients.delete(streamController);
+          },
+        });
+        return new Response(stream, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache, no-transform',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
 
       if (url.pathname === '/' || url.pathname === '/index.html') {
         return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });

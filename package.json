@@ -8,6 +8,8 @@
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "scout": "bun run src/index.ts",
+    "serve": "bun --watch src/index.ts --serve",
+    "dev": "bun --watch src/index.ts --serve",
     "cli": "bun run src/cli.ts",
     "export": "bun run src/exporter.ts",
     "sync": "bun run src/sync-remote.ts"
