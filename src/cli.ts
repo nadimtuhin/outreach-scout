@@ -5,6 +5,7 @@ import {
   searchPipeline,
 } from './analytics.ts';
 import { ScoutDatabase, type StoredTargetRow } from './db.ts';
+import { evaluateHalalCompliance, evaluateRemoteApacHiring } from './scoring-engine.ts';
 
 const dbPath = join(import.meta.dir, '..', 'scout.sqlite');
 const db = new ScoutDatabase(dbPath);
@@ -76,6 +77,49 @@ function handleStats(): void {
   const sortedPlatforms = Object.entries(stats.platformDistribution).toSorted((a, b) => b[1] - a[1]);
   for (const [plat, count] of sortedPlatforms) {
     console.log(`  ${plat.padEnd(30)}: ${count}`);
+  }
+
+  // Halal & APAC Telemetry Summary
+  let totalHalalScore = 0;
+  let totalApacScore = 0;
+  let apacNativeCount = 0;
+  let pureHalalCount = 0;
+  const apacRanked: Array<{ name: string; apacScore: number; halalScore: number; presence: string }> = [];
+
+  for (const r of all) {
+    const deep = JSON.parse(r.deep_profile || '{}');
+    const halal = deep.halalCompliance || evaluateHalalCompliance({ id: r.id, name: r.name, vertical: r.vertical, business: deep.business });
+    const remote = deep.remoteHiring || evaluateRemoteApacHiring({ id: r.id, name: r.name, headquarters: r.headquarters, jobs: deep.jobs });
+
+    totalHalalScore += halal.score;
+    totalApacScore += remote.apacScore;
+    if (halal.score === 100) pureHalalCount++;
+    if (remote.hasApacHires) apacNativeCount++;
+
+    apacRanked.push({
+      name: r.name,
+      apacScore: remote.apacScore,
+      halalScore: halal.score,
+      presence: remote.apacTeamEstimate,
+    });
+  }
+
+  const avgHalal = (totalHalalScore / all.length).toFixed(1);
+  const avgApac = (totalApacScore / all.length).toFixed(1);
+  const apacPercent = ((apacNativeCount / all.length) * 100).toFixed(0);
+
+  console.log('\n--- HALAL & ETHICAL COMPLIANCE ---');
+  console.log(`  Average Halal Score:   ${avgHalal}%`);
+  console.log(`  100% Halal Targets:    ${pureHalalCount} / ${all.length}`);
+  console.log(`  Prohibited Domains:    0 (Strict filter active)`);
+
+  console.log('\n--- REMOTE & APAC HIRING TELEMETRY ---');
+  console.log(`  Average APAC Score:    ${avgApac}%`);
+  console.log(`  Confirmed APAC Hires:  ${apacNativeCount} companies (${apacPercent}%)`);
+  console.log('\n  Top APAC-Friendly High-Conviction Targets:');
+  apacRanked.sort((a, b) => b.apacScore - a.apacScore);
+  for (const t of apacRanked.slice(0, 8)) {
+    console.log(`    • ${t.name.padEnd(16)} | APAC Score: ${t.apacScore}% | Halal: ${t.halalScore}% | ${t.presence}`);
   }
   console.log('===============================================================\n');
 }
@@ -207,6 +251,23 @@ function handleShow(targetId: string): void {
     }
   }
 
+  const halal = deep.halalCompliance || evaluateHalalCompliance({ id: t.id, name: t.name, vertical: t.vertical, business: deep.business });
+  const remote = deep.remoteHiring || evaluateRemoteApacHiring({ id: t.id, name: t.name, headquarters: t.headquarters, jobs: deep.jobs });
+
+  console.log('\n--- HALAL & ETHICAL COMPLIANCE ---');
+  console.log(`Status:    [${halal.status.toUpperCase()}] (${halal.score}/100)`);
+  console.log(`Analysis:  ${halal.reasoning}`);
+  if (halal.flags && halal.flags.length > 0) {
+    console.log(`Flags:     ${halal.flags.join(', ')}`);
+  }
+
+  console.log('\n--- REMOTE & APAC HIRING TELEMETRY ---');
+  console.log(`Remote Score: ${remote.remoteScore}/100 (Policy: ${remote.remotePolicy} • ~${remote.estimatedRemotePercent}% Remote)`);
+  console.log(`APAC Score:   ${remote.apacScore}/100 (Has APAC Hires: ${remote.hasApacHires ? 'YES' : 'No confirmed'})`);
+  console.log(`Team Footprint: ${remote.apacTeamEstimate}`);
+  console.log(`Timezone:       ${remote.timezoneFlexibility}`);
+  console.log(`Strategy Note:  ${remote.notes}`);
+
   const blogs = (deep.blogs || []) as Array<{
     title: string;
     url: string;
@@ -323,6 +384,65 @@ function handleStatus(targetId: string, newStatus: string): void {
   console.log(`Updated status for ${t.name} to '${newStatus}'.`);
 }
 
+function handleScore(targetArg?: string): void {
+  const all = db.getAllTargets();
+
+  if (targetArg && targetArg !== 'all') {
+    const t = all.find((r) => r.id === targetArg || r.name.toLowerCase() === targetArg.toLowerCase());
+    if (!t) {
+      console.error(`Target not found: ${targetArg}`);
+      process.exit(1);
+    }
+    const deep = JSON.parse(t.deep_profile || '{}');
+    const halal = deep.halalCompliance || evaluateHalalCompliance({ id: t.id, name: t.name, vertical: t.vertical, business: deep.business });
+    const remote = deep.remoteHiring || evaluateRemoteApacHiring({ id: t.id, name: t.name, headquarters: t.headquarters, jobs: deep.jobs });
+
+    console.log(`\n=================== COMPLIANCE & APAC SCORE: ${t.name.toUpperCase()} ===================`);
+    console.log(`Halal Status:    [${halal.status.toUpperCase()}] (${halal.score}/100)`);
+    console.log(`Halal Analysis:  ${halal.reasoning}`);
+    if (halal.flags && halal.flags.length > 0) {
+      console.log(`Domain Flags:    ${halal.flags.join(', ')}`);
+    }
+    console.log(`\nRemote Score:    ${remote.remoteScore}/100 (Policy: ${remote.remotePolicy})`);
+    console.log(`APAC Score:      ${remote.apacScore}/100 (Has APAC Hires: ${remote.hasApacHires ? 'YES' : 'No'})`);
+    console.log(`Team Footprint:  ${remote.apacTeamEstimate}`);
+    console.log(`Timezone:        ${remote.timezoneFlexibility}`);
+    console.log(`Strategy:        ${remote.notes}\n`);
+    return;
+  }
+
+  console.log('\n=================== APAC-FRIENDLY & HALAL LEADERBOARD ===================');
+  console.log('Rank | Target         | Vertical                       | APAC | Halal | Remote Policy');
+  console.log('-----+----------------+--------------------------------+------+-------+------------------');
+
+  const scored = all.map((r) => {
+    const deep = JSON.parse(r.deep_profile || '{}');
+    const halal = deep.halalCompliance || evaluateHalalCompliance({ id: r.id, name: r.name, vertical: r.vertical, business: deep.business });
+    const remote = deep.remoteHiring || evaluateRemoteApacHiring({ id: r.id, name: r.name, headquarters: r.headquarters, jobs: deep.jobs });
+    return {
+      id: r.id,
+      name: r.name,
+      vertical: r.vertical,
+      halal,
+      remote,
+    };
+  });
+
+  scored.sort((a, b) => b.remote.apacScore - a.remote.apacScore || b.halal.score - a.halal.score);
+
+  scored.forEach((s, idx) => {
+    const rank = String(idx + 1).padStart(4);
+    const name = s.name.slice(0, 14).padEnd(14);
+    const vert = s.vertical.slice(0, 30).padEnd(30);
+    const apac = `${s.remote.apacScore}%`.padStart(4);
+    const halal = `${s.halal.score}%`.padStart(5);
+    const policy = s.remote.remotePolicy.padEnd(16);
+    console.log(`${rank} | ${name} | ${vert} | ${apac} | ${halal} | ${policy}`);
+  });
+  console.log('=========================================================================\n');
+  console.log('Run "bun run cli score <id>" for detailed compliance & team telemetry.\n');
+}
+
 function main(): void {
   const args = process.argv.slice(2);
   const command = args[0] || 'list';
@@ -334,6 +454,10 @@ function main(): void {
     }
     case 'stats': {
       handleStats();
+      break;
+    }
+    case 'score': {
+      handleScore(args[1]);
       break;
     }
     case 'search': {

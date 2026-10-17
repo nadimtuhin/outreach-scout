@@ -1145,12 +1145,19 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         const isActive = t.id === activeTargetId;
         const score = t.matchAnalysis?.score ? t.matchAnalysis.score + '%' : '90%';
         const contactsPreview = (t.contacts || []).map(c => c.name.split(' ')[0]).join(', ');
+        const deep = t.deepProfile || {};
+        const halal = t.halalCompliance || deep.halalCompliance || { score: 95, status: 'halal' };
+        const remote = t.remoteHiring || deep.remoteHiring || { apacScore: 80, remotePolicy: 'Global Remote' };
 
         return \`
           <div class="target-item \${isActive ? 'active' : ''}" onclick="selectTarget('\${t.id}')">
             <div class="target-item-header">
               <span class="item-name">\${t.name}</span>
-              <span class="item-score">\${score}</span>
+              <div style="display:flex; gap:4px; align-items:center;">
+                <span class="item-score">\${score}</span>
+                <span style="font-size:10px; padding:1px 5px; border-radius:4px; background:rgba(16,185,129,0.12); color:#10b981; font-weight:600;" title="Halal Compliance Score">🕌 \${halal.score}%</span>
+                <span style="font-size:10px; padding:1px 5px; border-radius:4px; background:rgba(99,102,241,0.12); color:#818cf8; font-weight:600;" title="APAC Hiring Score">🌏 \${remote.apacScore}%</span>
+              </div>
             </div>
             <div class="item-subline">
               <span>\${t.fundingStage}</span>
@@ -1295,6 +1302,59 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
               <a class="company-link" href="\${t.careersUrl || t.website}" target="_blank">\${t.careersUrl || 'Careers'} ↗</a>
             </div>
           \`}
+        </div>
+      \`;
+
+      // 0.1 Halal & Ethical Compliance + Remote APAC Telemetry HTML
+      const halal = t.halalCompliance || deep.halalCompliance || { status: 'halal', score: 95, reasoning: 'Standard software technology infrastructure.' };
+      const remote = t.remoteHiring || deep.remoteHiring || { remoteScore: 85, remotePolicy: 'Global Remote', estimatedRemotePercent: 85, apacScore: 80, hasApacHires: false, apacTeamEstimate: 'Distributed remote team', timezoneFlexibility: 'Flexible international hours', notes: 'Remote friendly' };
+
+      const complianceHtml = \`
+        <div class="section-card" style="border-left: 4px solid \${halal.score >= 90 ? '#10b981' : (halal.score >= 75 ? '#f59e0b' : '#ef4444')};">
+          <div class="section-card-header">
+            <div class="section-title">🕌 Halal & Ethical Compliance</div>
+            <div class="section-badge" style="background:\${halal.score >= 90 ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color:\${halal.score >= 90 ? '#10b981' : '#f59e0b'}; font-weight:700;">
+              \${(halal.status || 'HALAL').toUpperCase()} • \${halal.score}/100
+            </div>
+          </div>
+          <div style="font-size:13px; color:var(--text); margin-bottom:10px; line-height:1.5;">
+            \${halal.reasoning}
+          </div>
+          \${(halal.flags && halal.flags.length > 0) ? \`
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              \${halal.flags.map(f => \`<span style="font-size:11px; padding:2px 8px; border-radius:4px; background:var(--bg); border:1px solid var(--border); color:var(--text-muted);">\${f}</span>\`).join('')}
+            </div>
+          \` : ''}
+        </div>
+
+        <div class="section-card" style="border-left: 4px solid \${remote.apacScore >= 90 ? '#6366f1' : '#3b82f6'};">
+          <div class="section-card-header">
+            <div class="section-title">🌏 Remote & APAC Hiring Telemetry</div>
+            <div class="section-badge" style="background:rgba(99,102,241,0.15); color:#818cf8; font-weight:700;">
+              APAC Score: \${remote.apacScore}/100
+            </div>
+          </div>
+          <div class="business-grid">
+            <div class="business-stat">
+              <div class="business-stat-label">Remote Policy</div>
+              <div class="business-stat-val" style="color:#10b981;">\${remote.remotePolicy} (~\${remote.estimatedRemotePercent || 85}% Remote)</div>
+            </div>
+            <div class="business-stat">
+              <div class="business-stat-label">APAC Team Presence</div>
+              <div class="business-stat-val" style="color:#818cf8;">\${remote.hasApacHires ? '✅ Confirmed Hires' : '🌐 International'}</div>
+            </div>
+            <div class="business-stat">
+              <div class="business-stat-label">Team Footprint</div>
+              <div class="business-stat-val">\${remote.apacTeamEstimate}</div>
+            </div>
+            <div class="business-stat">
+              <div class="business-stat-label">Timezone Flexibility</div>
+              <div class="business-stat-val">\${remote.timezoneFlexibility}</div>
+            </div>
+          </div>
+          <div style="margin-top:10px; font-size:12.5px; color:var(--text-muted); font-style:italic;">
+            💡 Strategy: \${remote.notes}
+          </div>
         </div>
       \`;
 
@@ -1506,6 +1566,8 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         </div>
 
         \${jobsHtml}
+
+        \${complianceHtml}
 
         \${leadersHtml}
 

@@ -84,6 +84,24 @@ export interface CompanyBusinessProfile {
   revenueOrFunding: string;
 }
 
+export interface HalalComplianceAssessment {
+  status: 'halal' | 'questionable' | 'haram';
+  score: number;
+  reasoning: string;
+  flags?: string[];
+}
+
+export interface RemoteApacHiringAssessment {
+  remoteScore: number;
+  remotePolicy: 'Global Remote' | 'US/Canada Remote' | 'EU/US Remote' | 'Hybrid' | 'Office-first';
+  estimatedRemotePercent: number;
+  apacScore: number;
+  hasApacHires: boolean;
+  apacTeamEstimate: string;
+  timezoneFlexibility: string;
+  notes: string;
+}
+
 export interface BlogArticleSignal {
   title: string;
   url: string;
@@ -126,6 +144,8 @@ export interface CompanyDeepProfile {
   projects: ProjectRepoSignal[];
   tastes: EngineeringTastes;
   jobs?: ScrapedJobPost[];
+  halalCompliance?: HalalComplianceAssessment;
+  remoteHiring?: RemoteApacHiringAssessment;
 }
 
 export type QueueJobStatus = 'waiting' | 'pending' | 'processing' | 'completed' | 'failed' | 'paused';
@@ -167,6 +187,8 @@ export interface TargetDossier {
   coldOutreachDraft: string;
   deepProfile?: CompanyDeepProfile;
   jobs?: ScrapedJobPost[];
+  halalCompliance?: HalalComplianceAssessment;
+  remoteHiring?: RemoteApacHiringAssessment;
 }
 
 export interface ScoutRunResult {

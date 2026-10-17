@@ -5,6 +5,7 @@ import { MORE_CONTACTS_MAP, MORE_RAW_TARGETS } from './more-targets.ts';
 import { COHORT4_CONTACTS_MAP, COHORT4_RAW_TARGETS } from './cohort4-targets.ts';
 import { COHORT5_CONTACTS_MAP, COHORT5_RAW_TARGETS } from './cohort5-targets.ts';
 import { COMPANY_PROFILES } from './profiler.ts';
+import { scoreCompanyProfile } from './scoring-engine.ts';
 
 const RAW_TARGETS = [
   // Vertical 1: Food POS & Ordering Integration
@@ -1107,11 +1108,31 @@ export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
     };
   });
 
+  const deep = COMPANY_PROFILES[t.metadata.id];
+  const scores = scoreCompanyProfile({
+    id: t.metadata.id,
+    name: t.metadata.name,
+    vertical: t.metadata.vertical,
+    headquarters: t.metadata.headquarters,
+    careersUrl: t.metadata.careersUrl,
+    business: deep?.business,
+    jobs: deep?.jobs,
+    techStack: t.metadata.techStack,
+  });
+
+  const fullDeepProfile = deep ? {
+    ...deep,
+    halalCompliance: scores.halalCompliance,
+    remoteHiring: scores.remoteHiring,
+  } : undefined;
+
   return {
     ...t,
     contacts,
     coldOutreachDraft: defaultDraft,
-    deepProfile: COMPANY_PROFILES[t.metadata.id],
-    jobs: COMPANY_PROFILES[t.metadata.id]?.jobs || [],
+    deepProfile: fullDeepProfile,
+    jobs: deep?.jobs || [],
+    halalCompliance: scores.halalCompliance,
+    remoteHiring: scores.remoteHiring,
   };
 });

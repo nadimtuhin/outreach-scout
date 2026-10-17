@@ -4,6 +4,7 @@ import { MORE_COMPANY_PROFILES } from './more-profiles.ts';
 import { COHORT4_COMPANY_PROFILES } from './cohort4-profiles.ts';
 import { COHORT5_COMPANY_PROFILES } from './cohort5-profiles.ts';
 import { SCRAPED_JOB_POSTS } from './job-posts.ts';
+import { scoreCompanyProfile } from './scoring-engine.ts';
 
 export const BASE_COMPANY_PROFILES: Record<string, CompanyDeepProfile> = {
   "craver": {
@@ -1197,13 +1198,25 @@ const RAW_COMBINED_PROFILES = {
 };
 
 export const COMPANY_PROFILES: Record<string, CompanyDeepProfile> = Object.fromEntries(
-  Object.entries(RAW_COMBINED_PROFILES).map(([id, prof]) => [
-    id,
-    {
-      ...prof,
-      jobs: SCRAPED_JOB_POSTS[id] || [],
-    },
-  ])
+  Object.entries(RAW_COMBINED_PROFILES).map(([id, prof]) => {
+    const jobs = SCRAPED_JOB_POSTS[id] || [];
+    const scores = scoreCompanyProfile({
+      id,
+      name: id,
+      vertical: '',
+      business: prof.business,
+      jobs,
+    });
+    return [
+      id,
+      {
+        ...prof,
+        jobs,
+        halalCompliance: scores.halalCompliance,
+        remoteHiring: scores.remoteHiring,
+      },
+    ];
+  })
 );
 
 export class CompanyProfiler {

@@ -68,6 +68,8 @@ async function syncRemote(): Promise<void> {
         leadership,
         architecture,
         jobs: deepProfile.jobs || [],
+        halalCompliance: deepProfile.halalCompliance,
+        remoteHiring: deepProfile.remoteHiring,
       };
     }),
   };
