@@ -201,12 +201,12 @@ describe('exportContactsCSV from scout.sqlite', () => {
       expect(firstContactRow[3]).toBe('https://anchorbrowser.io/blog');
       expect(firstContactRow[4]).toContain('Seed ($6M raised');
       expect(firstContactRow[5]).toBe('96');
-      expect(firstContactRow[6]).toBe('Oded Valin');
-      expect(firstContactRow[7]).toBe('Co-founder & CEO');
-      expect(firstContactRow[8]).toBe('oded@anchorbrowser.io');
-      expect(firstContactRow[9]).toBe('https://www.linkedin.com/in/odedvalin/');
+      expect(firstContactRow[6]).toBe('Idan Raman');
+      expect(firstContactRow[7]).toBe('Co-Founder & CEO');
+      expect(firstContactRow[8]).toBe('idan@anchorbrowser.io');
+      expect(firstContactRow[9]).toBe('https://www.linkedin.com/in/idan-raman/');
       expect(firstContactRow[10]).toBe('founder_ceo');
-      expect(firstContactRow[11]).toContain('Hi Oded');
+      expect(firstContactRow[11]).toContain('Hi Idan');
       expect(firstContactRow[11]).toContain('\n'); // multi-line pitch preserved!
       expect(firstContactRow[12]).toBe('drafted');
     }

@@ -14,5 +14,5 @@ describe('LinkedIn OpenTabs Follow Feature Tests', () => {
     expect(result).toBeDefined();
     expect(result.url).toContain('test-non-existent');
     expect(['followed', 'already_following', 'follow_button_not_found', 'offline', 'error']).toContain(result.status);
-  });
+  }, 15000);
 });

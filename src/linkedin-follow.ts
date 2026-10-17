@@ -57,19 +57,63 @@ export async function followLinkedInProfile(profileUrl: string): Promise<FollowR
       };
     }
 
-    // 1. Navigate tab to the target LinkedIn profile URL
+    // 1. Check if the current tab is in a security checkpoint or login challenge
+    if (targetTab.url.includes('/checkpoint/') || targetTab.url.includes('/challenge/')) {
+      return {
+        ok: false,
+        status: 'error',
+        message: 'Active tab is at a security checkpoint. Resolve manually in browser.',
+        url: profileUrl,
+      };
+    }
+
+    // 2. Focus the tab and navigate to the target profile URL
+    try {
+      await client.callTool('browser_focus_tab', { tabId: targetTab.id });
+    } catch {
+      // ignore
+    }
+
     await client.callTool('browser_navigate_tab', {
       tabId: targetTab.id,
       url: profileUrl,
     });
 
-    // 2. Wait 2.5s for page and action buttons to hydrate
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+    // 3. Human reading dwell time (randomized 3.5s - 5.5s) to allow hydration & prevent scraping alert
+    const dwellMs = Math.floor(Math.random() * 2000) + 3500;
+    await new Promise((resolve) => setTimeout(resolve, dwellMs));
 
-    // 3. Execute DOM script to locate and click the Follow action
+    // 4. Execute DOM script with human hover simulation and full mouse event sequences
     const scriptCode = `(() => {
       // Helper to check text
       const clean = (str) => (str || '').trim().toLowerCase();
+
+      // Checkpoint circuit breaker
+      if (window.location.href.includes('/checkpoint/') || window.location.href.includes('/challenge/')) {
+        return { status: 'checkpoint', message: 'LinkedIn security challenge detected. Halting.' };
+      }
+
+      // Helper for human-like click with pre-hover
+      const humanClick = (el) => {
+        const rect = el.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const opts = { bubbles: true, cancelable: true, view: window, clientX: x, clientY: y };
+
+        el.dispatchEvent(new MouseEvent('mouseover', opts));
+        el.dispatchEvent(new MouseEvent('mouseenter', opts));
+        el.dispatchEvent(new PointerEvent('pointerover', opts));
+
+        setTimeout(() => {
+          el.dispatchEvent(new PointerEvent('pointerdown', opts));
+          el.dispatchEvent(new MouseEvent('mousedown', opts));
+          setTimeout(() => {
+            el.dispatchEvent(new PointerEvent('pointerup', opts));
+            el.dispatchEvent(new MouseEvent('mouseup', opts));
+            el.dispatchEvent(new MouseEvent('click', opts));
+          }, 60);
+        }, 120);
+      };
 
       // Check top card buttons first
       const buttons = Array.from(document.querySelectorAll('.pv-top-card-v2-ctas button, .artdeco-dropdown button, section.artdeco-card button, main button'));
@@ -93,7 +137,7 @@ export async function followLinkedInProfile(profileUrl: string): Promise<FollowR
       });
 
       if (directFollowBtn) {
-        directFollowBtn.click();
+        humanClick(directFollowBtn);
         return { status: 'followed', message: 'Clicked primary Follow button.' };
       }
 
@@ -105,12 +149,12 @@ export async function followLinkedInProfile(profileUrl: string): Promise<FollowR
       });
 
       if (moreBtn) {
-        moreBtn.click();
+        humanClick(moreBtn);
         // Wait briefly for dropdown to render
         const dropdownItems = Array.from(document.querySelectorAll('.artdeco-dropdown__content--is-open span, .artdeco-dropdown__content--is-open div[role="button"]'));
         const dropdownFollow = dropdownItems.find(el => clean(el.innerText) === 'follow');
         if (dropdownFollow) {
-          dropdownFollow.click();
+          humanClick(dropdownFollow);
           return { status: 'followed', message: 'Clicked Follow from More actions dropdown.' };
         }
       }

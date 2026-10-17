@@ -134,7 +134,7 @@ describe('Dashboard Server & API End-to-End Tests', () => {
     const data = (await res.json()) as { ok: boolean; status: string };
     expect(data).toBeDefined();
     expect(['followed', 'already_following', 'follow_button_not_found', 'offline', 'error']).toContain(data.status);
-  });
+  }, 15000);
 
   test('OPTIONS preflight returns permissive CORS headers', async () => {
     const res = await fetch(`${BASE_URL}/api/linkedin/follow`, {
