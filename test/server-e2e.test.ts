@@ -66,7 +66,7 @@ describe('Dashboard Server & API End-to-End Tests', () => {
 
     const data = (await res.json()) as Array<{ id: string; name: string; contacts: string }>;
     expect(Array.isArray(data)).toBe(true);
-    expect(data.length).toBe(12);
+    expect(data.length).toBe(TARGET_DOSSIERS.length);
 
     const first = data[0]!;
     expect(first.id).toBeDefined();
@@ -113,7 +113,7 @@ describe('Dashboard Server & API End-to-End Tests', () => {
     expect(res.status).toBe(200);
     const data = (await res.json()) as { ok: boolean; count: number; timestamp: string };
     expect(data.ok).toBe(true);
-    expect(data.count).toBe(12);
+    expect(data.count).toBe(TARGET_DOSSIERS.length);
     expect(data.timestamp).toBeDefined();
   });
 

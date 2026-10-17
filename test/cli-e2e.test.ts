@@ -67,7 +67,7 @@ describe('CLI End-to-End Tests', () => {
 
     expect(exitCode).toBe(0);
     expect(stdout).toContain('OUTREACH PIPELINE STATS');
-    expect(stdout).toMatch(/Total Companies:\s+12/);
+    expect(stdout).toMatch(/Total Companies:\s+\d+/);
     expect(stdout).toContain('Total Contacts:');
   });
 

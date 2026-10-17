@@ -1,5 +1,6 @@
 import type { ContactLead, TargetDossier, VerticalCategory } from './types.ts';
 import { countWords, generateColdOutreach, generateTailoredPitchForContact } from './pitch-generator.ts';
+import { EXTENDED_CONTACTS_MAP, EXTENDED_RAW_TARGETS } from './extended-targets.ts';
 
 const RAW_TARGETS = [
   // Vertical 1: Food POS & Ordering Integration
@@ -1069,7 +1070,10 @@ const COMPANY_CONTACTS_MAP: Record<
   ],
 };
 
-export const TARGET_DOSSIERS: TargetDossier[] = RAW_TARGETS.map((t) => {
+const ALL_RAW_TARGETS = [...RAW_TARGETS, ...EXTENDED_RAW_TARGETS];
+const ALL_CONTACTS_MAP = { ...COMPANY_CONTACTS_MAP, ...EXTENDED_CONTACTS_MAP };
+
+export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
   const primaryLeader = t.leadership[0]!;
   const defaultDraft = generateColdOutreach({
     metadata: t.metadata,
@@ -1078,7 +1082,7 @@ export const TARGET_DOSSIERS: TargetDossier[] = RAW_TARGETS.map((t) => {
     hiring: t.hiring,
   });
 
-  const rawContacts = COMPANY_CONTACTS_MAP[t.metadata.id] || [];
+  const rawContacts = ALL_CONTACTS_MAP[t.metadata.id] || [];
   const contacts: ContactLead[] = rawContacts.map((c, idx) => {
     const pitch = generateTailoredPitchForContact({
       metadata: t.metadata,

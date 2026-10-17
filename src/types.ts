@@ -1,7 +1,9 @@
 export type VerticalCategory =
   | 'food_pos_integration'
   | 'healthcare_fhir_automation'
-  | 'browser_automation_infrastructure';
+  | 'browser_automation_infrastructure'
+  | 'developer_workflows_queues'
+  | 'unified_apis';
 
 export interface TargetMetadata {
   id: string;
@@ -74,6 +76,71 @@ export interface ContactLead {
   sequence?: OutreachSequence;
 }
 
+export interface CompanyBusinessProfile {
+  model: string;
+  pricing: string;
+  targetCustomers: string[];
+  keyClients: string[];
+  revenueOrFunding: string;
+}
+
+export interface BlogArticleSignal {
+  title: string;
+  url: string;
+  summary: string;
+  tags: string[];
+  date?: string;
+}
+
+export interface ProjectRepoSignal {
+  name: string;
+  url: string;
+  starsOrDownloads?: string;
+  techStack: string[];
+  description: string;
+}
+
+export interface EngineeringTastes {
+  architecturalBiases: string[];
+  stackPreferences: string[];
+  engineeringCulture: string[];
+}
+
+export interface CompanyDeepProfile {
+  business: CompanyBusinessProfile;
+  blogs: BlogArticleSignal[];
+  projects: ProjectRepoSignal[];
+  tastes: EngineeringTastes;
+}
+
+export type QueueJobStatus = 'waiting' | 'pending' | 'processing' | 'completed' | 'failed' | 'paused';
+
+export interface ScrapingJob {
+  id: string;
+  targetId: string;
+  taskType: 'profile_deep_dive' | 'blog_scrape' | 'employee_scrape' | 'projects_scrape';
+  status: QueueJobStatus;
+  priority: number;
+  attempts: number;
+  maxAttempts: number;
+  payload: Record<string, unknown>;
+  result?: Record<string, unknown>;
+  error?: string;
+  scheduledFor: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QueueStatusSummary {
+  total: number;
+  pending: number;
+  processing: number;
+  completed: number;
+  failed: number;
+  isPaused: boolean;
+  currentJob?: ScrapingJob;
+}
+
 export interface TargetDossier {
   metadata: TargetMetadata;
   leadership: LeadershipProfile[];
@@ -83,6 +150,7 @@ export interface TargetDossier {
   architecture: ArchitectureReverseEngineering;
   hiring: HiringPattern;
   coldOutreachDraft: string;
+  deepProfile?: CompanyDeepProfile;
 }
 
 export interface ScoutRunResult {

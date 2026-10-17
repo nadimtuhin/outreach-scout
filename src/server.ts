@@ -671,6 +671,8 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           <button class="cat-btn" onclick="setCategory('food_pos_integration')">Food POS</button>
           <button class="cat-btn" onclick="setCategory('healthcare_fhir_automation')">Healthcare</button>
           <button class="cat-btn" onclick="setCategory('browser_automation_infrastructure')">Browser</button>
+          <button class="cat-btn" onclick="setCategory('developer_workflows_queues')">Queues & Workflows</button>
+          <button class="cat-btn" onclick="setCategory('unified_apis')">Unified APIs</button>
         </div>
       </div>
 

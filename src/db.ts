@@ -1,5 +1,5 @@
 import { Database } from 'bun:sqlite';
-import type { TargetDossier } from './types.ts';
+import type { CompanyDeepProfile, QueueJobStatus, QueueStatusSummary, ScrapingJob, TargetDossier } from './types.ts';
 
 export interface StoredTargetRow {
   id: string;
@@ -19,6 +19,7 @@ export interface StoredTargetRow {
   match_analysis: string;
   key_employees: string;
   contacts: string;
+  deep_profile?: string;
 }
 
 export class ScoutDatabase {
@@ -71,6 +72,29 @@ export class ScoutDatabase {
     } catch {
       // Column may already exist
     }
+    try {
+      this.db.run("ALTER TABLE targets ADD COLUMN deep_profile TEXT NOT NULL DEFAULT '{}'");
+    } catch {
+      // Column may already exist
+    }
+
+    this.db.run(`
+      CREATE TABLE IF NOT EXISTS bun_queue_jobs (
+        id TEXT PRIMARY KEY,
+        target_id TEXT NOT NULL,
+        task_type TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'waiting',
+        priority INTEGER NOT NULL DEFAULT 0,
+        attempts INTEGER NOT NULL DEFAULT 0,
+        max_attempts INTEGER NOT NULL DEFAULT 3,
+        payload TEXT NOT NULL DEFAULT '{}',
+        result TEXT,
+        error TEXT,
+        scheduled_for TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+    `);
 
     this.db.run(`
       CREATE TABLE IF NOT EXISTS leadership (
@@ -115,8 +139,8 @@ export class ScoutDatabase {
       INSERT OR REPLACE INTO targets (
         id, name, vertical, website, careers_url, platform_ecosystem,
         headquarters, estimated_employees, funding_stage, tech_stack,
-        match_analysis, key_employees, contacts, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        match_analysis, key_employees, contacts, deep_profile, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertLeadership = this.db.prepare(`
@@ -154,6 +178,7 @@ export class ScoutDatabase {
           JSON.stringify(item.matchAnalysis),
           JSON.stringify(item.keyEmployees),
           JSON.stringify(item.contacts),
+          item.deepProfile ? JSON.stringify(item.deepProfile) : '{}',
           new Date().toISOString()
         );
 
@@ -200,6 +225,7 @@ export class ScoutDatabase {
           t.id, t.name, t.vertical, t.website, t.careers_url, t.headquarters,
           t.estimated_employees, t.funding_stage, t.status,
           t.platform_ecosystem, t.tech_stack, t.match_analysis, t.key_employees, t.contacts,
+          t.deep_profile,
           o.leader_name, o.draft_markdown, o.word_count
         FROM targets t
         LEFT JOIN outreach o ON t.id = o.target_id
@@ -211,6 +237,251 @@ export class ScoutDatabase {
   updateStatus(targetId: string, status: string): void {
     this.db.run('UPDATE targets SET status = ? WHERE id = ?', [status, targetId]);
     this.db.run('UPDATE outreach SET status = ? WHERE target_id = ?', [status, targetId]);
+  }
+
+  updateDeepProfile(targetId: string, deepProfile: CompanyDeepProfile): void {
+    this.db.run('UPDATE targets SET deep_profile = ? WHERE id = ?', [
+      JSON.stringify(deepProfile),
+      targetId,
+    ]);
+  }
+
+  getDeepProfile(targetId: string): CompanyDeepProfile | null {
+    const row = this.db
+      .prepare('SELECT deep_profile FROM targets WHERE id = ?')
+      .get(targetId) as { deep_profile?: string } | null;
+    if (!row || !row.deep_profile || row.deep_profile === '{}') {
+      return null;
+    }
+    try {
+      return JSON.parse(row.deep_profile) as CompanyDeepProfile;
+    } catch {
+      return null;
+    }
+  }
+
+  enqueueJob(job: ScrapingJob): void {
+    this.db.run(
+      `
+      INSERT OR REPLACE INTO bun_queue_jobs (
+        id, target_id, task_type, status, priority, attempts, max_attempts,
+        payload, result, error, scheduled_for, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `,
+      [
+        job.id,
+        job.targetId,
+        job.taskType,
+        job.status,
+        job.priority,
+        job.attempts,
+        job.maxAttempts,
+        JSON.stringify(job.payload ?? {}),
+        job.result ? JSON.stringify(job.result) : null,
+        job.error ?? null,
+        job.scheduledFor,
+        job.createdAt,
+        job.updatedAt,
+      ]
+    );
+  }
+
+  enqueueJobsBatch(jobs: ScrapingJob[]): void {
+    const insert = this.db.prepare(`
+      INSERT OR REPLACE INTO bun_queue_jobs (
+        id, target_id, task_type, status, priority, attempts, max_attempts,
+        payload, result, error, scheduled_for, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const tx = this.db.transaction((batch: ScrapingJob[]) => {
+      for (const job of batch) {
+        insert.run(
+          job.id,
+          job.targetId,
+          job.taskType,
+          job.status,
+          job.priority,
+          job.attempts,
+          job.maxAttempts,
+          JSON.stringify(job.payload ?? {}),
+          job.result ? JSON.stringify(job.result) : null,
+          job.error ?? null,
+          job.scheduledFor,
+          job.createdAt,
+          job.updatedAt
+        );
+      }
+    });
+
+    tx(jobs);
+  }
+
+  getJob(id: string): ScrapingJob | null {
+    const row = this.db
+      .prepare('SELECT * FROM bun_queue_jobs WHERE id = ?')
+      .get(id) as Record<string, unknown> | null;
+    if (!row) return null;
+    return this.mapJobRow(row);
+  }
+
+  claimNextWaitingJob(): ScrapingJob | null {
+    const now = new Date().toISOString();
+    const row = this.db
+      .prepare(`
+        UPDATE bun_queue_jobs
+        SET status = 'processing',
+            attempts = attempts + 1,
+            updated_at = ?
+        WHERE id = (
+          SELECT id FROM bun_queue_jobs
+          WHERE status = 'waiting' AND scheduled_for <= ?
+          ORDER BY priority DESC, created_at ASC
+          LIMIT 1
+        )
+        RETURNING *
+      `)
+      .get(now, now) as Record<string, unknown> | null;
+    if (!row) return null;
+    return this.mapJobRow(row);
+  }
+
+  rescheduleJob(id: string, delayMs: number, errorMsg?: string): void {
+    const now = new Date();
+    const scheduledFor = new Date(now.getTime() + delayMs).toISOString();
+    this.db.run(
+      `
+      UPDATE bun_queue_jobs
+      SET status = 'waiting',
+          scheduled_for = ?,
+          error = ?,
+          updated_at = ?
+      WHERE id = ?
+    `,
+      [scheduledFor, errorMsg ?? null, now.toISOString(), id]
+    );
+  }
+
+  getNextWaitingJob(): ScrapingJob | null {
+    const now = new Date().toISOString();
+    const row = this.db
+      .prepare(`
+        SELECT * FROM bun_queue_jobs
+        WHERE status = 'waiting' AND scheduled_for <= ?
+        ORDER BY priority DESC, created_at ASC
+        LIMIT 1
+      `)
+      .get(now) as Record<string, unknown> | null;
+    if (!row) return null;
+    return this.mapJobRow(row);
+  }
+
+  updateJobStatus(
+    id: string,
+    status: QueueJobStatus,
+    result?: Record<string, unknown>,
+    error?: string
+  ): void {
+    const now = new Date().toISOString();
+    this.db.run(
+      `
+      UPDATE bun_queue_jobs
+      SET status = ?, result = ?, error = ?, updated_at = ?
+      WHERE id = ?
+    `,
+      [
+        status,
+        result ? JSON.stringify(result) : null,
+        error ?? null,
+        now,
+        id,
+      ]
+    );
+  }
+
+  incrementJobAttempts(id: string): void {
+    this.db.run('UPDATE bun_queue_jobs SET attempts = attempts + 1, updated_at = ? WHERE id = ?', [
+      new Date().toISOString(),
+      id,
+    ]);
+  }
+
+  getQueueStats(): QueueStatusSummary {
+    const rows = this.db
+      .prepare('SELECT status, COUNT(*) as count FROM bun_queue_jobs GROUP BY status')
+      .all() as Array<{ status: string; count: number }>;
+
+    let waiting = 0;
+    let processing = 0;
+    let completed = 0;
+    let failed = 0;
+
+    for (const r of rows) {
+      if (r.status === 'waiting') waiting = r.count;
+      else if (r.status === 'processing') processing = r.count;
+      else if (r.status === 'completed') completed = r.count;
+      else if (r.status === 'failed') failed = r.count;
+    }
+
+    const currentJobRow = this.db
+      .prepare("SELECT * FROM bun_queue_jobs WHERE status = 'processing' LIMIT 1")
+      .get() as Record<string, unknown> | null;
+
+    return {
+      total: waiting + processing + completed + failed,
+      pending: waiting,
+      processing,
+      completed,
+      failed,
+      isPaused: false,
+      currentJob: currentJobRow ? this.mapJobRow(currentJobRow) : undefined,
+    };
+  }
+
+  listQueueJobs(status?: string, limit = 50): ScrapingJob[] {
+    let rows: Array<Record<string, unknown>>;
+    if (status) {
+      rows = this.db
+        .prepare('SELECT * FROM bun_queue_jobs WHERE status = ? ORDER BY created_at DESC LIMIT ?')
+        .all(status, limit) as Array<Record<string, unknown>>;
+    } else {
+      rows = this.db
+        .prepare('SELECT * FROM bun_queue_jobs ORDER BY created_at DESC LIMIT ?')
+        .all(limit) as Array<Record<string, unknown>>;
+    }
+    return rows.map((r) => this.mapJobRow(r));
+  }
+
+  clearCompletedJobs(): number {
+    const res = this.db.run("DELETE FROM bun_queue_jobs WHERE status = 'completed'");
+    return res.changes;
+  }
+
+  retryFailedJobs(): number {
+    const now = new Date().toISOString();
+    const res = this.db.run(
+      "UPDATE bun_queue_jobs SET status = 'waiting', attempts = 0, error = null, updated_at = ? WHERE status = 'failed'",
+      [now]
+    );
+    return res.changes;
+  }
+
+  private mapJobRow(row: Record<string, unknown>): ScrapingJob {
+    return {
+      id: String(row.id),
+      targetId: String(row.target_id),
+      taskType: row.task_type as ScrapingJob['taskType'],
+      status: row.status as QueueJobStatus,
+      priority: Number(row.priority ?? 0),
+      attempts: Number(row.attempts ?? 0),
+      maxAttempts: Number(row.max_attempts ?? 3),
+      payload: row.payload ? (JSON.parse(String(row.payload)) as Record<string, unknown>) : {},
+      result: row.result ? (JSON.parse(String(row.result)) as Record<string, unknown>) : undefined,
+      error: row.error ? String(row.error) : undefined,
+      scheduledFor: String(row.scheduled_for),
+      createdAt: String(row.created_at),
+      updatedAt: String(row.updated_at),
+    };
   }
 
   close(): void {

@@ -37,7 +37,6 @@ describe('ScoutDatabase Component Unit Tests', () => {
     const rows = db.getAllTargets();
 
     expect(rows.length).toBe(TARGET_DOSSIERS.length);
-    expect(rows.length).toBe(12);
 
     const craver = rows.find((r) => r.id === 'craver');
     expect(craver).toBeDefined();
@@ -63,11 +62,11 @@ describe('ScoutDatabase Component Unit Tests', () => {
 
   test('supports idempotent re-seeding without duplicate keys', () => {
     db.seedTargets(TARGET_DOSSIERS);
-    expect(db.getAllTargets().length).toBe(12);
+    expect(db.getAllTargets().length).toBe(TARGET_DOSSIERS.length);
 
     // Re-seed should replace without primary key collision
     db.seedTargets(TARGET_DOSSIERS);
-    expect(db.getAllTargets().length).toBe(12);
+    expect(db.getAllTargets().length).toBe(TARGET_DOSSIERS.length);
   });
 
   test('schema migration handles existing databases gracefully', () => {

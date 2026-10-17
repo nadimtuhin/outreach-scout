@@ -6,6 +6,8 @@ const VERTICAL_TITLES: Record<VerticalCategory, string> = {
   food_pos_integration: 'Vertical 1: Food POS & Ordering SaaS (Square / Toast / Clover)',
   healthcare_fhir_automation: 'Vertical 2: Healthcare Automation on EHR (Epic / SMART on FHIR)',
   browser_automation_infrastructure: 'Vertical 3: Browser Automation Infrastructure & Headless Scraping',
+  developer_workflows_queues: 'Vertical 4: Developer Workflows, Distributed Queues & Async Execution',
+  unified_apis: 'Vertical 5: Unified APIs & Multi-Tenant SaaS Integration Platforms',
 };
 
 export function exportMarkdownDocs(dossiers: TargetDossier[], outDir: string): void {
@@ -15,6 +17,8 @@ export function exportMarkdownDocs(dossiers: TargetDossier[], outDir: string): v
     food_pos_integration: [],
     healthcare_fhir_automation: [],
     browser_automation_infrastructure: [],
+    developer_workflows_queues: [],
+    unified_apis: [],
   };
 
   for (const d of dossiers) {
