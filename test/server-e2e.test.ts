@@ -117,6 +117,33 @@ describe('Dashboard Server & API End-to-End Tests', () => {
     expect(data.timestamp).toBeDefined();
   });
 
+  test('POST /api/linkedin/follow validates parameters and returns status', async () => {
+    const badRes = await fetch(`${BASE_URL}/api/linkedin/follow`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+    expect(badRes.status).toBe(400);
+
+    const res = await fetch(`${BASE_URL}/api/linkedin/follow`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: 'https://www.linkedin.com/in/test-profile/' }),
+    });
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as { ok: boolean; status: string };
+    expect(data).toBeDefined();
+    expect(['followed', 'already_following', 'follow_button_not_found', 'offline', 'error']).toContain(data.status);
+  });
+
+  test('OPTIONS preflight returns permissive CORS headers', async () => {
+    const res = await fetch(`${BASE_URL}/api/linkedin/follow`, {
+      method: 'OPTIONS',
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get('access-control-allow-origin')).toBe('*');
+  });
+
   test('GET /unknown-route returns 404', async () => {
     const res = await fetch(`${BASE_URL}/non-existent`);
     expect(res.status).toBe(404);

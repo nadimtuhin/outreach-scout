@@ -1,4 +1,5 @@
 import { ScoutDatabase } from './db.ts';
+import { followLinkedInProfile } from './linkedin-follow.ts';
 import { TARGET_DOSSIERS } from './targets-data.ts';
 
 export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
@@ -292,6 +293,9 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
     }
+    .detail-pane > * {
+      flex-shrink: 0;
+    }
 
     /* Detail Header */
     .detail-header {
@@ -469,6 +473,37 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       border: 1px solid var(--border);
     }
     .channel-pill:hover { border-color: var(--primary); color: var(--primary); }
+
+    .btn-follow-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 102, 194, 0.08);
+      color: #0a66c2;
+      border: 1px solid rgba(10, 102, 194, 0.3);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .btn-follow-linkedin:hover {
+      background: #0a66c2;
+      color: #ffffff;
+      border-color: #0a66c2;
+    }
+    .btn-follow-linkedin.followed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.3);
+      cursor: default;
+    }
+    .btn-follow-linkedin.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
 
     .contact-notes-banner {
       background: var(--surface);
@@ -819,6 +854,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
               <a class="channel-pill" href="\${activeContact.linkedInUrl}" target="_blank">
                 <span>LinkedIn ↗</span>
               </a>
+              \${activeContact.linkedInUrl ? \`
+              <button class="btn-follow-linkedin" onclick="followContactLinkedIn('\${activeContact.linkedInUrl}', this)" title="Automate Follow on LinkedIn via OpenTabs">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <span>⚡ Follow (OpenTabs)</span>
+              </button>
+              \` : ''}
             </div>
           </div>
 
@@ -959,6 +1000,39 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       }, 2000);
     }
 
+    async function followContactLinkedIn(url, btn) {
+      if (!url) return;
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span>⚡ Following...</span>';
+      btn.classList.add('loading');
+      try {
+        const res = await fetch('/api/linkedin/follow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (data.status === 'already_following') {
+            btn.innerHTML = '<span>✓ Already Following</span>';
+          } else {
+            btn.innerHTML = '<span>✓ Followed!</span>';
+          }
+          btn.classList.add('followed');
+        } else {
+          btn.innerHTML = '<span>⚠️ ' + (data.message || 'Follow Failed') + '</span>';
+        }
+      } catch (e) {
+        btn.innerHTML = '<span>❌ OpenTabs Offline</span>';
+      }
+      setTimeout(() => {
+        btn.classList.remove('loading');
+        if (!btn.classList.contains('followed')) {
+          btn.innerHTML = original;
+        }
+      }, 4000);
+    }
+
     initTheme();
     loadData();
   </script>
@@ -970,6 +1044,22 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     async fetch(req) {
       const url = new URL(req.url);
 
+      // Handle CORS Preflight
+      if (req.method === 'OPTIONS') {
+        return new Response(null, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          },
+        });
+      }
+
+      const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      };
+
       if (url.pathname === '/' || url.pathname === '/index.html') {
         return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
       }
@@ -977,7 +1067,7 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       if (url.pathname === '/api/targets' && req.method === 'GET') {
         const rows = db.getAllTargets();
         return new Response(JSON.stringify(rows), {
-          headers: { 'Content-Type': 'application/json' },
+          headers: corsHeaders,
         });
       }
 
@@ -990,9 +1080,30 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
             timestamp: new Date().toISOString(),
           }),
           {
-            headers: { 'Content-Type': 'application/json' },
+            headers: corsHeaders,
           }
         );
+      }
+
+      if (url.pathname === '/api/linkedin/follow' && req.method === 'POST') {
+        try {
+          const body = (await req.json()) as { url?: string };
+          if (!body.url) {
+            return new Response(JSON.stringify({ ok: false, message: 'missing url' }), {
+              status: 400,
+              headers: corsHeaders,
+            });
+          }
+          const result = await followLinkedInProfile(body.url);
+          return new Response(JSON.stringify(result), {
+            headers: corsHeaders,
+          });
+        } catch (err) {
+          return new Response(JSON.stringify({ ok: false, message: String(err) }), {
+            status: 500,
+            headers: corsHeaders,
+          });
+        }
       }
 
       if (url.pathname === '/api/status' && req.method === 'POST') {
@@ -1000,10 +1111,13 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         if (body.id && body.status) {
           db.updateStatus(body.id, body.status);
           return new Response(JSON.stringify({ ok: true }), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: corsHeaders,
           });
         }
-        return new Response(JSON.stringify({ error: 'missing id or status' }), { status: 400 });
+        return new Response(JSON.stringify({ error: 'missing id or status' }), {
+          status: 400,
+          headers: corsHeaders,
+        });
       }
 
       return new Response('Not Found', { status: 404 });
