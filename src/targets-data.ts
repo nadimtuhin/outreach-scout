@@ -1,6 +1,7 @@
 import type { ContactLead, TargetDossier, VerticalCategory } from './types.ts';
 import { countWords, generateColdOutreach, generateTailoredPitchForContact } from './pitch-generator.ts';
 import { EXTENDED_CONTACTS_MAP, EXTENDED_RAW_TARGETS } from './extended-targets.ts';
+import { COMPANY_PROFILES } from './profiler.ts';
 
 const RAW_TARGETS = [
   // Vertical 1: Food POS & Ordering Integration
@@ -1107,5 +1108,6 @@ export const TARGET_DOSSIERS: TargetDossier[] = ALL_RAW_TARGETS.map((t) => {
     ...t,
     contacts,
     coldOutreachDraft: defaultDraft,
+    deepProfile: COMPANY_PROFILES[t.metadata.id],
   };
 });

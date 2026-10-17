@@ -20,6 +20,8 @@ export interface StoredTargetRow {
   key_employees: string;
   contacts: string;
   deep_profile?: string;
+  leadership?: string;
+  architecture?: string;
 }
 
 export class ScoutDatabase {
@@ -74,6 +76,16 @@ export class ScoutDatabase {
     }
     try {
       this.db.run("ALTER TABLE targets ADD COLUMN deep_profile TEXT NOT NULL DEFAULT '{}'");
+    } catch {
+      // Column may already exist
+    }
+    try {
+      this.db.run("ALTER TABLE targets ADD COLUMN leadership TEXT NOT NULL DEFAULT '[]'");
+    } catch {
+      // Column may already exist
+    }
+    try {
+      this.db.run("ALTER TABLE targets ADD COLUMN architecture TEXT NOT NULL DEFAULT '{}'");
     } catch {
       // Column may already exist
     }
@@ -139,8 +151,9 @@ export class ScoutDatabase {
       INSERT OR REPLACE INTO targets (
         id, name, vertical, website, careers_url, platform_ecosystem,
         headquarters, estimated_employees, funding_stage, tech_stack,
-        match_analysis, key_employees, contacts, deep_profile, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        match_analysis, key_employees, contacts, deep_profile,
+        leadership, architecture, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertLeadership = this.db.prepare(`
@@ -179,6 +192,8 @@ export class ScoutDatabase {
           JSON.stringify(item.keyEmployees),
           JSON.stringify(item.contacts),
           item.deepProfile ? JSON.stringify(item.deepProfile) : '{}',
+          JSON.stringify(item.leadership || []),
+          JSON.stringify(item.architecture || {}),
           new Date().toISOString()
         );
 
@@ -225,7 +240,7 @@ export class ScoutDatabase {
           t.id, t.name, t.vertical, t.website, t.careers_url, t.headquarters,
           t.estimated_employees, t.funding_stage, t.status,
           t.platform_ecosystem, t.tech_stack, t.match_analysis, t.key_employees, t.contacts,
-          t.deep_profile,
+          t.deep_profile, t.leadership, t.architecture,
           o.leader_name, o.draft_markdown, o.word_count
         FROM targets t
         LEFT JOIN outreach o ON t.id = o.target_id

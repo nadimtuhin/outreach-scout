@@ -42,6 +42,10 @@ async function syncRemote(): Promise<void> {
         wordCount: number;
       }>;
 
+      const deepProfile = JSON.parse(r.deep_profile || '{}');
+      const leadership = JSON.parse(r.leadership || '[]');
+      const architecture = JSON.parse(r.architecture || '{}');
+
       return {
         id: r.id,
         name: r.name,
@@ -60,6 +64,9 @@ async function syncRemote(): Promise<void> {
         matchAnalysis: match,
         keyEmployees: employees,
         contacts,
+        deepProfile,
+        leadership,
+        architecture,
       };
     }),
   };

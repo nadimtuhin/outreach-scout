@@ -579,6 +579,283 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
     }
     .status-select:focus { border-color: var(--primary); }
 
+    /* Deep Profiling & Founder Cards */
+    .section-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-badge {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* Founder Profiling Grid */
+    .founders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .founder-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .founder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .founder-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .founder-role {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .founder-bio {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .biases-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .bias-chip {
+      font-size: 11px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* Business & ICP Grid */
+    .business-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .business-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-subtle);
+    }
+    .metric-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .clients-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .client-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--emerald-bg);
+      color: var(--emerald);
+      border: 1px solid var(--emerald-border);
+    }
+
+    /* Projects & Repos Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .project-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .project-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .project-title:hover { text-decoration: underline; }
+    .project-stats {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--emerald);
+      background: var(--emerald-bg);
+      border: 1px solid var(--emerald-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .project-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .stack-mini-pill {
+      font-size: 10.5px;
+      padding: 1px 6px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    /* Blogs & Articles */
+    .blogs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .blog-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .blog-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .blog-link {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .blog-link:hover { color: var(--primary); text-decoration: underline; }
+    .blog-date {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-subtle);
+    }
+    .blog-summary {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .blog-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 2px;
+    }
+    .blog-tag-pill {
+      font-size: 10.5px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      color: var(--text-subtle);
+    }
+
+    /* Architectural Tastes Grid */
+    .tastes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .tastes-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tastes-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+    }
+    .tastes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tastes-item {
+      font-size: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.4;
+    }
+    .tastes-item span:first-child {
+      color: var(--primary);
+      font-weight: bold;
+    }
+
     /* Responsive Breakpoints & Scrollbar tuning */
     @media (max-width: 900px) {
       body {
@@ -728,6 +1005,9 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
             techStack: JSON.parse(r.tech_stack || '[]'),
             matchAnalysis: JSON.parse(r.match_analysis || '{}'),
             contacts: JSON.parse(r.contacts || '[]'),
+            deepProfile: JSON.parse(r.deep_profile || '{}'),
+            leadership: JSON.parse(r.leadership || '[]'),
+            architecture: JSON.parse(r.architecture || '{}'),
             coldOutreachDraft: r.draft_markdown,
             wordCount: r.word_count
           };
@@ -890,6 +1170,184 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
         </div>
       \` : '<div style="padding:24px;">No contacts listed</div>';
 
+      const deep = t.deepProfile || {};
+      const leaders = t.leadership || [];
+      const arch = t.architecture || {};
+
+      // 1. Founders & Leadership HTML
+      const leadersHtml = (leaders && leaders.length > 0) ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">⚡ Leadership & Founder Profiling</div>
+            <div class="section-badge">\${leaders.length} Decision Makers</div>
+          </div>
+          <div class="founders-grid">
+            \${leaders.map(l => {
+              const biases = Array.isArray(l.coreBiases) ? l.coreBiases : (typeof l.coreBiases === 'string' ? JSON.parse(l.coreBiases || '[]') : []);
+              return \`
+                <div class="founder-card">
+                  <div class="founder-header">
+                    <div>
+                      <div class="founder-name">\${l.name}</div>
+                      <div class="founder-role">\${l.role}</div>
+                    </div>
+                    \${l.linkedInUrl ? \`<a class="channel-pill" href="\${l.linkedInUrl}" target="_blank">LinkedIn ↗</a>\` : ''}
+                  </div>
+                  <div class="founder-bio">\${l.technicalBackground || 'Engineering background in scalable systems and product execution.'}</div>
+                  \${biases.length > 0 ? \`
+                    <div style="margin-top:6px;">
+                      <div style="font-size:11px; font-weight:700; color:var(--text-subtle); margin-bottom:4px; text-transform:uppercase;">Core Biases:</div>
+                      <div class="biases-list">
+                        \${biases.map(b => \`<span class="bias-chip">\${b}</span>\`).join('')}
+                      </div>
+                    </div>
+                  \` : ''}
+                </div>
+              \`;
+            }).join('')}
+          </div>
+        </div>
+      \` : '';
+
+      // 2. Company Business Model & ICP HTML
+      const businessHtml = deep.business ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">🏢 Business Model & ICP Profiling</div>
+            <div class="section-badge">\${deep.business.revenueOrFunding || t.fundingStage}</div>
+          </div>
+          <div class="business-grid">
+            <div class="business-metric">
+              <div class="metric-label">Monetization & Model</div>
+              <div class="metric-value">\${deep.business.model}</div>
+            </div>
+            <div class="business-metric">
+              <div class="metric-label">Pricing Structure</div>
+              <div class="metric-value">\${deep.business.pricing}</div>
+            </div>
+            <div class="business-metric">
+              <div class="metric-label">Target ICP Customers</div>
+              <div class="metric-value">\${(deep.business.targetCustomers || []).join(', ')}</div>
+            </div>
+            <div class="business-metric">
+              <div class="metric-label">Enterprise / Key Clients</div>
+              <div class="clients-pills">
+                \${(deep.business.keyClients || []).map(c => \`<span class="client-pill">\${c}</span>\`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      \` : '';
+
+      // 3. Flagship Engineering Projects HTML
+      const projectsHtml = (deep.projects && deep.projects.length > 0) ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">🛠️ Core Engineering Projects & Repos</div>
+            <div class="section-badge">\${deep.projects.length} Flagship Projects</div>
+          </div>
+          <div class="projects-grid">
+            \${deep.projects.map(p => \`
+              <div class="project-card">
+                <div class="project-card-header">
+                  <a class="project-title" href="\${p.url}" target="_blank">\${p.name} ↗</a>
+                  \${p.starsOrDownloads ? \`<span class="project-stats">\${p.starsOrDownloads}</span>\` : ''}
+                </div>
+                <div class="project-desc">\${p.description}</div>
+                <div class="project-stack">
+                  \${(p.techStack || []).map(s => \`<span class="stack-mini-pill">\${s}</span>\`).join('')}
+                </div>
+              </div>
+            \`).join('')}
+          </div>
+        </div>
+      \` : '';
+
+      // 4. Engineering Blogs HTML
+      const blogsHtml = (deep.blogs && deep.blogs.length > 0) ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">📰 Engineering Blogs & Architecture Signals</div>
+            <div class="section-badge">\${deep.blogs.length} Articles</div>
+          </div>
+          <div class="blogs-list">
+            \${deep.blogs.map(b => \`
+              <div class="blog-row">
+                <div class="blog-row-header">
+                  <a class="blog-link" href="\${b.url}" target="_blank">\${b.title} ↗</a>
+                  \${b.date ? \`<span class="blog-date">\${b.date}</span>\` : ''}
+                </div>
+                <div class="blog-summary">\${b.summary}</div>
+                <div class="blog-tags">
+                  \${(b.tags || []).map(tag => \`<span class="blog-tag-pill">\${tag}</span>\`).join('')}
+                </div>
+              </div>
+            \`).join('')}
+          </div>
+        </div>
+      \` : '';
+
+      // 5. Engineering Tastes & Biases HTML
+      const tastesHtml = deep.tastes ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">🧠 Engineering Tastes & Architectural Biases</div>
+            <div class="section-badge">Culture & Tech</div>
+          </div>
+          <div class="tastes-grid">
+            <div class="tastes-col">
+              <div class="tastes-col-title">Architectural Biases</div>
+              <div class="tastes-list">
+                \${(deep.tastes.architecturalBiases || []).map(b => \`<div class="tastes-item"><span>⚡</span><span>\${b}</span></div>\`).join('')}
+              </div>
+            </div>
+            <div class="tastes-col">
+              <div class="tastes-col-title">Stack Preferences</div>
+              <div class="tastes-list">
+                \${(deep.tastes.stackPreferences || []).map(s => \`<div class="tastes-item"><span>✓</span><span>\${s}</span></div>\`).join('')}
+              </div>
+            </div>
+            <div class="tastes-col">
+              <div class="tastes-col-title">Engineering Culture</div>
+              <div class="tastes-list">
+                \${(deep.tastes.engineeringCulture || []).map(c => \`<div class="tastes-item"><span>★</span><span>\${c}</span></div>\`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      \` : '';
+
+      // 6. Architecture & Failure Modes HTML
+      const failureModes = Array.isArray(arch.criticalFailureModes) ? arch.criticalFailureModes : (typeof arch.criticalFailureModes === 'string' ? JSON.parse(arch.criticalFailureModes || '[]') : []);
+      const archHtml = arch.coreWorkflow ? \`
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-title">⚙️ Reverse-Engineered Architecture & Failure Modes</div>
+            <div class="section-badge">Candidate Proof</div>
+          </div>
+          <div style="font-size:13px; line-height:1.5; color:var(--text);">
+            <strong>Core Workflow:</strong> \${arch.coreWorkflow}
+          </div>
+          \${failureModes.length > 0 ? \`
+            <div style="margin-top:6px;">
+              <div style="font-size:11px; font-weight:700; color:var(--text-subtle); margin-bottom:6px; text-transform:uppercase;">Critical Failure Modes:</div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                \${failureModes.map(f => \`
+                  <div style="font-size:12.5px; color:#ef4444; display:flex; align-items:flex-start; gap:6px;">
+                    <span>⚠️</span><span>\${f}</span>
+                  </div>
+                \`).join('')}
+              </div>
+            </div>
+          \` : ''}
+          \${arch.candidateExperienceBridge ? \`
+            <div style="font-size:12.5px; color:var(--text-muted); background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:10px; margin-top:8px;">
+              <strong style="color:var(--text);">Candidate Bridge:</strong> \${arch.candidateExperienceBridge}
+            </div>
+          \` : ''}
+        </div>
+      \` : '';
+
       pane.innerHTML = \`
         <div class="detail-header">
           <div class="detail-title-row">
@@ -916,6 +1374,25 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           </div>
         </div>
 
+        <div class="contacts-section">
+          <div class="contacts-nav">
+            \${contactTabs}
+          </div>
+          \${contactContent}
+        </div>
+
+        \${leadersHtml}
+
+        \${businessHtml}
+
+        \${projectsHtml}
+
+        \${blogsHtml}
+
+        \${tastesHtml}
+
+        \${archHtml}
+
         <div class="diagnosis-grid">
           <div class="diagnosis-col">
             <div class="col-title">Strong Alignment (\${t.matchAnalysis?.strongMatches?.length || 0})</div>
@@ -925,13 +1402,6 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
             <div class="col-title">Technical Bridge / Gaps</div>
             \${bridgeList}
           </div>
-        </div>
-
-        <div class="contacts-section">
-          <div class="contacts-nav">
-            \${contactTabs}
-          </div>
-          \${contactContent}
         </div>
       \`;
     }
