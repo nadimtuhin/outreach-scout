@@ -148,4 +148,65 @@ describe('Dashboard Server & API End-to-End Tests', () => {
     const res = await fetch(`${BASE_URL}/non-existent`);
     expect(res.status).toBe(404);
   });
+
+  test('GET /api/projects returns list of projects including default', async () => {
+    const res = await fetch(`${BASE_URL}/api/projects`);
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as Array<{ id: string; name: string }>;
+    expect(Array.isArray(data)).toBe(true);
+    expect(data.some((p) => p.id === 'default')).toBe(true);
+  });
+
+  test('POST /api/projects creates and deletes a custom project', async () => {
+    const newProj = {
+      id: 'e2e-test-proj',
+      name: 'E2E Test Campaign',
+      description: 'Temporary campaign for test suite',
+      createdAt: new Date().toISOString(),
+      profile: {
+        name: 'Tester',
+        senderName: 'Test',
+        headline: 'QA Lead',
+        email: 'test@example.com',
+        calendlyUrl: 'https://calendly.com/test/30min',
+        location: 'Remote',
+        timezone: 'UTC',
+        experienceYears: 5,
+        coreSkills: ['Testing', 'Playwright'],
+        proofRepos: [],
+      },
+      rules: {
+        targetVerticals: ['developer_workflows_queues'],
+        targetTitles: ['CTO'],
+        minHalalScore: 80,
+        minRemoteScore: 70,
+        minApacScore: 70,
+        wordCountLimit: 150,
+        voiceRules: {
+          noEmDashes: true,
+          noNumberedLists: true,
+          bareProofUrlsOnTop: true,
+          tone: 'direct',
+        },
+      },
+    };
+
+    const createRes = await fetch(`${BASE_URL}/api/projects`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProj),
+    });
+    expect(createRes.status).toBe(200);
+
+    const listRes = await fetch(`${BASE_URL}/api/projects`);
+    const list = (await listRes.json()) as Array<{ id: string }>;
+    expect(list.some((p) => p.id === 'e2e-test-proj')).toBe(true);
+
+    const delRes = await fetch(`${BASE_URL}/api/projects/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: 'e2e-test-proj' }),
+    });
+    expect(delRes.status).toBe(200);
+  });
 });
