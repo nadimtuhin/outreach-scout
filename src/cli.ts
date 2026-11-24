@@ -362,15 +362,43 @@ async function handleCopy(targetId: string, contactArg?: string): Promise<void> 
     }
   }
 
-  const proc = Bun.spawn(['pbcopy'], { stdin: 'pipe' });
-  proc.stdin.write(pitchToCopy);
-  proc.stdin.flush();
-  proc.stdin.end();
-  await proc.exited;
-
-  console.log(`\nCopied tailored pitch for ${contactName} at ${t.name} to clipboard.`);
+  const copied = await copyToClipboard(pitchToCopy);
+  if (copied) {
+    console.log(`\nCopied tailored pitch for ${contactName} at ${t.name} to clipboard.`);
+  } else {
+    console.log(
+      `\nNo clipboard tool found (pbcopy, wl-copy, xclip, xsel). Tailored pitch for ${contactName} at ${t.name}:\n`
+    );
+    console.log(pitchToCopy);
+  }
   console.log(`Next step: paste into email or LinkedIn note, then run:`);
   console.log(`  bun run cli status ${t.id} sent\n`);
+}
+
+// pbcopy only exists on macOS; try common Linux clipboard tools before giving up.
+const CLIPBOARD_COMMANDS: string[][] = [
+  ['pbcopy'],
+  ['wl-copy'],
+  ['xclip', '-selection', 'clipboard'],
+  ['xsel', '--clipboard', '--input'],
+];
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  for (const cmd of CLIPBOARD_COMMANDS) {
+    if (!cmd[0] || !Bun.which(cmd[0])) continue;
+    try {
+      const proc = Bun.spawn(cmd, { stdin: 'pipe', stdout: 'ignore', stderr: 'ignore' });
+      proc.stdin.write(text);
+      proc.stdin.flush();
+      proc.stdin.end();
+      // Sequential on purpose: stop at the first tool that works
+      // eslint-disable-next-line no-await-in-loop
+      if ((await proc.exited) === 0) return true;
+    } catch {
+      // try the next clipboard tool
+    }
+  }
+  return false;
 }
 
 function handleStatus(targetId: string, newStatus: string): void {

@@ -34,9 +34,19 @@ describe('CLI End-to-End Tests', () => {
   });
 
   test('bun run cli copy <id> [contact] executes pbcopy and confirms copy', async () => {
+    // Stub pbcopy so the test is deterministic on Linux CI as well as macOS
+    const { mkdtempSync, writeFileSync, chmodSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join, delimiter } = await import('node:path');
+    const binDir = mkdtempSync(join(tmpdir(), 'fake-pbcopy-'));
+    const fakePbcopy = join(binDir, 'pbcopy');
+    writeFileSync(fakePbcopy, '#!/bin/sh\ncat > /dev/null\n');
+    chmodSync(fakePbcopy, 0o755);
+
     const proc = Bun.spawn(['bun', 'run', 'src/cli.ts', 'copy', 'craver', '1'], {
       stdout: 'pipe',
       stderr: 'pipe',
+      env: { ...process.env, PATH: `${binDir}${delimiter}${process.env.PATH ?? ''}` },
     });
     const stdout = await new Response(proc.stdout).text();
     const exitCode = await proc.exited;
@@ -82,5 +92,23 @@ describe('CLI End-to-End Tests', () => {
     expect(exitCode).toBe(0);
     expect(stdout).toContain('SEARCH RESULTS');
     expect(stdout).toContain('Metriport');
+  });
+});
+
+describe('CLI copy without a clipboard tool', () => {
+  test('falls back to printing the pitch instead of crashing when pbcopy is missing', async () => {
+    const { dirname } = await import('node:path');
+    // PATH containing only the bun binary: no pbcopy / xclip / wl-copy available
+    const proc = Bun.spawn([process.execPath, 'src/cli.ts', 'copy', 'craver', '1'], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+      env: { ...process.env, PATH: dirname(process.execPath) },
+    });
+    const stdout = await new Response(proc.stdout).text();
+    const exitCode = await proc.exited;
+
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain('Amin Yazdani');
+    expect(stdout).toContain('No clipboard tool found');
   });
 });
