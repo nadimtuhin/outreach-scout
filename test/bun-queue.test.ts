@@ -25,6 +25,9 @@ describe('BunQueue Architecture Tests', () => {
   });
 
   afterEach(() => {
+    // resume() restarts the worker in the background; stop it before closing
+    // the DB so it doesn't hit a closed database during later test files.
+    queue.stop();
     db.close();
     try {
       unlinkSync(TEST_DB);
