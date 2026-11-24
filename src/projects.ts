@@ -9,6 +9,20 @@ import type {
 
 const PROJECTS_DIR = join(import.meta.dir, '..', 'projects');
 
+// Project ids become file names under PROJECTS_DIR, so they must not contain
+// path separators or '..' segments that would escape the directory.
+const PROJECT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
+
+export function isValidProjectId(id: unknown): id is string {
+  return typeof id === 'string' && PROJECT_ID_PATTERN.test(id);
+}
+
+function assertValidProjectId(id: unknown): asserts id is string {
+  if (!isValidProjectId(id)) {
+    throw new Error(`Invalid project id: ${JSON.stringify(id)}`);
+  }
+}
+
 /**
  * Load all project configurations from the projects directory.
  */
@@ -42,7 +56,7 @@ export function getProject(projectId?: string): ScoutProject {
   const targetId = projectId || 'default';
   const filePath = join(PROJECTS_DIR, `${targetId}.json`);
 
-  if (existsSync(filePath)) {
+  if (isValidProjectId(targetId) && existsSync(filePath)) {
     try {
       const content = readFileSync(filePath, 'utf-8');
       return JSON.parse(content) as ScoutProject;
@@ -65,6 +79,7 @@ export function getProject(projectId?: string): ScoutProject {
  * Save or update a project configuration.
  */
 export function saveProject(project: ScoutProject): void {
+  assertValidProjectId(project.id);
   const filePath = join(PROJECTS_DIR, `${project.id}.json`);
   writeFileSync(filePath, JSON.stringify(project, null, 2), 'utf-8');
 }
@@ -73,6 +88,7 @@ export function saveProject(project: ScoutProject): void {
  * Delete a project configuration (default project cannot be deleted).
  */
 export function deleteProject(projectId: string): boolean {
+  assertValidProjectId(projectId);
   if (projectId === 'default') {
     throw new Error("Cannot delete the 'default' project.");
   }
