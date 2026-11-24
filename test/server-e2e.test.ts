@@ -209,4 +209,39 @@ describe('Dashboard Server & API End-to-End Tests', () => {
     });
     expect(delRes.status).toBe(200);
   });
+
+  test('POST /api/status with malformed JSON returns 400 instead of 500', async () => {
+    const res = await fetch(`${BASE_URL}/api/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{not json',
+    });
+    expect(res.status).toBe(400);
+    const data = (await res.json()) as { error?: string };
+    expect(data.error).toBeDefined();
+  });
+
+  test('POST /api/projects rejects path-traversal ids with 400', async () => {
+    const res = await fetch(`${BASE_URL}/api/projects`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: '../evil-traversal', name: 'x', profile: {}, rules: {} }),
+    });
+    expect(res.status).toBe(400);
+    expect(await Bun.file(new URL('../evil-traversal.json', import.meta.url)).exists()).toBe(false);
+  });
+
+  test('POST /api/projects/delete rejects path-traversal ids with 400', async () => {
+    // A file one level above projects/ that a traversal id would reach
+    const sacrificial = Bun.file(new URL('../test-sacrificial.json', import.meta.url));
+    await Bun.write(sacrificial, '{}');
+    const res = await fetch(`${BASE_URL}/api/projects/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: '../test-sacrificial' }),
+    });
+    expect(res.status).toBe(400);
+    expect(await sacrificial.exists()).toBe(true);
+    await sacrificial.delete();
+  });
 });

@@ -6,14 +6,17 @@ export interface OpenTabsToolCallResult {
 export class OpenTabsClient {
   private readonly baseUrl: string;
   private readonly token: string;
+  private readonly timeoutMs: number;
   private sessionId: string | null = null;
 
   constructor(
     baseUrl = process.env.OPENTABS_URL || 'http://127.0.0.1:9515/mcp',
-    token = process.env.OPENTABS_TOKEN || ''
+    token = process.env.OPENTABS_TOKEN || '',
+    timeoutMs = 15_000
   ) {
     this.baseUrl = baseUrl;
     this.token = token;
+    this.timeoutMs = timeoutMs;
   }
 
   private async initializeSession(): Promise<string> {
@@ -32,6 +35,8 @@ export class OpenTabsClient {
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers,
+      // Abort if the daemon stalls so callers (e.g. the dashboard) never hang forever
+      signal: AbortSignal.timeout(this.timeoutMs),
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'initialize',
@@ -66,6 +71,8 @@ export class OpenTabsClient {
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers,
+      // Abort if the daemon stalls so callers (e.g. the dashboard) never hang forever
+      signal: AbortSignal.timeout(this.timeoutMs),
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'tools/call',
@@ -109,6 +116,8 @@ export class OpenTabsClient {
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers,
+      // Abort if the daemon stalls so callers (e.g. the dashboard) never hang forever
+      signal: AbortSignal.timeout(this.timeoutMs),
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'tools/call',

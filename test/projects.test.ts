@@ -118,3 +118,28 @@ describe('Generic Multi-Project & Multi-Profile Architecture', () => {
     }
   });
 });
+
+describe('project id validation (path traversal)', () => {
+  const evilIds = ['../evil', '../../tmp/pwn', 'a/b', 'a\\b', '..', '', 'x\0y'];
+
+  it('saveProject rejects ids that escape the projects directory', async () => {
+    const { saveProject } = await import('../src/projects.ts');
+    const base = getProject('default');
+    for (const id of evilIds) {
+      expect(() => saveProject({ ...base, id })).toThrow(/invalid project id/i);
+    }
+  });
+
+  it('deleteProject rejects ids that escape the projects directory', async () => {
+    const { deleteProject } = await import('../src/projects.ts');
+    for (const id of evilIds) {
+      expect(() => deleteProject(id)).toThrow(/invalid project id/i);
+    }
+  });
+
+  it('getProject does not read files outside the projects directory', () => {
+    // package.json lives one directory above projects/, so '../package' would resolve to it
+    const proj = getProject('../package');
+    expect(proj.id).toBe('default');
+  });
+});

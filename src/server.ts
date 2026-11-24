@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { ScoutDatabase } from './db.ts';
 import { followLinkedInProfile } from './linkedin-follow.ts';
 import { TARGET_DOSSIERS } from './targets-data.ts';
-import { deleteProject, listProjects, saveProject } from './projects.ts';
+import { deleteProject, isValidProjectId, listProjects, saveProject } from './projects.ts';
 import type { ScoutProject } from './types.ts';
 
 export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
@@ -3436,6 +3436,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
               headers: corsHeaders,
             });
           }
+          if (!isValidProjectId(body.id)) {
+            return new Response(JSON.stringify({ error: 'invalid project id' }), {
+              status: 400,
+              headers: corsHeaders,
+            });
+          }
           saveProject(body);
           return new Response(JSON.stringify({ ok: true, project: body }), {
             headers: corsHeaders,
@@ -3453,6 +3459,12 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
           const body = (await req.json()) as { id: string };
           if (!body.id) {
             return new Response(JSON.stringify({ error: 'missing id' }), {
+              status: 400,
+              headers: corsHeaders,
+            });
+          }
+          if (!isValidProjectId(body.id)) {
+            return new Response(JSON.stringify({ error: 'invalid project id' }), {
               status: 400,
               headers: corsHeaders,
             });
@@ -3512,8 +3524,16 @@ export function startDashboard(port = 3033, dbPath = 'scout.sqlite'): void {
       }
 
       if (url.pathname === '/api/status' && req.method === 'POST') {
-        const body = (await req.json()) as { id: string; status: string };
-        if (body.id && body.status) {
+        let body: { id?: unknown; status?: unknown } | null;
+        try {
+          body = (await req.json()) as { id?: unknown; status?: unknown } | null;
+        } catch {
+          return new Response(JSON.stringify({ error: 'invalid JSON body' }), {
+            status: 400,
+            headers: corsHeaders,
+          });
+        }
+        if (body && typeof body.id === 'string' && typeof body.status === 'string' && body.id && body.status) {
           db.updateStatus(body.id, body.status);
           return new Response(JSON.stringify({ ok: true }), {
             headers: corsHeaders,
